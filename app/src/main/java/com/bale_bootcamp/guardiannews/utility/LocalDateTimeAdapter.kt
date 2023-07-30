@@ -1,20 +1,20 @@
 package com.bale_bootcamp.guardiannews.utility
 
 import com.squareup.moshi.FromJson
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.JsonReader
+import com.squareup.moshi.JsonWriter
 import com.squareup.moshi.ToJson
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class LocalDateTimeAdapter {
+class LocalDateTimeAdapter: JsonAdapter<LocalDateTime>() {
     private val formatter = DateTimeFormatter.ISO_DATE_TIME
-
-    @ToJson
-    fun toJson(value: LocalDateTime): String {
-        return formatter.format(value)
+    override fun fromJson(reader: JsonReader): LocalDateTime? {
+        return LocalDateTime.parse(reader.nextString(), formatter)
     }
 
-    @FromJson
-    fun fromJson(value: String): LocalDateTime {
-        return LocalDateTime.parse(value, formatter)
+    override fun toJson(writer: JsonWriter, value: LocalDateTime?) {
+        writer.value(value?.format(formatter))
     }
 }

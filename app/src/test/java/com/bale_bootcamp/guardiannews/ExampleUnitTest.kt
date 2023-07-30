@@ -14,10 +14,19 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun apiTest() {
+        val randomDatePair = TestUtils().randomDateGenerator()
         for(category in TestUtils().categoryIterator()) {
-            val randomDatePair = TestUtils().randomDateGenerator()
-            NewsApi.retrofitApiService.getLatestFromCategory(category, randomDatePair.first, randomDatePair.second, 1).execute().body()?.let {
-                assertEquals(it.status, "ok")
+            NewsApi.retrofitApiService.getLatestFromCategory(
+                category,
+                randomDatePair.first,
+                randomDatePair.second,
+                1
+            ).execute().body()?.let {
+                System.out.println(it)
+
+
+                assertEquals("ok", it.response.status)
+                assert(it.response.results.isNotEmpty())
             }
         }
     }
