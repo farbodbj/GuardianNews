@@ -1,5 +1,7 @@
 package com.bale_bootcamp.guardiannews
 
+import com.bale_bootcamp.guardiannews.network.NewsApi
+import com.bale_bootcamp.guardiannews.network.NewsApiService
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -11,7 +13,12 @@ import org.junit.Assert.*
  */
 class ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun apiTest() {
+        for(category in TestUtils().categoryIterator()) {
+            val randomDatePair = TestUtils().randomDateGenerator()
+            NewsApi.retrofitApiService.getLatestFromCategory(category, randomDatePair.first, randomDatePair.second, 1).execute().body()?.let {
+                assertEquals(it.status, "ok")
+            }
+        }
     }
 }
