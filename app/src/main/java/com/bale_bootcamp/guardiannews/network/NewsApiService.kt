@@ -1,6 +1,9 @@
 package com.bale_bootcamp.guardiannews.network
 
+import com.bale_bootcamp.guardiannews.model.NetworkResponse
 import com.bale_bootcamp.guardiannews.model.ResponseModel
+import com.bale_bootcamp.guardiannews.utility.LocalDateTimeAdapter
+import com.bale_bootcamp.guardiannews.utility.MoshiInstance
 import com.bale_bootcamp.guardiannews.utility.RetrofitFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,11 +14,13 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.time.LocalDate
-import java.util.Date
+import java.time.LocalDateTime
+
 
 object Api {
     const val BASE_URL = "https://content.guardianapis.com/"
     const val API_KEY = "24214983-e02f-49e4-94be-663d934bceb0"
+    const val DEFAULT_FIELDS = "headline,thumbnail,body,trailText,starRating"
 }
 
 
@@ -29,28 +34,32 @@ interface NewsApiService {
         override fun toString(): String = this.categoryName
     }
 
-    @GET("{category}?api-key=${Api.API_KEY}")
+    @GET("{category}?api-key=${Api.API_KEY}&show-fields=${Api.DEFAULT_FIELDS}")
     fun getLatestFromCategory(@Path("category") category: Category,
                               @Query("from-date") fromDate: LocalDate,
                               @Query("to-date") toDate: LocalDate,
                               @Query("page") page: Int,
-                              @Query("page-size") pageSize: Int = 10): Call<ResponseModel>
+                              @Query("page-size") pageSize: Int = 10): Call<NetworkResponse>
 }
 
 
 object NewsApi {
+    init{
+        MoshiInstance.registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
+    }
+
     private val okhttpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
         .build()
 
-    private val converterFactory: MoshiConverterFactory = MoshiConverterFactory.create()
+    private val converterFactory: MoshiConverterFactory = MoshiConverterFactory
+        .create(MoshiInstance.instance)
 
-    val retrofit: Retrofit = RetrofitFactory.createRetrofitInstance(
-        baseUrl = Api.BASE_URL,
-        client = okhttpClient,
-        converterFactory = converterFactory)
 
     val retrofitApiService: NewsApiService by lazy {
-        retrofit.create(NewsApiService::class.java)
+        RetrofitFactory.createRetrofitInstance(
+            baseUrl = Api.BASE_URL,
+            client = okhttpClient,
+            converterFactory = converterFactory).create(NewsApiService::class.java)
     }
 }

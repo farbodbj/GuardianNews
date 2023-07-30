@@ -1,6 +1,7 @@
 package com.bale_bootcamp.guardiannews.model
 
-import android.telecom.Call.Details
+
+import com.squareup.moshi.Json
 import java.time.LocalDateTime
 
 data class News (
@@ -12,4 +13,5 @@ data class News (
     val webTitle: String,
     val webUrl: String,
     val apiUrl: String,
-    val details: Details)
+    @Json(name = "fields") val details: NewsDetail
+)
