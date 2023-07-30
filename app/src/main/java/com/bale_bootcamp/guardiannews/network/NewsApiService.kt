@@ -23,7 +23,6 @@ object Api {
     const val DEFAULT_FIELDS = "headline,thumbnail,body,trailText,starRating"
 }
 
-
 interface NewsApiService {
     enum class Category(private val categoryName: String) {
         HOME("search"),

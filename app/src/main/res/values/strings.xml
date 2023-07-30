@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">GuardianNews</string>
+    <string name="toolbar_title">The Guardian</string>
+
+    <string name="home">Home</string>
+    <string name="world">World</string>
+    <string name="environment">Environment</string>
+    <string name="sport">Sport</string>
+    <string name="science">Science</string>
+
+
+
+
 </resources>
