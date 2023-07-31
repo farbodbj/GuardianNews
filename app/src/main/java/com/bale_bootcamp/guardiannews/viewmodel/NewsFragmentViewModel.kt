@@ -14,19 +14,20 @@ class NewsFragmentViewModel (
     private val repository: NewsRepository
 ): ViewModel() {
 
+    private val _category = MutableLiveData<NewsApiService.Category>()
+    val category: LiveData<NewsApiService.Category> = _category
 
-    private var _responseModel :MutableLiveData<ResponseModel?> = MutableLiveData(null)
-    val responseModel: LiveData<ResponseModel?> = _responseModel
+    private val _news = MutableLiveData<ResponseModel>()
+    val news: LiveData<ResponseModel> = _news
 
 
-     fun refresh(category: NewsApiService.Category,
-                 fromDate: LocalDate,
-                 toDate: LocalDate,
-                 page: Int,
-                 pageSize: Int): LiveData<ResponseModel?>
-     = _responseModel.switchMap {
-            repository.getNews(category, fromDate, toDate, page, pageSize)
-     }
+    fun setCategory(category: NewsApiService.Category) {
+        _category.value = category
+    }
+
+    suspend fun setNews(fromDate: LocalDate, toDate: LocalDate, page: Int, pageSize: Int) {
+        _news.value = repository.getNews(category.value!!, fromDate, toDate, page, pageSize)
+    }
 
 
     class NewsFragmentViewModelFactory(private val repository: NewsRepository): ViewModelProvider.Factory {
