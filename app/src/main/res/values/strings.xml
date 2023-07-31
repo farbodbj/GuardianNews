@@ -7,8 +7,9 @@
     <string name="environment">Environment</string>
     <string name="sport">Sport</string>
     <string name="science">Science</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
 
 </resources>
