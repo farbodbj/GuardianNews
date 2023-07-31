@@ -23,11 +23,10 @@ class NewsRepository (
         pageSize: Int
     ): MutableLiveData<ResponseModel?> {
 
-        val responseModel: MutableLiveData<ResponseModel?> = MutableLiveData()
-        onlineDataSource.getNews(category, fromDate, toDate, page, pageSize)
-            .observeForever { responseModel.value = it }
+        val responseModel: MutableLiveData<ResponseModel?> = onlineDataSource.getNews(category, fromDate, toDate, page, pageSize)
 
         Log.d(TAG, "${::getNews.name} called with values category: ${category.name}, fromDate: $fromDate, toDate: $toDate, page: $page, pageSize: $pageSize")
+        Log.d(TAG, "$responseModel, ${responseModel.value}")
         return responseModel
     }
 }

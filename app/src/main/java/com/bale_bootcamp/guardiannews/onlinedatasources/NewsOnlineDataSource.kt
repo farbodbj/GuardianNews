@@ -15,7 +15,7 @@ class NewsOnlineDataSource (
     private val TAG: String = "NewsOnlineDataSource"
 
     fun getNews(category: NewsApiService.Category, fromDate: LocalDate, toDate: LocalDate, page: Int, pageSize: Int): MutableLiveData<ResponseModel?> {
-        lateinit var responseModel: MutableLiveData<ResponseModel?>
+        val responseModel: MutableLiveData<ResponseModel?> = MutableLiveData(null)
         Log.d(TAG, "${::getNews.name} called with values category: ${category.name}, fromDate: $fromDate, toDate: $toDate, page: $page, pageSize: $pageSize")
 
         apiService.getLatestFromCategory(category, fromDate, toDate, page, pageSize)
@@ -25,7 +25,7 @@ class NewsOnlineDataSource (
                     response: retrofit2.Response<NetworkResponse>
                 ) {
                     if (response.isSuccessful) {
-                        responseModel = MutableLiveData(response.body()?.response)
+                        responseModel.value = response.body()?.response
                         Log.d(TAG, "request successful with code: ${response.code()}, ${response.body()?.response?.results?.size} results returned")
                     } else {
                         Log.d(TAG, "request not successful with code: ${response.code()}")
