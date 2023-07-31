@@ -1,5 +1,6 @@
 package com.bale_bootcamp.guardiannews.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bale_bootcamp.guardiannews.model.ResponseModel
@@ -13,11 +14,20 @@ class NewsRepository (
     private val onlineDataSource: NewsOnlineDataSource,
     private val lifeCycleAwareCoroutineScope: CoroutineScope
 ) {
+    private val TAG: String = "NewsRepository"
 
     fun getNews(category: NewsApiService.Category,
         fromDate: LocalDate,
         toDate: LocalDate,
         page: Int,
         pageSize: Int
-    ): MutableLiveData<ResponseModel?> = onlineDataSource.getNews(category, fromDate, toDate, page, pageSize)
+    ): MutableLiveData<ResponseModel?> {
+
+        val responseModel: MutableLiveData<ResponseModel?> = MutableLiveData()
+        onlineDataSource.getNews(category, fromDate, toDate, page, pageSize)
+            .observeForever { responseModel.value = it }
+
+        Log.d(TAG, "${::getNews.name} called with values category: ${category.name}, fromDate: $fromDate, toDate: $toDate, page: $page, pageSize: $pageSize")
+        return responseModel
+    }
 }
