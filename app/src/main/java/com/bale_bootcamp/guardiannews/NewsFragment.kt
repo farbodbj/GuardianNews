@@ -11,15 +11,18 @@ import androidx.lifecycle.lifecycleScope
 import com.bale_bootcamp.guardiannews.adapter.NewsAdapter
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
 import com.bale_bootcamp.guardiannews.network.NewsApi
+import com.bale_bootcamp.guardiannews.network.NewsApiService
 import com.bale_bootcamp.guardiannews.onlinedatasources.NewsOnlineDataSource
 import com.bale_bootcamp.guardiannews.repository.NewsRepository
 import com.bale_bootcamp.guardiannews.viewmodel.NewsFragmentViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class NewsFragment : Fragment() {
     private val TAG = "NewsFragment"
     private lateinit var _binding: FragmentNewsBinding
     val binding get() = _binding
+    lateinit var category: String
 
     private val viewModel: NewsFragmentViewModel by activityViewModels {
         val onlineDataSource = NewsOnlineDataSource(NewsApi.retrofitApiService)
@@ -40,6 +43,7 @@ class NewsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
+        category = arguments?.getString("category") ?: "search"
         Log.d(TAG, "onCreateView: binding set")
         setNewsList()
         Log.d(TAG, "onCreateView: news list set")
@@ -53,6 +57,10 @@ class NewsFragment : Fragment() {
             TODO("onItemClicked")
         }
 
+        // put random dates for now
+        Log.d(TAG, "*********** ${category} ************")
+        viewModel.refresh(NewsApiService.Category.findByStr(category), LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"), 1, 10)
+        binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
         lifecycleScope.launch {
             viewModel.responseModel.observe(viewLifecycleOwner) {
                 Log.d(TAG, "setNewsList: $it")
