@@ -37,24 +37,19 @@
                 app:tabIndicatorColor="@color/blue_500"
                 app:tabSelectedTextColor="@color/blue_500"
                 android:elevation="@dimen/tab_layout_elevation">
-
                 <com.google.android.material.tabs.TabItem
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/home" />
                 <com.google.android.material.tabs.TabItem
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/world" />
                 <com.google.android.material.tabs.TabItem
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/science" />
                 <com.google.android.material.tabs.TabItem
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/environment" />
@@ -79,7 +74,7 @@
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="false"
         app:headerLayout="@layout/nav_drawer_header"
