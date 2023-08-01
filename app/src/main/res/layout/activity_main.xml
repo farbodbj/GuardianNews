@@ -17,7 +17,6 @@
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -26,9 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/toolbar_title"
+                app:titleTextAppearance="@style/toolBarTitle"
                 android:background="@color/white"
-                app:navigationIcon="@drawable/menu_24dp"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                app:navigationIcon="@drawable/menu_24dp" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
@@ -36,7 +35,8 @@
                 android:layout_height="wrap_content"
                 app:tabIndicatorColor="@color/blue_500"
                 app:tabSelectedTextColor="@color/blue_500"
-                android:elevation="@dimen/tab_layout_elevation">
+                android:elevation="@dimen/tab_layout_elevation"
+                app:tabTextAppearance="@style/tabItemText">
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,7 +54,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/environment" />
                 <com.google.android.material.tabs.TabItem
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sport" />
@@ -63,8 +62,8 @@
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             tools:layout="@layout/fragment_news"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/app_bar_layout"/>
@@ -79,6 +78,6 @@
         android:fitsSystemWindows="false"
         app:headerLayout="@layout/nav_drawer_header"
         app:menu="@menu/main_nav_drawer"
-        android:elevation="3dp"/>
+        android:elevation="@dimen/cardview_default_elevation"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

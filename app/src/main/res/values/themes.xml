@@ -1,7 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.GuardianNews" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- generate the theme -->
         <item name="android:colorPrimary">@color/blue_500</item>
         <item name="android:colorPrimaryDark">@color/blue_700</item>
         <item name="android:colorAccent">@color/blue_A400</item>
@@ -13,6 +12,22 @@
         <item name="cornerSize">8dp</item>
     </style>
 
+    <style name="toolBarTitle" parent="android:Widget.ActionBar">
+        <item name="titleTextColor">@android:color/black</item>
+        <item name="fontFamily">@font/vogue</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">@dimen/toolbar_title_text_size</item>
+        <item name="fontWeight">900</item>
+    </style>
+
+    <style name="tabItemText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">@dimen/tab_item_text_size</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">@font/vogue</item>
+
+        <item name="android:fontStyle">normal</item>
+        <item name="android:fontWeight">900</item>
+    </style>
 
     <style name="Theme.GuardianNews" parent="Base.Theme.GuardianNews" />
 </resources>
