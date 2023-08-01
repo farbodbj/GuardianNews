@@ -46,12 +46,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setViewPager() {
-        binding.viewPager.adapter = NewsPagerAdapter(this@MainActivity)
-            .addFragment(NewsFragment(), listOf("category" to "search"))
-            .addFragment(NewsFragment(), listOf("category" to "world"))
-            .addFragment(NewsFragment(), listOf("category" to "science"))
-            .addFragment(NewsFragment(), listOf("category" to "environment"))
-            .addFragment(NewsFragment(), listOf("category" to "sport"))
+        binding.viewPager.adapter = NewsPagerAdapter(this)
         Log.d(TAG, "onCreate: view pager adapter set")
     }
 
