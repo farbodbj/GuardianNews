@@ -1,12 +1,15 @@
 package com.bale_bootcamp.guardiannews.adapter
 
 import android.graphics.drawable.Drawable
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.text.parseAsHtml
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.databinding.NewsViewholderBinding
 import com.bale_bootcamp.guardiannews.model.News
 import com.bumptech.glide.Glide
@@ -68,17 +71,17 @@ class NewsAdapter(
         }
 
         private fun bindTextual(news: News) = binding.apply {
-            newsTitle.text = news.details.headline
-            newsSummary.text = news.details.trailText
-            newsDate.text = news.webPublicationDate.toString()
+            newsTitle.text = news.details.headline.parseAsHtml()
+            newsSummary.text = news.details.trailText.parseAsHtml()
+            newsDate.text = news.webPublicationDate.toString().parseAsHtml()
             Log.d(TAG, "bindTextual: text binded")
         }
 
         private fun bindImage(news: News) = binding.apply {
-
             Glide.with(newsImage.context)
                 .load(news.details.thumbnail)
                 .centerCrop()
+                .placeholder(R.drawable.placeholder_square)
                 .listener(object : RequestListener<Drawable> {
                     private val TAG = "Glide"
                     override fun onLoadFailed(
