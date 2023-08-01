@@ -32,6 +32,7 @@
             android:maxHeight="@dimen/news_summary_max_height"
             android:layout_marginStart="@dimen/margin_m"
             android:layout_marginTop="@dimen/margin_m"
+
             tools:text="@tools:sample/lorem/random" />
 
         <com.google.android.material.imageview.ShapeableImageView
