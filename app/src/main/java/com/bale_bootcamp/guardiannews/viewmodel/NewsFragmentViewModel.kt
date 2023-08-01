@@ -27,11 +27,10 @@ class NewsFragmentViewModel (
     }
 
 
-    class NewsFragmentViewModelFactory(repositoryClass: Class<NewsRepository>): ViewModelProvider.Factory {
-        private val repository = repositoryClass.constructors[0].newInstance(NewsOnlineDataSource(NewsApi.retrofitApiService)) as NewsRepository
+    class NewsFragmentViewModelFactory(): ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(NewsFragmentViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
+                val repository = NewsRepository((NewsOnlineDataSource(NewsApi.retrofitApiService)))
                 return NewsFragmentViewModel(repository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
