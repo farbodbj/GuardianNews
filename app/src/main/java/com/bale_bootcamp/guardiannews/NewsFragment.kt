@@ -18,13 +18,11 @@ import com.bale_bootcamp.guardiannews.viewmodel.NewsFragmentViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class NewsFragment : Fragment() {
+class NewsFragment(private val category: String) : Fragment() {
     private val TAG = "NewsFragment"
 
     private lateinit var _binding: FragmentNewsBinding
     private val binding get() = _binding
-
-    lateinit var category: String
 
     private val viewModel: NewsFragmentViewModel by activityViewModels {
         val onlineDataSource = NewsOnlineDataSource(NewsApi.retrofitApiService)
@@ -37,6 +35,8 @@ class NewsFragment : Fragment() {
         Log.d(TAG, "onViewCreated: view created")
         _binding = FragmentNewsBinding.bind(view)
         Log.d(TAG, "onViewCreated: binding set")
+        setNewsList()
+        Log.d(TAG, "onViewCreated: news list set")
     }
 
 
@@ -45,10 +45,6 @@ class NewsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
-        category = arguments?.getString("category") ?: "search"
-        Log.d(TAG, "onCreateView: binding set")
-        setNewsList()
-        Log.d(TAG, "onCreateView: news list set")
         return binding.root
     }
 
@@ -75,11 +71,3 @@ class NewsFragment : Fragment() {
     }
 }
 
-object NewsFragmentFactory {
-    fun newInstance(category: NewsApiService.Category) =
-        NewsFragment().apply {
-            arguments = Bundle().apply {
-                putString("category", category.categoryName)
-            }
-        }
-}
