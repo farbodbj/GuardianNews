@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NewsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,8 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/margin_s"
         android:layout_marginBottom="@dimen/margin_s"
+        android:paddingBottom="?attr/actionBarSize"
         android:scrollbars="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/news_viewholder"/>
 </FrameLayout>
