@@ -25,8 +25,6 @@ class NewsFragment(private val category: String) : Fragment() {
     private val binding get() = _binding
 
     private val viewModel: NewsFragmentViewModel by activityViewModels {
-        val onlineDataSource = NewsOnlineDataSource(NewsApi.retrofitApiService)
-
         NewsFragmentViewModel.NewsFragmentViewModelFactory(NewsRepository::class.java)
     }
 
@@ -54,8 +52,6 @@ class NewsFragment(private val category: String) : Fragment() {
             Log.d(TAG, "onItemClicked: $it")
             TODO("onItemClicked")
         }
-
-        Log.d(TAG, "*********** ${category} ************")
 
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
         viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"), 1, 10).observe(viewLifecycleOwner) { responseModel ->
