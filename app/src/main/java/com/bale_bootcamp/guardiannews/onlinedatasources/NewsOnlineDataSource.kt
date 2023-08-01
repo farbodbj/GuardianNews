@@ -29,13 +29,13 @@ class NewsOnlineDataSource (
                         Log.d(TAG, "request successful with code: ${response.code()}, ${response.body()?.response?.results?.size} results returned")
                     } else {
                         Log.d(TAG, "request not successful with code: ${response.code()}")
-                        TODO("log the error")
+                        //TODO("log the error")
                     }
                 }
 
                 override fun onFailure(call: retrofit2.Call<NetworkResponse>, t: Throwable) {
                     Log.d(TAG, "request failed with ${t.localizedMessage}")
-                    TODO("log the error")
+                    //TODO("log the error")
                 }
             })
         return responseModel

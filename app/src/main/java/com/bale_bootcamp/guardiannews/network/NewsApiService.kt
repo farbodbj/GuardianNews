@@ -31,6 +31,11 @@ interface NewsApiService {
         ENVIRONMENT("environment"),
         SPORT("sport");
         override fun toString(): String = this.categoryName
+        companion object {
+            fun findByStr(value: String): Category {
+                return values().find { it.categoryName == value } ?: throw IllegalArgumentException("value not found in enum")
+            }
+        }
     }
 
     @GET("{category}?api-key=${Api.API_KEY}&show-fields=${Api.DEFAULT_FIELDS}")
@@ -48,7 +53,7 @@ object NewsApi {
     }
 
     private val okhttpClient: OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+        //.addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
         .build()
 
     private val converterFactory: MoshiConverterFactory = MoshiConverterFactory
