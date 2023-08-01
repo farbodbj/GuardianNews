@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setViewPager() {
         binding.viewPager.adapter = NewsPagerAdapter(this@MainActivity)
-            .addFragment(NewsFragment(), listOf("category" to "home"))
+            .addFragment(NewsFragment(), listOf("category" to "search"))
             .addFragment(NewsFragment(), listOf("category" to "world"))
             .addFragment(NewsFragment(), listOf("category" to "science"))
             .addFragment(NewsFragment(), listOf("category" to "environment"))
@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
                 4 -> tab.text = "Sport"
             }
         }.attach()
+
         Log.d(TAG, "onCreate: tab layout mediator attached")
     }
 

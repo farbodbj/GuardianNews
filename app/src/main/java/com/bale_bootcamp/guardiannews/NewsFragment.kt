@@ -20,8 +20,10 @@ import java.time.LocalDate
 
 class NewsFragment : Fragment() {
     private val TAG = "NewsFragment"
+
     private lateinit var _binding: FragmentNewsBinding
-    val binding get() = _binding
+    private val binding get() = _binding
+
     lateinit var category: String
 
     private val viewModel: NewsFragmentViewModel by activityViewModels {
@@ -57,17 +59,21 @@ class NewsFragment : Fragment() {
             TODO("onItemClicked")
         }
 
-        // put random dates for now
         Log.d(TAG, "*********** ${category} ************")
-        viewModel.refresh(NewsApiService.Category.findByStr(category), LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"), 1, 10)
+
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
-        lifecycleScope.launch {
-            viewModel.responseModel.observe(viewLifecycleOwner) {
-                Log.d(TAG, "setNewsList: $it")
-                newsRecyclerViewAdapter.submitList(it?.results)
+        viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"), 1, 10).observe(viewLifecycleOwner) { responseModel ->
+            //Log.d(TAG, "setNewsList: $responseModel")
+            //checking whether responseModel is null or not
+            if (responseModel?.results != null) {
+                newsRecyclerViewAdapter.submitList(responseModel.results)
                 Log.d(TAG, "setNewsList: list submitted")
+            } else{
+                Log.d(TAG, "setNewsList: responseModel or results is null")
             }
         }
+
+
     }
 
 }
