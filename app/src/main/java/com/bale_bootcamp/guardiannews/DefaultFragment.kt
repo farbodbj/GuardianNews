@@ -17,7 +17,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 class DefaultFragment : Fragment() {
     private val TAG = "DefaultFragment"
 
-    private lateinit var binding: FragmentDefaultBinding
+
+    private var _binding: FragmentDefaultBinding? = null
+    private val binding get() = _binding!!
 
     private val toggle by lazy {
         ActionBarDrawerToggle(
@@ -33,7 +35,7 @@ class DefaultFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentDefaultBinding.inflate(inflater, container, false)
+        _binding = FragmentDefaultBinding.inflate(inflater, container, false)
         setUiComponents()
         return binding.root
     }
@@ -60,7 +62,6 @@ class DefaultFragment : Fragment() {
 
         Log.d(TAG, "onCreate: view pager adapter set")
     }
-
 
     private fun setTabLayout() {
         val navDrawer = binding.navView
@@ -129,5 +130,10 @@ class DefaultFragment : Fragment() {
                 false
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
