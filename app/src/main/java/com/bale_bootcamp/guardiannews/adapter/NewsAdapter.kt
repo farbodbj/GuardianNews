@@ -42,7 +42,7 @@ class NewsAdapter(
         Log.d(TAG, "onCreateViewHolder: viewHolder created")
 
         viewHolder.itemView.setOnClickListener {
-            val position = viewHolder.adapterPosition
+            val position = viewHolder.bindingAdapterPosition
             onItemClicked(getItem(position))
         }
         Log.d(TAG, "onCreateViewHolder: viewHolder setOnClickListener")
