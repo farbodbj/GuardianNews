@@ -1,42 +1,41 @@
 package com.bale_bootcamp.guardiannews
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.bale_bootcamp.guardiannews.adapter.NewsPagerAdapter
-import com.bale_bootcamp.guardiannews.databinding.ActivityMainBinding
+import com.bale_bootcamp.guardiannews.databinding.FragmentDefaultBinding
 import com.bale_bootcamp.guardiannews.network.NewsApiService
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlin.IllegalStateException
 
-class MainActivity : AppCompatActivity() {
-    private val TAG = "MainActivity"
+class DefaultFragment : Fragment() {
+    private val TAG = "DefaultFragment"
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: FragmentDefaultBinding
+
     private val toggle by lazy {
         ActionBarDrawerToggle(
-            this,
+            activity,
             binding.root,
             R.string.drawer_open,
             R.string.drawer_close
         )
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Inflate the layout for this fragment
+        binding = FragmentDefaultBinding.inflate(inflater, container, false)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "onCreate: starts")
-        super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        Log.d(TAG, "onCreate: binding created")
-        setContentView(binding.root)
-
-        setUiComponents()
-        Log.d(TAG, "onCreate: ui components set")
+        return binding.root
     }
 
     private fun setUiComponents() {
@@ -50,11 +49,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun setViewPager() {
         binding.viewPager.adapter =
-            NewsPagerAdapter(this,
-                NewsApiService.Category
-                    .values()
-                    .map { it.categoryName }
-            )
+            activity?.let { it ->
+                NewsPagerAdapter(
+                    it,
+                    NewsApiService.Category
+                        .values()
+                        .map { it.categoryName }
+                )
+            }
 
         Log.d(TAG, "onCreate: view pager adapter set")
     }
@@ -91,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setShowSelectedItem() {
         val navDrawer = binding.navView
-        binding.tabLayout.addOnTabSelectedListener(object: OnTabSelectedListener {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 Log.d(TAG, tab!!.position.toString())
                 navDrawer.setCheckedItem(navDrawer.menu.getItem(tab.position).itemId)
@@ -114,9 +116,9 @@ class MainActivity : AppCompatActivity() {
         navDrawer.setNavigationItemSelectedListener {
             try {
                 viewPager.currentItem =
-                    when(it.itemId) {
-                        R.id.nav_home ->  0
-                        R.id.nav_world ->  1
+                    when (it.itemId) {
+                        R.id.nav_home -> 0
+                        R.id.nav_world -> 1
                         R.id.nav_science -> 2
                         R.id.nav_environment -> 3
                         R.id.nav_sport -> 4
@@ -127,11 +129,5 @@ class MainActivity : AppCompatActivity() {
                 false
             }
         }
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        toggle.syncState()
     }
 }
