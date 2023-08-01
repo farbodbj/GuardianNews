@@ -7,6 +7,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.bale_bootcamp.guardiannews.adapter.NewsPagerAdapter
 import com.bale_bootcamp.guardiannews.databinding.ActivityMainBinding
+import com.bale_bootcamp.guardiannews.network.NewsApiService
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
@@ -46,7 +47,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setViewPager() {
-        binding.viewPager.adapter = NewsPagerAdapter(this)
+        binding.viewPager.adapter =
+            NewsPagerAdapter(this,
+                NewsApiService.Category
+                    .values()
+                    .map { it.categoryName })
+
         Log.d(TAG, "onCreate: view pager adapter set")
     }
 

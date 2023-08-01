@@ -56,7 +56,6 @@ class NewsAdapter(
         Log.d(TAG, "onBindViewHolder: viewHolder binded at position $position")
     }
 
-
     class NewsViewHolder(
         private var binding: NewsViewholderBinding
     ): RecyclerView.ViewHolder(binding.root) {
