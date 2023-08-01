@@ -59,6 +59,7 @@ class DefaultFragment : Fragment() {
                 )
             }
 
+        binding.viewPager.offscreenPageLimit = 5
         Log.d(TAG, "onCreate: view pager adapter set")
     }
 
