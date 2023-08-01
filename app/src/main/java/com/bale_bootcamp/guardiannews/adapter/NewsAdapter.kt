@@ -72,6 +72,7 @@ class NewsAdapter(
 
         private fun bindTextual(news: News) = binding.apply {
             newsTitle.text = news.details.headline.parseAsHtml()
+            newsSection.text = news.sectionName
             newsSummary.text = news.details.trailText.parseAsHtml()
             newsDate.text = news.webPublicationDate.toString().parseAsHtml()
             Log.d(TAG, "bindTextual: text binded")
