@@ -17,7 +17,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 class DefaultFragment : Fragment() {
     private val TAG = "DefaultFragment"
 
-
     private var _binding: FragmentDefaultBinding? = null
     private val binding get() = _binding!!
 
