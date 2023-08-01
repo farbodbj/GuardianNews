@@ -11,8 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import java.time.LocalDate
 
 class NewsRepository (
-    private val onlineDataSource: NewsOnlineDataSource,
-    private val lifeCycleAwareCoroutineScope: CoroutineScope
+    private val onlineDataSource: NewsOnlineDataSource
 ) {
     private val TAG: String = "NewsRepository"
 
