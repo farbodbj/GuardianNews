@@ -25,7 +25,7 @@ class NewsFragment(private val category: String) : Fragment() {
     private val binding get() = _binding
 
     private val viewModel: NewsFragmentViewModel by activityViewModels {
-        NewsFragmentViewModel.NewsFragmentViewModelFactory(NewsRepository::class.java)
+        NewsFragmentViewModel.NewsFragmentViewModelFactory()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

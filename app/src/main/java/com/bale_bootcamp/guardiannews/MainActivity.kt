@@ -15,10 +15,7 @@ import kotlin.IllegalStateException
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
-
     private lateinit var binding: ActivityMainBinding
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate: starts")
