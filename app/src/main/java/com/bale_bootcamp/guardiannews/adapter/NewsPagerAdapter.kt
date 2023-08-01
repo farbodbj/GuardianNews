@@ -13,7 +13,7 @@ class NewsPagerAdapter(fragmentActivity: FragmentActivity): FragmentStateAdapter
     private val fragments: MutableList<Fragment> = mutableListOf()
     fun addFragment(toAdd: Fragment, pariList: List<Pair<String, String>>): NewsPagerAdapter {
         Log.d(TAG, "addFragment: $toAdd, fragment args: ${Utils.buildStringBundle(pariList)}")
-        toAdd.arguments?.putAll(Utils.buildStringBundle(pariList))
+        toAdd.arguments = Utils.buildStringBundle(pariList)
         fragments.add(toAdd)
         return this
     }
