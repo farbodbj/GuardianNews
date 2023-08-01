@@ -8,7 +8,10 @@ import androidx.core.view.GravityCompat
 import com.bale_bootcamp.guardiannews.adapter.NewsPagerAdapter
 import com.bale_bootcamp.guardiannews.databinding.ActivityMainBinding
 import com.bale_bootcamp.guardiannews.network.NewsApiService
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlin.IllegalStateException
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
@@ -51,26 +54,22 @@ class MainActivity : AppCompatActivity() {
             NewsPagerAdapter(this,
                 NewsApiService.Category
                     .values()
-                    .map { it.categoryName })
+                    .map { it.categoryName }
+            )
 
         Log.d(TAG, "onCreate: view pager adapter set")
     }
 
 
     private fun setTabLayout() {
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) {
-            tab, position ->
-            when(position) {
-                0 -> tab.text = "Home"
-                1 -> tab.text = "World"
-                2 -> tab.text = "Science"
-                3 -> tab.text = "Environment"
-                4 -> tab.text = "Sport"
-            }
+        val navDrawer = binding.navView
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = navDrawer.menu.getItem(position).title
         }.attach()
 
         Log.d(TAG, "onCreate: tab layout mediator attached")
     }
+
 
     private fun setNavigationDrawer() {
         val drawerLayout = binding.root
@@ -85,6 +84,48 @@ class MainActivity : AppCompatActivity() {
                 drawerLayout.closeDrawer(GravityCompat.START)
             } else {
                 drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+        setShowSelectedItem()
+        syncDrawerWithViewPager()
+    }
+
+    private fun setShowSelectedItem() {
+        val navDrawer = binding.navView
+        binding.tabLayout.addOnTabSelectedListener(object: OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                Log.d(TAG, tab!!.position.toString())
+                navDrawer.setCheckedItem(navDrawer.menu.getItem(tab.position).itemId)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // No implementation needed
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // No implementation needed
+            }
+        })
+    }
+
+    private fun syncDrawerWithViewPager() {
+        val viewPager = binding.viewPager
+        val navDrawer = binding.navView
+
+        navDrawer.setNavigationItemSelectedListener {
+            try {
+                viewPager.currentItem =
+                    when(it.itemId) {
+                        R.id.nav_home ->  0
+                        R.id.nav_world ->  1
+                        R.id.nav_science -> 2
+                        R.id.nav_environment -> 3
+                        R.id.nav_sport -> 4
+                        else -> throw IllegalStateException("unknown error")
+                    }
+                true
+            } catch (e: IllegalStateException) {
+                false
             }
         }
     }

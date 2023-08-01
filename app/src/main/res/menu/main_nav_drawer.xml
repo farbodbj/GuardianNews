@@ -3,27 +3,34 @@
     <group android:checkableBehavior="none">
         <item
             android:id="@+id/nav_home"
+            android:checkable="true"
             android:icon="@drawable/ic_home_24dp"
             android:title="@string/home" />
 
         <item
             android:id="@+id/nav_world"
+            android:checkable="true"
             android:icon="@drawable/ic_world_24dp"
             android:title="@string/world" />
 
         <item
             android:id="@+id/nav_environment"
+            android:checkable="true"
             android:icon="@drawable/ic_forest_24dp"
             android:title="@string/environment" />
 
         <item
+            android:id="@+id/nav_science"
+            android:checkable="true"
+            android:icon="@drawable/ic_science_24dp"
+            android:title="@string/science" />
+
+        <item
             android:id="@+id/nav_sport"
+            android:checkable="true"
             android:icon="@drawable/ic_sport_24dp"
             android:title="@string/sport" />
 
-        <item
-            android:id="@+id/nav_science"
-            android:icon="@drawable/ic_science_24dp"
-            android:title="@string/science" />
+
     </group>
 </menu>
