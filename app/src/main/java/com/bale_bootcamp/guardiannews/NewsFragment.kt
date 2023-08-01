@@ -26,8 +26,8 @@ class NewsFragment(private val category: String) : Fragment() {
 
     private val viewModel: NewsFragmentViewModel by activityViewModels {
         val onlineDataSource = NewsOnlineDataSource(NewsApi.retrofitApiService)
-        val repository = NewsRepository(onlineDataSource, lifecycleScope)
-        NewsFragmentViewModel.NewsFragmentViewModelFactory(repository)
+
+        NewsFragmentViewModel.NewsFragmentViewModelFactory(NewsRepository::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,4 +70,3 @@ class NewsFragment(private val category: String) : Fragment() {
         }
     }
 }
-

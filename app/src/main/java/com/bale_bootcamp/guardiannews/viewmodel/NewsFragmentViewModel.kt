@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.switchMap
 import com.bale_bootcamp.guardiannews.model.ResponseModel
+import com.bale_bootcamp.guardiannews.network.NewsApi
 import com.bale_bootcamp.guardiannews.network.NewsApiService
+import com.bale_bootcamp.guardiannews.onlinedatasources.NewsOnlineDataSource
 import com.bale_bootcamp.guardiannews.repository.NewsRepository
 import java.time.LocalDate
 
@@ -40,7 +42,8 @@ class NewsFragmentViewModel (
     }
 
 
-    class NewsFragmentViewModelFactory(private val repository: NewsRepository): ViewModelProvider.Factory {
+    class NewsFragmentViewModelFactory(repositoryClass: Class<NewsRepository>): ViewModelProvider.Factory {
+        private val repository = repositoryClass.constructors[0].newInstance(NewsOnlineDataSource(NewsApi.retrofitApiService)) as NewsRepository
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(NewsFragmentViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
