@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +20,7 @@ import com.bale_bootcamp.guardiannews.viewmodel.NewsFragmentViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+private const val ONE_MINUTE: Long = 60 * 1000L
 class NewsFragment(private val category: String) : Fragment() {
     private val TAG = "NewsFragment"
 
@@ -26,6 +28,8 @@ class NewsFragment(private val category: String) : Fragment() {
     private val binding get() = _binding!!
 
     private var isRefreshing = false
+
+    private var lastRefreshed: Long = 0
 
     private val viewModel: NewsFragmentViewModel by activityViewModels {
         NewsFragmentViewModel.NewsFragmentViewModelFactory()
@@ -60,13 +64,14 @@ class NewsFragment(private val category: String) : Fragment() {
         }
 
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
-        viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"), 1, 10)
+        viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.now().minusMonths(1), LocalDate.now(), 1, 10)
             .observe(viewLifecycleOwner) { responseModel ->
                 Log.i(TAG, "setNewsList: $responseModel")
                 //checking whether responseModel is null or not
                 if (responseModel?.results != null) {
                     newsRecyclerViewAdapter.submitList(responseModel.results)
                     isRefreshing = false
+                    lastRefreshed = System.currentTimeMillis()
                     Log.d(TAG, "setNewsList: list submitted")
                 } else{
                     Log.d(TAG, "setNewsList: responseModel or results is null")
@@ -75,10 +80,18 @@ class NewsFragment(private val category: String) : Fragment() {
     }
 
     private fun setSwipeRefresh(){
+        val newsRefreshedToast: Toast = Toast.makeText(context, "News refreshed", Toast.LENGTH_SHORT)
+        val refreshedJutsNowToast: Toast = Toast.makeText(context, "News not refreshed", Toast.LENGTH_SHORT)
         binding.refresh.setOnRefreshListener {
             setNewsList()
-            if(isRefreshing)
+            if(isRefreshing) {
                 binding.refresh.isRefreshing = false
+                newsRefreshedToast.show()
+            }
+            if(System.currentTimeMillis() - lastRefreshed < ONE_MINUTE) {
+                binding.refresh.isRefreshing = false
+                refreshedJutsNowToast.show()
+            }
         }
     }
 
