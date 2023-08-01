@@ -24,7 +24,7 @@ object Api {
 }
 
 interface NewsApiService {
-    enum class Category(private val categoryName: String) {
+    enum class Category(val categoryName: String) {
         HOME("search"),
         WORLD("world"),
         SCIENCE("science"),

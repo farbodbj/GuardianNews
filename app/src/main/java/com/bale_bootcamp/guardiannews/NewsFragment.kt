@@ -63,7 +63,7 @@ class NewsFragment : Fragment() {
 
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
         viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.parse("2021-09-01"), LocalDate.parse("2021-09-02"), 1, 10).observe(viewLifecycleOwner) { responseModel ->
-            //Log.d(TAG, "setNewsList: $responseModel")
+            Log.i(TAG, "setNewsList: $responseModel")
             //checking whether responseModel is null or not
             if (responseModel?.results != null) {
                 newsRecyclerViewAdapter.submitList(responseModel.results)
@@ -72,8 +72,14 @@ class NewsFragment : Fragment() {
                 Log.d(TAG, "setNewsList: responseModel or results is null")
             }
         }
-
-
     }
+}
 
+object NewsFragmentFactory {
+    fun newInstance(category: NewsApiService.Category) =
+        NewsFragment().apply {
+            arguments = Bundle().apply {
+                putString("category", category.categoryName)
+            }
+        }
 }
