@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.bale_bootcamp.guardiannews.adapter.NewsAdapter
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
 import com.bale_bootcamp.guardiannews.network.NewsApiService
@@ -25,7 +26,7 @@ class NewsFragment(private val category: String) : Fragment() {
 
     private var lastRefreshed: Long = 0
 
-    private val viewModel: NewsFragmentViewModel by activityViewModels {
+    private val viewModel: NewsFragmentViewModel by viewModels {
         NewsFragmentViewModel.NewsFragmentViewModelFactory()
     }
 
@@ -70,7 +71,13 @@ class NewsFragment(private val category: String) : Fragment() {
             10)
 
         Log.d(TAG, "refreshNewsList: ${viewModel.news}")
-        newsRecyclerViewAdapter.submitList(viewModel.news)
+
+        viewModel.news.observe(viewLifecycleOwner) {
+            Log.d(TAG, "refreshNewsList: $it")
+            newsRecyclerViewAdapter.submitList(it)
+            lastRefreshed = System.currentTimeMillis()
+            isRefreshing = false
+        }
     }
 
     private fun setSwipeRefresh(){
