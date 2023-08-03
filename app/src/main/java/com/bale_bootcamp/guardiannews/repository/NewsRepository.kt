@@ -1,31 +1,41 @@
 package com.bale_bootcamp.guardiannews.repository
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.bale_bootcamp.guardiannews.localdatasources.database.NewsDao
+import com.bale_bootcamp.guardiannews.model.News
 import com.bale_bootcamp.guardiannews.model.ResponseModel
-import com.bale_bootcamp.guardiannews.network.NewsApi
 import com.bale_bootcamp.guardiannews.network.NewsApiService
 import com.bale_bootcamp.guardiannews.onlinedatasources.NewsOnlineDataSource
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 class NewsRepository (
-    private val onlineDataSource: NewsOnlineDataSource
+    private val onlineDataSource: NewsOnlineDataSource,
+    private val localDataSource: NewsDao
 ) {
     private val TAG: String = "NewsRepository"
 
-    fun getNews(category: NewsApiService.Category,
+    suspend fun refreshNews(category: NewsApiService.Category,
+                    fromDate: LocalDate,
+                    toDate: LocalDate,
+                    page: Int,
+                    pageSize: Int) {
+
+        val results = onlineDataSource.getNews(category, fromDate, toDate, page, pageSize)
+        results.value?.results?.let {
+            localDataSource.insert(*it.toTypedArray())
+        }
+    }
+
+
+    suspend fun getNews(category: NewsApiService.Category,
         fromDate: LocalDate,
         toDate: LocalDate,
         page: Int,
         pageSize: Int
-    ): MutableLiveData<ResponseModel?> {
-
-        val responseModel: MutableLiveData<ResponseModel?> = onlineDataSource.getNews(category, fromDate, toDate, page, pageSize)
-
-        Log.d(TAG, "${::getNews.name} called with values category: ${category.name}, fromDate: $fromDate, toDate: $toDate, page: $page, pageSize: $pageSize")
-        Log.d(TAG, "$responseModel, ${responseModel.value}")
-        return responseModel
+    ): Flow<List<News>> {
+        return localDataSource.select(category)
     }
 }
