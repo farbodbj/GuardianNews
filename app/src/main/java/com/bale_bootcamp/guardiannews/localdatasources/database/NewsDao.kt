@@ -13,7 +13,7 @@ interface NewsDao: BaseDao<News> {
     @Query("select * from ${News.ENTITY_NAME} where sectionId = :category")
     fun selectInternal(category: String): Flow<List<News>>
 
-    @Transaction
+
     fun select(category: NewsApiService.Category): Flow<List<News>>
         = selectInternal(category.name)
 
