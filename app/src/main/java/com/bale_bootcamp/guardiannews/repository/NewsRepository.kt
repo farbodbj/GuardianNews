@@ -6,6 +6,7 @@ import com.bale_bootcamp.guardiannews.model.News
 import com.bale_bootcamp.guardiannews.network.NewsApiService
 import com.bale_bootcamp.guardiannews.onlinedatasources.NewsOnlineDataSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import java.time.LocalDate
 
 class NewsRepository (
@@ -33,6 +34,6 @@ class NewsRepository (
         toDate: LocalDate,
         page: Int,
         pageSize: Int
-    ): Flow<List<News>> = localDataSource.select(category)
-
+    ): Flow<List<News>> =
+        localDataSource.select(category).distinctUntilChanged()
 }
