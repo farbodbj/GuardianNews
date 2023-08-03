@@ -23,7 +23,6 @@ class NewsFragmentViewModel (
 ): ViewModel() {
     private val TAG: String = "NewsFragmentViewModel"
 
-    private var _news: List<News>? = null
     val news: MutableLiveData<List<News>> = MutableLiveData()
 
     fun getNews(category: NewsApiService.Category,
