@@ -16,7 +16,7 @@ class NewsOnlineDataSource (
     private val TAG: String = "NewsOnlineDataSource"
 
     fun getNews(category: NewsApiService.Category, fromDate: LocalDate, toDate: LocalDate, page: Int, pageSize: Int
-    ): LiveData<ResponseModel?> {
+    ): MutableLiveData<ResponseModel?> {
 
         val responseModel: MutableLiveData<ResponseModel?> = MutableLiveData(null)
         Log.d(TAG, "${::getNews.name} called with values category: ${category.name}, fromDate: $fromDate, toDate: $toDate, page: $page, pageSize: $pageSize")
@@ -42,6 +42,7 @@ class NewsOnlineDataSource (
                 }
             })
 
+        Log.d(TAG, "getNews return value: ${responseModel.value}" )
         return responseModel
     }
 }

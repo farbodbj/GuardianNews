@@ -1,6 +1,8 @@
 package com.bale_bootcamp.guardiannews.repository
 
 
+import android.util.Log
+import androidx.lifecycle.Observer
 import com.bale_bootcamp.guardiannews.localdatasources.database.NewsDao
 import com.bale_bootcamp.guardiannews.model.News
 import com.bale_bootcamp.guardiannews.network.NewsApiService
@@ -21,8 +23,11 @@ class NewsRepository (
                     page: Int,
                     pageSize: Int) {
 
+
         val results = onlineDataSource.getNews(category, fromDate, toDate, page, pageSize)
+
         results.value?.results?.let {
+            Log.d(TAG, it.toString())
             localDataSource.insert(*it.toTypedArray())
         }
 
@@ -30,10 +35,10 @@ class NewsRepository (
 
 
     fun getNews(category: NewsApiService.Category,
-        fromDate: LocalDate,
-        toDate: LocalDate,
-        page: Int,
-        pageSize: Int
+                fromDate: LocalDate,
+                toDate: LocalDate,
+                page: Int,
+                pageSize: Int
     ): Flow<List<News>> =
         localDataSource.select(category).distinctUntilChanged()
 }
