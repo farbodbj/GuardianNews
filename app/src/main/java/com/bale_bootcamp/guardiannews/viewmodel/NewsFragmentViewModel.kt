@@ -10,7 +10,9 @@ import com.bale_bootcamp.guardiannews.network.NewsApi
 import com.bale_bootcamp.guardiannews.network.NewsApiService
 import com.bale_bootcamp.guardiannews.onlinedatasources.NewsOnlineDataSource
 import com.bale_bootcamp.guardiannews.repository.NewsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -19,12 +21,19 @@ class NewsFragmentViewModel (
 ): ViewModel() {
     private val TAG: String = "NewsFragmentViewModel"
 
+    private var _news: List<News>? = null
+
     fun getNews(category: NewsApiService.Category,
                 fromDate: LocalDate,
                 toDate: LocalDate,
                 page: Int,
                 pageSize: Int
-    ): Flow<List<News>> = repository.getNews(category, fromDate, toDate, page, pageSize)
+    ) {
+        viewModelScope.launch {
+            repository.getNews(category, fromDate, toDate, page, pageSize).collectLatest { _news = it }
+        }
+
+    }
 
 
     fun refreshNews(category: NewsApiService.Category,
@@ -32,8 +41,8 @@ class NewsFragmentViewModel (
                     toDate: LocalDate,
                     page: Int,
                     pageSize: Int) {
-        viewModelScope.launch{
-            repository.refreshNews(category, fromDate, toDate, page, pageSize)
+        viewModelScope.launch {
+            repository.getNews(category, fromDate, toDate, page, pageSize).collectLatest { _news = it }
         }
     }
 
