@@ -27,8 +27,8 @@ interface NewsApiService {
     enum class Category(val categoryName: String) {
         HOME("search"),
         WORLD("world"),
-        SCIENCE("science"),
         ENVIRONMENT("environment"),
+        SCIENCE("science"),
         SPORT("sport");
         override fun toString(): String = this.categoryName
         companion object {
