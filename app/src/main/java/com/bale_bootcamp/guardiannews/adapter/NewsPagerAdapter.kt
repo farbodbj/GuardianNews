@@ -19,7 +19,7 @@ class NewsPagerAdapter(fragmentActivity: FragmentActivity,
     }
 
     override fun createFragment(position: Int): Fragment {
-        Log.d(TAG, "createFragment: position: $position")
+        Log.d(TAG, "createFragment: category at position: ${categories[position]}")
         return NewsFragment(categories[position])
     }
 
