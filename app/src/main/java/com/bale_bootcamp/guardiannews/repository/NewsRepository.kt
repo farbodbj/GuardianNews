@@ -23,16 +23,13 @@ class NewsRepository (
                     page: Int,
                     pageSize: Int) {
 
-
         val results = onlineDataSource.getNews(category, fromDate, toDate, page, pageSize)
 
         results.value?.results?.let {
             Log.d(TAG, it.toString())
             localDataSource.insert(*it.toTypedArray())
         }
-
     }
-
 
     fun getNews(category: NewsApiService.Category,
                 fromDate: LocalDate,
@@ -40,5 +37,5 @@ class NewsRepository (
                 page: Int,
                 pageSize: Int
     ): Flow<List<News>> =
-        localDataSource.select(category).distinctUntilChanged()
+        localDataSource.select(category)
 }

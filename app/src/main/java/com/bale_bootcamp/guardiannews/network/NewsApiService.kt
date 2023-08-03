@@ -39,11 +39,11 @@ interface NewsApiService {
     }
 
     @GET("{category}?api-key=${Api.API_KEY}&show-fields=${Api.DEFAULT_FIELDS}")
-    fun getLatestFromCategory(@Path("category") category: Category,
+    suspend fun getLatestFromCategory(@Path("category") category: Category,
                               @Query("from-date") fromDate: LocalDate,
                               @Query("to-date") toDate: LocalDate,
                               @Query("page") page: Int,
-                              @Query("page-size") pageSize: Int = 10): Call<NetworkResponse>
+                              @Query("page-size") pageSize: Int = 10): NetworkResponse
 }
 
 
