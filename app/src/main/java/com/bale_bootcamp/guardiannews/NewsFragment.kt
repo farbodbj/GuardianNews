@@ -7,17 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import com.bale_bootcamp.guardiannews.adapter.NewsAdapter
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
-import com.bale_bootcamp.guardiannews.network.NewsApi
 import com.bale_bootcamp.guardiannews.network.NewsApiService
-import com.bale_bootcamp.guardiannews.onlinedatasources.NewsOnlineDataSource
-import com.bale_bootcamp.guardiannews.repository.NewsRepository
 import com.bale_bootcamp.guardiannews.viewmodel.NewsFragmentViewModel
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 private const val ONE_MINUTE: Long = 60 * 1000L
@@ -40,7 +34,7 @@ class NewsFragment(private val category: String) : Fragment() {
         Log.d(TAG, "onViewCreated: view created")
         _binding = FragmentNewsBinding.bind(view)
         Log.d(TAG, "onViewCreated: binding set")
-        setNewsList()
+        refreshNewsList()
         Log.d(TAG, "onViewCreated: news list set")
         Log.d(TAG, "onViewCreated: swipe refresh set")
         setSwipeRefresh()
@@ -56,7 +50,7 @@ class NewsFragment(private val category: String) : Fragment() {
         return binding.root
     }
 
-    private fun setNewsList() {
+    private fun refreshNewsList() {
         isRefreshing = true
         val newsRecyclerViewAdapter = NewsAdapter {
             Log.d(TAG, "onItemClicked: $it")
@@ -64,26 +58,26 @@ class NewsFragment(private val category: String) : Fragment() {
         }
 
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
-        viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.now().minusMonths(1), LocalDate.now(), 1, 10)
-            .observe(viewLifecycleOwner) { responseModel ->
-                Log.i(TAG, "setNewsList: $responseModel")
-                //checking whether responseModel is null or not
-                if (responseModel?.results != null) {
-                    newsRecyclerViewAdapter.submitList(responseModel.results)
-                    isRefreshing = false
-                    lastRefreshed = System.currentTimeMillis()
-                    Log.d(TAG, "setNewsList: list submitted")
-                } else{
-                    Log.d(TAG, "setNewsList: responseModel or results is null")
-                }
-        }
+        viewModel.refreshNews(NewsApiService.Category.findByStr(category),
+            LocalDate.now().minusMonths(1),
+            LocalDate.now(),
+            1,
+            10)
+        viewModel.getNews(NewsApiService.Category.findByStr(category),
+            LocalDate.now().minusMonths(1),
+            LocalDate.now(),
+            1,
+            10)
+
+        Log.d(TAG, "refreshNewsList: ${viewModel.news}")
+        newsRecyclerViewAdapter.submitList(viewModel.news)
     }
 
     private fun setSwipeRefresh(){
         val newsRefreshedToast: Toast = Toast.makeText(context, "News refreshed", Toast.LENGTH_SHORT)
         val refreshedJutsNowToast: Toast = Toast.makeText(context, "News not refreshed", Toast.LENGTH_SHORT)
         binding.refresh.setOnRefreshListener {
-            setNewsList()
+            refreshNewsList()
             if(isRefreshing) {
                 binding.refresh.isRefreshing = false
                 newsRefreshedToast.show()
