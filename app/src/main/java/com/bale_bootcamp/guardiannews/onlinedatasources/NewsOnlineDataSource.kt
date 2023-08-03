@@ -1,6 +1,7 @@
 package com.bale_bootcamp.guardiannews.onlinedatasources
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bale_bootcamp.guardiannews.model.NetworkResponse
 import com.bale_bootcamp.guardiannews.model.ResponseModel
@@ -14,7 +15,9 @@ class NewsOnlineDataSource (
 ) {
     private val TAG: String = "NewsOnlineDataSource"
 
-    fun getNews(category: NewsApiService.Category, fromDate: LocalDate, toDate: LocalDate, page: Int, pageSize: Int): MutableLiveData<ResponseModel?> {
+    fun getNews(category: NewsApiService.Category, fromDate: LocalDate, toDate: LocalDate, page: Int, pageSize: Int
+    ): LiveData<ResponseModel?> {
+
         val responseModel: MutableLiveData<ResponseModel?> = MutableLiveData(null)
         Log.d(TAG, "${::getNews.name} called with values category: ${category.name}, fromDate: $fromDate, toDate: $toDate, page: $page, pageSize: $pageSize")
 
@@ -38,6 +41,7 @@ class NewsOnlineDataSource (
                     //TODO("log the error")
                 }
             })
+
         return responseModel
     }
 }
