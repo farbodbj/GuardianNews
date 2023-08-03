@@ -1,9 +1,12 @@
 package com.bale_bootcamp.guardiannews.model
 
 
+import androidx.room.Embedded
+import androidx.room.Entity
 import com.squareup.moshi.Json
 import java.time.LocalDateTime
 
+@Entity(tableName = News.ENTITY_NAME, primaryKeys = ["id"])
 data class News (
     val id: String,
     val type: String,
@@ -13,5 +16,12 @@ data class News (
     val webTitle: String,
     val webUrl: String,
     val apiUrl: String,
-    @Json(name = "fields") val details: NewsDetail
-)
+    @Json(name = "fields")
+    @Embedded
+    val details: NewsDetail) {
+    companion object {
+        const val ENTITY_NAME = "news"
+    }
+}
+
+
