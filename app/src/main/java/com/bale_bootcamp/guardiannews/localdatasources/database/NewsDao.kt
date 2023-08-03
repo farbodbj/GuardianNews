@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NewsDao: BaseDao<News> {
-    @Query("select * from ${News.ENTITY_NAME} where sectionId = :category limit :count")
-    suspend fun selectInternal(count: Int, category: String): Flow<List<News>>
+    @Query("select * from ${News.ENTITY_NAME} where sectionId = :category")
+    suspend fun selectInternal(category: String): Flow<List<News>>
 
     @Transaction
-    suspend fun select(count: Int, category: NewsApiService.Category): Flow<List<News>> {
-        return selectInternal(count, category.name)
-    }
+    suspend fun select(category: NewsApiService.Category): Flow<List<News>>
+        = selectInternal(category.name)
+
 }
