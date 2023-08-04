@@ -5,13 +5,12 @@ import android.util.Log
 import com.bale_bootcamp.guardiannews.localdatasources.database.NewsDao
 import com.bale_bootcamp.guardiannews.model.News
 import com.bale_bootcamp.guardiannews.network.NewsApiService
-import com.bale_bootcamp.guardiannews.onlinedatasources.NewsOnlineDataSource
 import kotlinx.coroutines.flow.Flow
 
 import java.time.LocalDate
 
 class NewsRepository (
-    private val onlineDataSource: NewsOnlineDataSource,
+    private val onlineDataSource: NewsApiService,
     private val localDataSource: NewsDao
 ) {
     private val TAG: String = "NewsRepository"
@@ -22,9 +21,8 @@ class NewsRepository (
                     page: Int,
                     pageSize: Int) {
 
-        val results = onlineDataSource.getNews(category, fromDate, toDate, page, pageSize)
-
-        results.value?.results?.let {
+        val results = onlineDataSource.getLatestFromCategory(category, fromDate, toDate, page, pageSize).response
+        results.results.let {
             Log.d(TAG, it.toString())
             localDataSource.insertAll(*it.toTypedArray())
         }
