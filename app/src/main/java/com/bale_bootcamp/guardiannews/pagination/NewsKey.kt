@@ -1,11 +1,15 @@
 package com.bale_bootcamp.guardiannews.pagination
 
 import com.bale_bootcamp.guardiannews.network.NewsApiService
+import java.time.LocalDate
 
 data class NewsKey(
-    private val category: NewsApiService.Category,
-    private val fromDate: String,
-    private val toDate: String,
-    private val page: Int,
-    private val pageSize: Int
-)
+    val category: NewsApiService.Category,
+    val fromDate: LocalDate = LocalDate.now().minusMonths(1),
+    val toDate: LocalDate = LocalDate.now(),
+    val page: Int,
+    val pageSize: Int = 10,
+) {
+    operator fun plus(num: Int) = copy(page = page + num)
+    operator fun minus(num: Int) = copy(page = page - num)
+}
