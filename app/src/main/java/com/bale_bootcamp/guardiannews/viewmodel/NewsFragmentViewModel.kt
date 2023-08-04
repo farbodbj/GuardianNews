@@ -2,7 +2,6 @@ package com.bale_bootcamp.guardiannews.viewmodel
 
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,10 +10,8 @@ import com.bale_bootcamp.guardiannews.GuardianNewsApp
 import com.bale_bootcamp.guardiannews.model.News
 import com.bale_bootcamp.guardiannews.network.NewsApi
 import com.bale_bootcamp.guardiannews.network.NewsApiService
-import com.bale_bootcamp.guardiannews.onlinedatasources.NewsOnlineDataSource
 import com.bale_bootcamp.guardiannews.repository.NewsRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -55,7 +52,7 @@ class NewsFragmentViewModel (
             if (modelClass.isAssignableFrom(NewsFragmentViewModel::class.java)) {
                 val repository
                     = NewsRepository(
-                        NewsOnlineDataSource(NewsApi.retrofitApiService),
+                        NewsApi.retrofitApiService,
                         GuardianNewsApp.getAppContext().database.newsDao()
                     )
                 return NewsFragmentViewModel(repository) as T
