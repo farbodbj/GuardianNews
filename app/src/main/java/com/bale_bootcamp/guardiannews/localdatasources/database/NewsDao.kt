@@ -23,4 +23,7 @@ interface NewsDao: BaseDao<News> {
             selectInternal(category.categoryName)
         }
     }
+
+    @Query("delete from ${News.ENTITY_NAME}")
+    suspend fun deleteAll()
 }
