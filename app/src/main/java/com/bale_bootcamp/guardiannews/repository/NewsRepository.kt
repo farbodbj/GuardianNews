@@ -2,13 +2,12 @@ package com.bale_bootcamp.guardiannews.repository
 
 
 import android.util.Log
-import androidx.lifecycle.Observer
 import com.bale_bootcamp.guardiannews.localdatasources.database.NewsDao
 import com.bale_bootcamp.guardiannews.model.News
 import com.bale_bootcamp.guardiannews.network.NewsApiService
 import com.bale_bootcamp.guardiannews.onlinedatasources.NewsOnlineDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
+
 import java.time.LocalDate
 
 class NewsRepository (
@@ -27,7 +26,7 @@ class NewsRepository (
 
         results.value?.results?.let {
             Log.d(TAG, it.toString())
-            localDataSource.insert(*it.toTypedArray())
+            localDataSource.insertAll(*it.toTypedArray())
         }
     }
 
