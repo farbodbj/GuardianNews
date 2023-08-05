@@ -15,6 +15,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
 
 
 object Api {
@@ -54,6 +55,7 @@ object NewsApi {
 
     private val okhttpClient: OkHttpClient = OkHttpClient.Builder()
         //.addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+        .readTimeout(5, TimeUnit.MINUTES)
         .build()
 
     private val converterFactory: MoshiConverterFactory = MoshiConverterFactory
