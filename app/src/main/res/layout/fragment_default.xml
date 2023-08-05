@@ -66,7 +66,8 @@ tools:context=".MainActivity">
         android:layout_height="0dp"
         tools:layout="@layout/fragment_news"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_bar_layout"/>
+        app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 <com.google.android.material.navigation.NavigationView
