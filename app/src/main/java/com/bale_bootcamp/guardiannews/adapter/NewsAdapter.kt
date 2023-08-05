@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.parseAsHtml
+import androidx.paging.CombinedLoadStates
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +22,7 @@ import com.bumptech.glide.request.target.Target
 
 class NewsAdapter(
     private val onItemClicked: (News) -> Unit
-): ListAdapter<News, NewsAdapter.NewsViewHolder>(DiffCallback) {
+): PagingDataAdapter<News, NewsAdapter.NewsViewHolder>(DiffCallback) {
     private val TAG = "NewsAdapter"
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<News>() {
@@ -46,7 +48,7 @@ class NewsAdapter(
 
         viewHolder.itemView.setOnClickListener {
             val position = viewHolder.bindingAdapterPosition
-            onItemClicked(getItem(position))
+            getItem(position)?.let { it1 -> onItemClicked(it1) }
         }
         Log.d(TAG, "onCreateViewHolder: viewHolder setOnClickListener")
 
@@ -55,7 +57,7 @@ class NewsAdapter(
 
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let { holder.bind(it) }
         Log.d(TAG, "onBindViewHolder: viewHolder binded at position $position")
     }
 
