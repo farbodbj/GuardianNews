@@ -35,7 +35,8 @@ class DefaultFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentDefaultBinding.inflate(inflater, container, false)
-        setUiComponents()
+        if(savedInstanceState == null)
+            setUiComponents()
         return binding.root
     }
 
