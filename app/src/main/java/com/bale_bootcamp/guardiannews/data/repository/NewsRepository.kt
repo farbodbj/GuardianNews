@@ -1,4 +1,4 @@
-package com.bale_bootcamp.guardiannews.repository
+package com.bale_bootcamp.guardiannews.data.repository
 
 
 import android.util.Log
@@ -7,11 +7,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.bale_bootcamp.guardiannews.GuardianNewsApp
-import com.bale_bootcamp.guardiannews.localdatasources.database.NewsDao
-import com.bale_bootcamp.guardiannews.model.News
-import com.bale_bootcamp.guardiannews.network.NewsApiService
-import com.bale_bootcamp.guardiannews.pagination.NewsPagingMediator
-import com.bale_bootcamp.guardiannews.pagination.RemoteKeyDao
+import com.bale_bootcamp.guardiannews.data.local.database.NewsDao
+import com.bale_bootcamp.guardiannews.data.local.model.News
+import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import kotlinx.coroutines.flow.Flow
 
 import java.time.LocalDate
@@ -23,10 +21,10 @@ class NewsRepository (
     private val TAG: String = "NewsRepository"
 
     suspend fun refreshNews(category: NewsApiService.Category,
-                    fromDate: LocalDate,
-                    toDate: LocalDate,
-                    page: Int,
-                    pageSize: Int) {
+                            fromDate: LocalDate,
+                            toDate: LocalDate,
+                            page: Int,
+                            pageSize: Int) {
 
         val results = onlineDataSource.getLatestFromCategory(category, fromDate, toDate, page, pageSize).response
         results.results.let {
@@ -55,7 +53,8 @@ class NewsRepository (
                 GuardianNewsApp.getAppContext().database.remoteKeyDao(),
                 category,
                 fromDate,
-                toDate)) {
+                toDate)
+        ) {
             Log.d(TAG, "localDataSource.selectAll()")
             localDataSource.select(category)
         }

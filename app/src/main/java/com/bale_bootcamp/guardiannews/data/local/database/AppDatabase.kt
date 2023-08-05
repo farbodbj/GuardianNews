@@ -1,15 +1,13 @@
-package com.bale_bootcamp.guardiannews.localdatasources.database
+package com.bale_bootcamp.guardiannews.data.local.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.bale_bootcamp.guardiannews.model.News
-import com.bale_bootcamp.guardiannews.pagination.RemoteKey
-import com.bale_bootcamp.guardiannews.pagination.RemoteKeyDao
+import com.bale_bootcamp.guardiannews.data.local.model.News
+import com.bale_bootcamp.guardiannews.data.local.model.RemoteKey
 import com.bale_bootcamp.guardiannews.utility.LocalDateTimeConverter
-import java.time.LocalDateTime
 import java.util.concurrent.Executor
 
 @Database(entities = [News::class, RemoteKey::class], version = 2)

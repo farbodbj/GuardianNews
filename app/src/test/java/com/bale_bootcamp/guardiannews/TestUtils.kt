@@ -1,11 +1,9 @@
 package com.bale_bootcamp.guardiannews
 
-import com.bale_bootcamp.guardiannews.network.NewsApiService
+import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import java.time.LocalDate
 import java.time.Month
 import java.time.Year
-import java.util.Date
-import java.util.GregorianCalendar
 import java.util.Random
 
 class TestUtils {

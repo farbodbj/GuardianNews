@@ -1,17 +1,10 @@
-package com.bale_bootcamp.guardiannews
+package com.bale_bootcamp.guardiannews.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.core.view.GravityCompat
-import com.bale_bootcamp.guardiannews.adapter.NewsPagerAdapter
+import androidx.appcompat.app.AppCompatActivity
+import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.databinding.ActivityMainBinding
-import com.bale_bootcamp.guardiannews.network.NewsApiService
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.google.android.material.tabs.TabLayoutMediator
-import kotlin.IllegalStateException
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"

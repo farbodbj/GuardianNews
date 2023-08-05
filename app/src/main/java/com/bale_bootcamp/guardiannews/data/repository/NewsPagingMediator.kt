@@ -1,14 +1,16 @@
-package com.bale_bootcamp.guardiannews.pagination
+package com.bale_bootcamp.guardiannews.data.repository
 
 import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.bale_bootcamp.guardiannews.localdatasources.database.NewsDao
-import com.bale_bootcamp.guardiannews.model.News
-import com.bale_bootcamp.guardiannews.model.ResponseModel
-import com.bale_bootcamp.guardiannews.network.NewsApiService
+import com.bale_bootcamp.guardiannews.data.local.database.NewsDao
+import com.bale_bootcamp.guardiannews.data.local.database.RemoteKeyDao
+import com.bale_bootcamp.guardiannews.data.local.model.News
+import com.bale_bootcamp.guardiannews.data.local.model.RemoteKey
+import com.bale_bootcamp.guardiannews.data.network.model.ResponseModel
+import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import java.time.LocalDate
 
 

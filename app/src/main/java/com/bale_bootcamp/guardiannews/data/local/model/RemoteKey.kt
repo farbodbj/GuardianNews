@@ -1,4 +1,4 @@
-package com.bale_bootcamp.guardiannews.pagination
+package com.bale_bootcamp.guardiannews.data.local.model
 
 import androidx.room.Entity
 

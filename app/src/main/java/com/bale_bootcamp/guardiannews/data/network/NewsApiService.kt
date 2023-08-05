@@ -1,14 +1,10 @@
-package com.bale_bootcamp.guardiannews.network
+package com.bale_bootcamp.guardiannews.data.network
 
-import com.bale_bootcamp.guardiannews.model.NetworkResponse
-import com.bale_bootcamp.guardiannews.model.ResponseModel
+import com.bale_bootcamp.guardiannews.data.network.model.NetworkResponse
 import com.bale_bootcamp.guardiannews.utility.LocalDateTimeAdapter
 import com.bale_bootcamp.guardiannews.utility.MoshiInstance
 import com.bale_bootcamp.guardiannews.utility.RetrofitFactory
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -41,10 +37,10 @@ interface NewsApiService {
 
     @GET("{category}?api-key=${Api.API_KEY}&show-fields=${Api.DEFAULT_FIELDS}")
     suspend fun getLatestFromCategory(@Path("category") category: Category,
-                              @Query("from-date") fromDate: LocalDate,
-                              @Query("to-date") toDate: LocalDate,
-                              @Query("page") page: Int,
-                              @Query("page-size") pageSize: Int = 10): NetworkResponse
+                                      @Query("from-date") fromDate: LocalDate,
+                                      @Query("to-date") toDate: LocalDate,
+                                      @Query("page") page: Int,
+                                      @Query("page-size") pageSize: Int = 10): NetworkResponse
 }
 
 
@@ -66,6 +62,7 @@ object NewsApi {
         RetrofitFactory.createRetrofitInstance(
             baseUrl = Api.BASE_URL,
             client = okhttpClient,
-            converterFactory = converterFactory).create(NewsApiService::class.java)
+            converterFactory = converterFactory
+        ).create(NewsApiService::class.java)
     }
 }

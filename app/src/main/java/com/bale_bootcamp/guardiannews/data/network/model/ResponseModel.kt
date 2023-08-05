@@ -1,4 +1,6 @@
-package com.bale_bootcamp.guardiannews.model
+package com.bale_bootcamp.guardiannews.data.network.model
+
+import com.bale_bootcamp.guardiannews.data.local.model.News
 
 data class ResponseModel(
     val status: String,

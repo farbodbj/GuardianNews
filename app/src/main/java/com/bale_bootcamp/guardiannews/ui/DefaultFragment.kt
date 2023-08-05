@@ -1,16 +1,17 @@
-package com.bale_bootcamp.guardiannews
+package com.bale_bootcamp.guardiannews.ui
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
-import com.bale_bootcamp.guardiannews.adapter.NewsPagerAdapter
+import androidx.fragment.app.Fragment
+import com.bale_bootcamp.guardiannews.R
+import com.bale_bootcamp.guardiannews.ui.news.NewsPagerAdapter
+import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentDefaultBinding
-import com.bale_bootcamp.guardiannews.network.NewsApiService
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
