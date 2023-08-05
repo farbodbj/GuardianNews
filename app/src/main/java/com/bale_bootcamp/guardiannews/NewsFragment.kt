@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.bale_bootcamp.guardiannews.adapter.NewsAdapter
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
 import com.bale_bootcamp.guardiannews.network.NewsApiService
 import com.bale_bootcamp.guardiannews.viewmodel.NewsFragmentViewModel
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 private const val ONE_MINUTE: Long = 60 * 1000L
@@ -61,11 +63,6 @@ class NewsFragment() : Fragment() {
         val category = arguments?.getString("category") ?: "search"
 
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
-        viewModel.refreshNews(NewsApiService.Category.findByStr(category),
-            LocalDate.now().minusMonths(1),
-            LocalDate.now(),
-            1,
-            10)
         viewModel.getNews(NewsApiService.Category.findByStr(category),
             LocalDate.now().minusMonths(1),
             LocalDate.now(),
@@ -76,7 +73,9 @@ class NewsFragment() : Fragment() {
 
         viewModel.news.observe(viewLifecycleOwner) {
             Log.d(TAG, "refreshNewsList: $it")
-            newsRecyclerViewAdapter.submitList(it)
+            lifecycleScope.launch {
+                newsRecyclerViewAdapter.submitData(it)
+            }
             lastRefreshed = System.currentTimeMillis()
             isRefreshing = false
         }
@@ -86,7 +85,8 @@ class NewsFragment() : Fragment() {
         val newsRefreshedToast: Toast = Toast.makeText(context, "News refreshed", Toast.LENGTH_SHORT)
         val refreshedJutsNowToast: Toast = Toast.makeText(context, "News not refreshed", Toast.LENGTH_SHORT)
         binding.refresh.setOnRefreshListener {
-            refreshNewsList()
+            //refreshNewsList()
+            //binding.newsRecyclerView.adapter.refresh()
             if(isRefreshing) {
                 binding.refresh.isRefreshing = false
                 newsRefreshedToast.show()
