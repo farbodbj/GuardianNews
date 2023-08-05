@@ -16,7 +16,7 @@ import com.bale_bootcamp.guardiannews.viewmodel.NewsFragmentViewModel
 import java.time.LocalDate
 
 private const val ONE_MINUTE: Long = 60 * 1000L
-class NewsFragment(private val category: String) : Fragment() {
+class NewsFragment() : Fragment() {
     private val TAG = "NewsFragment"
 
     private var _binding: FragmentNewsBinding? = null
@@ -57,6 +57,8 @@ class NewsFragment(private val category: String) : Fragment() {
             Log.d(TAG, "onItemClicked: $it")
             //TODO("onItemClicked")
         }
+
+        val category = arguments?.getString("category") ?: "search"
 
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
         viewModel.refreshNews(NewsApiService.Category.findByStr(category),
