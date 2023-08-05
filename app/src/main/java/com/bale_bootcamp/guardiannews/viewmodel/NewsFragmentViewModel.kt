@@ -2,16 +2,15 @@ package com.bale_bootcamp.guardiannews.viewmodel
 
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.bale_bootcamp.guardiannews.GuardianNewsApp
 import com.bale_bootcamp.guardiannews.model.News
 import com.bale_bootcamp.guardiannews.network.NewsApi
 import com.bale_bootcamp.guardiannews.network.NewsApiService
-import com.bale_bootcamp.guardiannews.onlinedatasources.NewsOnlineDataSource
 import com.bale_bootcamp.guardiannews.repository.NewsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -23,7 +22,7 @@ class NewsFragmentViewModel (
 ): ViewModel() {
     private val TAG: String = "NewsFragmentViewModel"
 
-    val news: MutableLiveData<List<News>> = MutableLiveData()
+    val news: MutableLiveData<PagingData<News>> = MutableLiveData()
 
     fun getNews(category: NewsApiService.Category,
                 fromDate: LocalDate,
@@ -31,7 +30,7 @@ class NewsFragmentViewModel (
                 page: Int,
                 pageSize: Int) {
         viewModelScope.launch {
-            repository.getNews(category, fromDate, toDate, page, pageSize).collect {
+            repository.getNews(category, fromDate, toDate, page, pageSize).collectLatest {
                 news.postValue(it)
                 Log.d(TAG, "getNews: $it")
             }
@@ -55,7 +54,7 @@ class NewsFragmentViewModel (
             if (modelClass.isAssignableFrom(NewsFragmentViewModel::class.java)) {
                 val repository
                     = NewsRepository(
-                        NewsOnlineDataSource(NewsApi.retrofitApiService),
+                        NewsApi.retrofitApiService,
                         GuardianNewsApp.getAppContext().database.newsDao()
                     )
                 return NewsFragmentViewModel(repository) as T
