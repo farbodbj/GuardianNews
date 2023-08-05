@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 private const val ONE_MINUTE: Long = 60 * 1000L
-class NewsFragment() : Fragment() {
+class NewsFragment : Fragment() {
     private val TAG = "NewsFragment"
 
     private var _binding: FragmentNewsBinding? = null
