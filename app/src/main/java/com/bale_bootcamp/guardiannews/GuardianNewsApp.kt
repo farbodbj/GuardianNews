@@ -3,7 +3,7 @@ package com.bale_bootcamp.guardiannews
 import android.app.Application
 import android.util.Log
 import androidx.room.RoomDatabase
-import com.bale_bootcamp.guardiannews.localdatasources.database.AppDatabase
+import com.bale_bootcamp.guardiannews.data.local.database.AppDatabase
 import java.util.concurrent.Executors.newSingleThreadExecutor
 
 class GuardianNewsApp: Application() {

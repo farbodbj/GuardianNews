@@ -1,4 +1,4 @@
-package com.bale_bootcamp.guardiannews.model
+package com.bale_bootcamp.guardiannews.data.local.model
 
 
 import androidx.room.Embedded
@@ -18,7 +18,8 @@ data class News (
     val apiUrl: String,
     @Json(name = "fields")
     @Embedded
-    val details: NewsDetail) {
+    val details: NewsDetail
+) {
     companion object {
         const val ENTITY_NAME = "news"
     }

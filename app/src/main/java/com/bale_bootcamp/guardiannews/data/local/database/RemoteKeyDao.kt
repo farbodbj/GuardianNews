@@ -1,23 +1,22 @@
-package com.bale_bootcamp.guardiannews.pagination
+package com.bale_bootcamp.guardiannews.data.local.database
 
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.util.query
-import com.bale_bootcamp.guardiannews.network.NewsApiService
+import com.bale_bootcamp.guardiannews.data.local.model.RemoteKey
+import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 
 @Dao
 interface RemoteKeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(remoteKey: RemoteKey)
 
-    @Query("select * from ${RemoteKeyDao.ENTITY_NAME} where id = :id")
+    @Query("select * from $ENTITY_NAME where id = :id")
     suspend fun getRemoteKeyById(id: String): RemoteKey?
 
-    @Query("delete from ${RemoteKeyDao.ENTITY_NAME} where id like :category + ' || %'")
+    @Query("delete from $ENTITY_NAME where id like :category + ' || %'")
     suspend fun deleteByCategory(category: String): Int
 
     suspend fun delete(category: NewsApiService.Category) :Int {

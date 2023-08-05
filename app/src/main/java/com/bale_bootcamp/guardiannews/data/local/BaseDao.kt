@@ -1,4 +1,4 @@
-package com.bale_bootcamp.guardiannews.localdatasources
+package com.bale_bootcamp.guardiannews.data.local
 
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy

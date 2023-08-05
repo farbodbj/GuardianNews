@@ -1,4 +1,4 @@
-package com.bale_bootcamp.guardiannews.model
+package com.bale_bootcamp.guardiannews.data.local.model
 
 data class NewsDetail(
     val headline: String,

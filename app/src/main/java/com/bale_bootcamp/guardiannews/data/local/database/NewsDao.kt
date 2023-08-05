@@ -1,11 +1,11 @@
-package com.bale_bootcamp.guardiannews.localdatasources.database
+package com.bale_bootcamp.guardiannews.data.local.database
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
-import com.bale_bootcamp.guardiannews.localdatasources.BaseDao
-import com.bale_bootcamp.guardiannews.model.News
-import com.bale_bootcamp.guardiannews.network.NewsApiService
+import com.bale_bootcamp.guardiannews.data.local.BaseDao
+import com.bale_bootcamp.guardiannews.data.local.model.News
+import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 
 @Dao
 interface NewsDao: BaseDao<News> {

@@ -1,7 +1,6 @@
 package com.bale_bootcamp.guardiannews
 
-import com.bale_bootcamp.guardiannews.network.NewsApi
-import com.bale_bootcamp.guardiannews.network.NewsApiService
+import com.bale_bootcamp.guardiannews.data.network.NewsApi
 import org.junit.Test
 
 import org.junit.Assert.*

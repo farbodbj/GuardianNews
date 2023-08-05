@@ -1,23 +1,20 @@
-package com.bale_bootcamp.guardiannews
+package com.bale_bootcamp.guardiannews.ui.news
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.bale_bootcamp.guardiannews.adapter.NewsAdapter
+import com.bale_bootcamp.guardiannews.ONE_MINUTE
+import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
-import com.bale_bootcamp.guardiannews.network.NewsApiService
-import com.bale_bootcamp.guardiannews.viewmodel.NewsFragmentViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-private const val ONE_MINUTE: Long = 60 * 1000L
 class NewsFragment : Fragment() {
     private val TAG = "NewsFragment"
 
@@ -63,7 +60,8 @@ class NewsFragment : Fragment() {
         val category = arguments?.getString("category") ?: "search"
 
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
-        viewModel.getNews(NewsApiService.Category.findByStr(category),
+        viewModel.getNews(
+            NewsApiService.Category.findByStr(category),
             LocalDate.now().minusMonths(1),
             LocalDate.now(),
             1,
@@ -82,8 +80,10 @@ class NewsFragment : Fragment() {
     }
 
     private fun setSwipeRefresh(){
-        val newsRefreshedToast: Toast = Toast.makeText(context, "News refreshed", Toast.LENGTH_SHORT)
-        val refreshedJutsNowToast: Toast = Toast.makeText(context, "News not refreshed", Toast.LENGTH_SHORT)
+        val newsRefreshedToast: Toast =
+            Toast.makeText(context, "News refreshed", Toast.LENGTH_SHORT)
+        val refreshedJutsNowToast: Toast =
+            Toast.makeText(context, "News not refreshed", Toast.LENGTH_SHORT)
         binding.refresh.setOnRefreshListener {
             //refreshNewsList()
             //binding.newsRecyclerView.adapter.refresh()

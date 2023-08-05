@@ -1,4 +1,4 @@
-package com.bale_bootcamp.guardiannews.viewmodel
+package com.bale_bootcamp.guardiannews.ui.news
 
 
 import android.util.Log
@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.bale_bootcamp.guardiannews.GuardianNewsApp
-import com.bale_bootcamp.guardiannews.model.News
-import com.bale_bootcamp.guardiannews.network.NewsApi
-import com.bale_bootcamp.guardiannews.network.NewsApiService
-import com.bale_bootcamp.guardiannews.repository.NewsRepository
+import com.bale_bootcamp.guardiannews.data.local.model.News
+import com.bale_bootcamp.guardiannews.data.network.NewsApi
+import com.bale_bootcamp.guardiannews.data.network.NewsApiService
+import com.bale_bootcamp.guardiannews.data.repository.NewsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

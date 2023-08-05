@@ -1,19 +1,16 @@
-package com.bale_bootcamp.guardiannews.adapter
+package com.bale_bootcamp.guardiannews.ui.news
 
 import android.graphics.drawable.Drawable
-import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.parseAsHtml
-import androidx.paging.CombinedLoadStates
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.databinding.NewsViewholderBinding
-import com.bale_bootcamp.guardiannews.model.News
+import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException

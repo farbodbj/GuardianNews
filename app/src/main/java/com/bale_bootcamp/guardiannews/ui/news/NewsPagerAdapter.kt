@@ -1,4 +1,4 @@
-package com.bale_bootcamp.guardiannews.adapter
+package com.bale_bootcamp.guardiannews.ui.news
 
 
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.bale_bootcamp.guardiannews.NewsFragment
 
 
 class NewsPagerAdapter(fragmentActivity: FragmentActivity,
