@@ -79,13 +79,18 @@ class NewsPagingMediator(
     }
 
     private suspend fun getFromApi(lastAccessedPage: Int) =
-        onlineDataSource.getLatestFromCategory(
-            category,
-            fromDate,
-            toDate,
-            lastAccessedPage,
-            10
-        ).response
+        try {
+            onlineDataSource.getLatestFromCategory(
+                category,
+                fromDate,
+                toDate,
+                lastAccessedPage,
+                10
+            ).response
+        } catch (e: Exception) {
+            Log.e(TAG, "exception: ${e.message}")
+            ResponseModel("status", 0, 0, 10, 50, emptyList())
+        }
 
 
     private suspend fun insertToNewsDb(news: List<News>) = localNewsDataSource.insertAll(*news.toTypedArray())
