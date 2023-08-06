@@ -21,6 +21,17 @@ class DefaultFragment : Fragment() {
     private var _binding: FragmentDefaultBinding? = null
     private val binding get() = _binding!!
 
+    private val navDrawerItems = mapOf(
+         R.id.nav_home to 0,
+         R.id.nav_world to 1,
+         R.id.nav_science to 2,
+         R.id.nav_environment to 3,
+         R.id.nav_sport to 4,
+         R.id.nav_settings to 5)
+
+
+
+
     private val toggle by lazy {
         ActionBarDrawerToggle(
             activity,
@@ -115,18 +126,15 @@ class DefaultFragment : Fragment() {
     private fun syncDrawerWithViewPager() {
         val viewPager = binding.viewPager
         val navDrawer = binding.navView
-
         navDrawer.setNavigationItemSelectedListener {
             try {
-                viewPager.currentItem =
-                    when (it.itemId) {
-                        R.id.nav_home -> 0
-                        R.id.nav_world -> 1
-                        R.id.nav_science -> 2
-                        R.id.nav_environment -> 3
-                        R.id.nav_sport -> 4
-                        else -> throw IllegalStateException("unknown error")
-                    }
+                val selectedNavItem = navDrawerItems[it.itemId]
+
+                if(selectedNavItem in 0..5) {
+                    viewPager.currentItem = selectedNavItem!!
+                } else {
+                    TODO("open settings fragment")
+                }
                 true
             } catch (e: IllegalStateException) {
                 false
