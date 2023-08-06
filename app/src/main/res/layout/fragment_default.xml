@@ -35,7 +35,7 @@ tools:context=".ui.MainActivity">
             android:layout_height="wrap_content"
             app:tabIndicatorColor="@color/blue_500"
             app:tabSelectedTextColor="@color/blue_500"
-            android:elevation="@dimen/tab_layout_elevation"
+            android:elevation="@dimen/toolbar_elevation"
             app:tabTextAppearance="@style/tabItemText">
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
