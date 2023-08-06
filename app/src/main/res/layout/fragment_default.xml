@@ -23,7 +23,7 @@ tools:context=".ui.MainActivity">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="?actionBarSize"
             app:title="@string/toolbar_title"
             app:titleTextAppearance="@style/toolBarTitle"
             android:background="@color/white"

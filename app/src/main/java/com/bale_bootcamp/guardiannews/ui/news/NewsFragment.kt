@@ -9,11 +9,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.bale_bootcamp.guardiannews.ONE_MINUTE
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+
+const val ONE_MINUTE = 60 * 1000
 
 class NewsFragment : Fragment() {
     private val TAG = "NewsFragment"
