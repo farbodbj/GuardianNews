@@ -5,16 +5,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.bale_bootcamp.guardiannews.data.local.model.RemoteKey
+import com.bale_bootcamp.guardiannews.data.local.model.NewsRemoteKey
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 
 @Dao
 interface RemoteKeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(remoteKey: RemoteKey)
+    suspend fun insert(newsRemoteKey: NewsRemoteKey)
 
     @Query("select * from $ENTITY_NAME where id = :id")
-    suspend fun getRemoteKeyById(id: String): RemoteKey?
+    suspend fun getRemoteKeyById(id: String): NewsRemoteKey?
 
     @Query("delete from $ENTITY_NAME where id like :category + ' || %'")
     suspend fun deleteByCategory(category: String): Int
