@@ -9,7 +9,7 @@
     <dimen name="nav_header_height">150dp</dimen>
     <dimen name="nav_header_width">266dp</dimen>
 
-    <dimen name="tab_layout_elevation">8dp</dimen>
+    <dimen name="toolbar_elevation">8dp</dimen>
     <dimen name="news_item_elevation">8dp</dimen>
 
     <dimen name="news_title_text_size">20sp</dimen>
