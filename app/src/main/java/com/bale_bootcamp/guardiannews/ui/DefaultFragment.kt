@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.ui.news.NewsPagerAdapter
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentDefaultBinding
+import com.bale_bootcamp.guardiannews.ui.settings.SettingsFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -28,8 +30,6 @@ class DefaultFragment : Fragment() {
          R.id.nav_environment to 3,
          R.id.nav_sport to 4,
          R.id.nav_settings to 5)
-
-
 
 
     private val toggle by lazy {
@@ -130,10 +130,14 @@ class DefaultFragment : Fragment() {
             try {
                 val selectedNavItem = navDrawerItems[it.itemId]
 
-                if(selectedNavItem in 0..5) {
+                if(selectedNavItem in 0..4) {
                     viewPager.currentItem = selectedNavItem!!
                 } else {
-                    TODO("open settings fragment")
+
+                    activity?.supportFragmentManager
+                        ?.beginTransaction()
+                        ?.replace(R.id.fragment_container, SettingsFragment())
+                        ?.commit()
                 }
                 true
             } catch (e: IllegalStateException) {
