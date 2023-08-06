@@ -13,7 +13,6 @@
     <string name="drawer_close">Close navigation drawer</string>
 
     <string name="settings_title">Settings</string>
-
     <string-array name="settings_items">
         <item>Number of items</item>
 

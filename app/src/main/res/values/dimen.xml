@@ -12,6 +12,8 @@
     <dimen name="toolbar_elevation">8dp</dimen>
     <dimen name="news_item_elevation">8dp</dimen>
 
+    <dimen name="setting_title_text_size">16sp</dimen>
+
     <dimen name="news_title_text_size">20sp</dimen>
     <dimen name="news_photo_max_width">200dp</dimen>
     <dimen name="news_photo_max_height">150dp</dimen>
