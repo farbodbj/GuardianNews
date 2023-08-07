@@ -31,6 +31,10 @@
             android:icon="@drawable/ic_sport_24dp"
             android:title="@string/sport" />
 
-
+        <item
+            android:id="@+id/nav_settings"
+            android:checkable="true"
+            android:icon="@drawable/ic_settings_24dp"
+            android:title="@string/settings"/>
     </group>
 </menu>
