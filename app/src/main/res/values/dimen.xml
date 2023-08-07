@@ -22,4 +22,16 @@
 
     <dimen name="toolbar_title_text_size">26sp</dimen>
     <dimen name="tab_item_text_size">14sp</dimen>
+
+    <dimen name="text_size_xs">8sp</dimen>
+    <dimen name="text_size_s">12sp</dimen>
+    <dimen name="text_size_m">14sp</dimen>
+    <dimen name="text_size_l">16sp</dimen>
+
+    <dimen name="extra_thin_stroke">.5dp</dimen>
+    <dimen name="thin_stroke">1dp</dimen>
+
+
+    <dimen name="theme_choice_menu_width">256dp</dimen>
+    <dimen name="theme_button_corner_radius">8dp</dimen>
 </resources>
