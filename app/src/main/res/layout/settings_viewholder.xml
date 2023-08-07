@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:clickable="true"
+    android:contextClickable="true"
     android:orientation="vertical">
 
     <TextView
@@ -13,6 +14,7 @@
         tools:text="example setting"
         android:paddingStart="@dimen/margin_s"
         android:textStyle="bold"
+        android:textColor="@color/black"
         android:textSize="@dimen/setting_title_text_size"/>
 
     <TextView
