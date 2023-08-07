@@ -6,22 +6,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
+import com.bale_bootcamp.guardiannews.data.repository.SettingsRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import okio.IOException
-import java.lang.Thread.State
-import kotlin.coroutines.coroutineContext
 
 private const val SETTINGS_PREFERENCES_NAME = "settings_preferences"
 class SettingsDataStore(private val context: Context) {
@@ -33,8 +23,10 @@ class SettingsDataStore(private val context: Context) {
 
     suspend fun <T> savePref(key: Preferences.Key<T>, value: T) {
         Log.d(TAG, "savePref: key: ${key.name}, value: $value")
-        context.dataStore.edit { settings ->
-            settings[key] = value
+        try {
+            context.dataStore.edit { settings -> settings[key] = value }
+        } catch (e: IOException) {
+            Log.e(TAG, "savePref: ${e.message}")
         }
     }
 
@@ -42,14 +34,12 @@ class SettingsDataStore(private val context: Context) {
         context.dataStore.data
             .catch {exception ->
                 if(exception is IOException) {
-                    Log.e(TAG, "Error reading preferences", exception)
+                    Log.e(TAG, "IOException while reading preferences:", exception)
                     emit(emptyPreferences())
-                } else {
-                    throw exception
                 }
             }.map {
                 Log.d(TAG, "getPrefFlow: key: ${key.name}, value: ${it[key]}")
-                it[key] ?: throw IllegalStateException("No value found for key ${key.name}")
+                it[key] ?: SettingsRepository.KeyDefaults.defaultMap[key.name] as T
             }
 
     class SettingsDataStoreFactory(private val context: Context) {

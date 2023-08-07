@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.data.local.datastore.SettingsDataStore
-import com.bale_bootcamp.guardiannews.data.repository.UserPreferencesRepository
+import com.bale_bootcamp.guardiannews.data.repository.SettingsRepository
 import com.bale_bootcamp.guardiannews.databinding.ActivityMainBinding
 import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +17,12 @@ import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
     private lateinit var binding: ActivityMainBinding
+
+    private val settingsRepository by lazy {
+        SettingsRepository.getInstance(SettingsDataStore
+            .SettingsDataStoreFactory(this)
+            .create())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setThemeFromPrefs()
@@ -33,30 +39,20 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun setThemeFromPrefs() {
-        Log.d(TAG, "setThemeFromPrefs: started")
-        val preferencesRepository = UserPreferencesRepository
-            .getInstance(
-                SettingsDataStore
-                    .SettingsDataStoreFactory(this)
-                    .create()
-            )
-        lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                preferencesRepository.getColorTheme().collectLatest {
-                    val themeId = when(ColorTheme.findByStr(it)) {
-                        ColorTheme.WHITE -> R.style.OverlayThemeWhite
-                        ColorTheme.SKY_BLUE -> R.style.OverlayThemeSkyBlue
-                        ColorTheme.DARK_BLUE -> R.style.OverlayThemeDarkBlue
-                        ColorTheme.GREEN -> R.style.OverlayThemeGreen
-                        ColorTheme.LIGHT_GREEN -> R.style.OverlayThemeLightGreen
-                    }
-                    Log.d(TAG, "theme res Id: $themeId for theme name: $it")
-                    withContext(Dispatchers.Main){
-                        setTheme(themeId)
-                    }
-                }
+    private fun setThemeFromPrefs() = lifecycleScope.launch(Dispatchers.IO) {
+        settingsRepository.getColorTheme().collectLatest {
+            runOnUiThread {
+                setTheme(getColorThemeOverlayId(it))
             }
         }
     }
+
+    private fun getColorThemeOverlayId(themeName: String) =
+        when(ColorTheme.findByStr(themeName)) {
+            ColorTheme.WHITE -> R.style.OverlayThemeWhite
+            ColorTheme.SKY_BLUE -> R.style.OverlayThemeSkyBlue
+            ColorTheme.DARK_BLUE -> R.style.OverlayThemeDarkBlue
+            ColorTheme.GREEN -> R.style.OverlayThemeGreen
+            ColorTheme.LIGHT_GREEN -> R.style.OverlayThemeLightGreen
+        }
 }
