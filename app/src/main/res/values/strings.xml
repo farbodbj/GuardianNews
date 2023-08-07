@@ -10,8 +10,13 @@
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="sky_blue">Sky blue</string>
+    <string name="dark_blue">Dark blue</string>
+    <string name="green">Green</string>
+    <string name="light_green">Light green</string>
+    <string name="white">White</string>
+
+    <string name="ok_button">OK</string>
 
 </resources>
