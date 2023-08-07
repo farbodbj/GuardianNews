@@ -30,5 +30,18 @@
     <color name="dark_blue">@color/blue_900</color>
     <color name="green">#4CAF50</color>
     <color name="light_green">#8BC34A</color>
+    <!-- the colors above with a dark shade -->
+    <color name="dark_shade">#66000000</color>
+    <color name="dark_sky_blue">#6682B1FF</color>
+    <color name="dark_green">#664CAF50</color>
+    <color name="dark_light_green">#668BC34A</color>
+    <color name="dark_dark_blue">#660D47A1</color>
+
+
+
+
+
+
+
 
 </resources>
