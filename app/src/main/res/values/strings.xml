@@ -12,7 +12,6 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     
-    
     <string name="sky_blue">Sky blue</string>
     <string name="dark_blue">Dark blue</string>
     <string name="green">Green</string>
@@ -20,6 +19,7 @@
     <string name="white">White</string>
 
     <string name="ok_button">OK</string>
+
 
   <string name="settings_title">Settings</string>
   <string-array name="settings_items">
@@ -33,4 +33,6 @@
 
         <item>Text size</item>
   </string-array>
+
+    <string name="customize_style">Customize style</string>
 </resources>

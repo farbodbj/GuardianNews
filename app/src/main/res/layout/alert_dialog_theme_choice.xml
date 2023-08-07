@@ -5,12 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/theme_selection_toggle_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_xs"
         android:orientation="vertical"
         app:singleSelection="true"
-        app:checkedButton="@id/light_green_button">
+        app:checkedButton="@id/white_button">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/white_button"
@@ -56,6 +57,7 @@
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/ok_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_s"
