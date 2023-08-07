@@ -1,10 +1,13 @@
 package com.bale_bootcamp.guardiannews.ui.settings
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.bale_bootcamp.guardiannews.GuardianNewsApp
 import com.bale_bootcamp.guardiannews.data.local.datastore.SettingsDataStore
+import com.bale_bootcamp.guardiannews.data.repository.UserPreferencesRepository
 import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import com.bale_bootcamp.guardiannews.ui.settings.model.Setting
@@ -13,7 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class SettingsViewModel (
-    private val settingsDataStore: SettingsDataStore
+    private val settingsRepository: UserPreferencesRepository
 ): ViewModel() {
     private val _itemCount: MutableStateFlow<Int> = MutableStateFlow(10)
     val itemCount = _itemCount
@@ -32,7 +35,7 @@ class SettingsViewModel (
 
     init {
         viewModelScope.launch {
-            settingsDataStore.apply {
+            settingsRepository.apply {
                 getItemCount().collect { itemCount ->
                     _itemCount.value = itemCount
                 }
@@ -53,35 +56,33 @@ class SettingsViewModel (
     }
 
     fun saveItemCount(itemCount: Int) = viewModelScope.launch {
-        settingsDataStore.saveItemCount(itemCount)
+        settingsRepository.saveItemCount(itemCount)
     }
 
     fun saveOrderBy(orderBy: OrderBy) = viewModelScope.launch {
-            settingsDataStore.saveOrderBy(orderBy.toString())
+            settingsRepository.saveOrderBy(orderBy.toString())
     }
 
     fun saveFromDate(fromDate: String) = viewModelScope.launch {
-            settingsDataStore.saveFromDate(fromDate)
+            settingsRepository.saveFromDate(fromDate)
     }
 
     fun saveColorTheme(colorTheme: ColorTheme) = viewModelScope.launch {
-            settingsDataStore.saveColorTheme(colorTheme.toString())
+        Log.d("SettingsViewModel", "saveColorTheme: $colorTheme")
+            settingsRepository.saveColorTheme(colorTheme.toString())
     }
 
     fun saveFontSize(fontSize: TextSize) = viewModelScope.launch {
-            settingsDataStore.saveFontSize(fontSize.toString())
+            settingsRepository.saveFontSize(fontSize.toString())
     }
 
-    fun onSettingClicked(setting: Setting){
-        //pass
-    }
-
-    class SettingsViewModelFactory: ViewModelProvider.Factory {
+    class SettingsViewModelFactory(private val context: Context): ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if(modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                val settingsDataStore = SettingsDataStore(GuardianNewsApp.getAppContext())
-                return SettingsViewModel(settingsDataStore) as T
+                val settingsDataStore = SettingsDataStore.SettingsDataStoreFactory(context).create()
+                val settingsRepository = UserPreferencesRepository.getInstance(settingsDataStore)
+                return SettingsViewModel(settingsRepository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

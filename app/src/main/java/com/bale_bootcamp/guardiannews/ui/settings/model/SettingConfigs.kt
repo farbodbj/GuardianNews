@@ -1,7 +1,7 @@
 package com.bale_bootcamp.guardiannews.ui.settings.model
 
 
-enum class OrderBy(private val value: String) {
+enum class OrderBy(val value: String) {
     NEWEST("newest"),
     OLDEST("oldest"),
     RELEVANCE("relevance");
@@ -13,7 +13,7 @@ enum class OrderBy(private val value: String) {
     }
 }
 
-enum class ColorTheme(private val value: String) {
+enum class ColorTheme(val value: String) {
     WHITE("white"),
     SKY_BLUE("sky_blue"),
     DARK_BLUE("dark_blue"),
@@ -27,7 +27,7 @@ enum class ColorTheme(private val value: String) {
     }
 }
 
-enum class TextSize(private val value: String) {
+enum class TextSize(val value: String) {
     SMALL("small"),
     MEDIUM("medium"),
     LARGE("large");
