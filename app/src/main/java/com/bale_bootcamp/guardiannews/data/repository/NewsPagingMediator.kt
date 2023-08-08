@@ -19,6 +19,7 @@ class NewsPagingMediator(
     private val onlineDataSource: NewsApiService,
     private val localNewsDataSource: NewsDao,
     private val localRemoteKeyDataSource: RemoteKeyDao,
+    private val localSettingsRepository: SettingsRepository,
     private val category: NewsApiService.Category,
     private val fromDate: LocalDate,
     private val toDate: LocalDate,
@@ -80,15 +81,14 @@ class NewsPagingMediator(
         return MediatorResult.Success(endOfPaginationReached = !hasMoreData)
     }
 
-    private suspend fun getFromApi(lastAccessedPage: Int) =
-        try {
-            onlineDataSource.getLatestFromCategory(
-                category,
-                fromDate,
-                toDate,
-                lastAccessedPage,
-                10
-            ).response
+    private suspend fun getFromApi(lastAccessedPage: Int) = try {
+        Log.d(TAG, "getFromApi: ${category.categoryName}, $fromDate, $toDate, $lastAccessedPage")
+        onlineDataSource.getLatestFromCategory(
+            category,
+            fromDate,
+            toDate,
+            lastAccessedPage,
+    50).response
         } catch (e: Exception) {
             Log.e(TAG, "exception: ${e.message}")
             ResponseModel("status", 0, 0, 10, 50, emptyList())
