@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/theme_choice_menu_width"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/theme_selection_toggle_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_xs"
+        android:orientation="vertical"
+        app:singleSelection="true"
+        app:checkedButton="@id/white_button">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/white_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/white"
+            android:backgroundTint="@drawable/white_theme_checked"
+            android:textColor="@color/black"
+            app:strokeWidth="@dimen/extra_thin_stroke"
+            app:cornerRadius="@dimen/theme_button_corner_radius"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sky_blue_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sky_blue"
+            android:backgroundTint="@drawable/sky_blue_theme_checked"
+            app:cornerRadius="@dimen/theme_button_corner_radius"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dark_blue_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/dark_blue"
+            android:backgroundTint="@drawable/dark_blue_theme_checked"
+            app:cornerRadius="@dimen/theme_button_corner_radius"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/green_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/green"
+            android:backgroundTint="@drawable/green_theme_checked"
+            app:cornerRadius="@dimen/theme_button_corner_radius"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/light_green_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/light_green"
+            android:backgroundTint="@drawable/light_green_theme_checked"
+            app:cornerRadius="@dimen/theme_button_corner_radius"/>
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/ok_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_s"
+        android:layout_marginEnd="@dimen/margin_s"
+        app:strokeWidth="@dimen/extra_thin_stroke"
+        app:cornerRadius="@dimen/theme_button_corner_radius"
+        android:text="@string/ok_button"
+        android:textSize="@dimen/text_size_m"
+        android:textColor="@color/black"/>
+</LinearLayout>

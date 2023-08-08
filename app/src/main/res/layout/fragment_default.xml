@@ -23,7 +23,7 @@ tools:context=".ui.MainActivity">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="?actionBarSize"
             app:title="@string/toolbar_title"
             app:titleTextAppearance="@style/toolBarTitle"
             android:background="@color/white"
@@ -35,7 +35,7 @@ tools:context=".ui.MainActivity">
             android:layout_height="wrap_content"
             app:tabIndicatorColor="@color/blue_500"
             app:tabSelectedTextColor="@color/blue_500"
-            android:elevation="@dimen/tab_layout_elevation"
+            android:elevation="@dimen/toolbar_elevation"
             app:tabTextAppearance="@style/tabItemText">
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
