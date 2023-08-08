@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:background="?colorPrimary"
-            app:titleTextColor="?android:textColor"
+            app:titleTextColor="?colorOnPrimary"
             android:elevation="@dimen/toolbar_elevation"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:title="@string/settings_title"

@@ -8,6 +8,7 @@
     <style name="OverlayThemeWhite" parent="Base.Theme.GuardianNews">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
         <item name="colorAccent">@color/white</item>
         <item name="android:textColor">@color/black</item>
     </style>
@@ -15,6 +16,7 @@
     <style name="OverlayThemeSkyBlue" parent="Base.Theme.GuardianNews">
         <item name="colorPrimary">@color/sky_blue</item>
         <item name="colorPrimaryDark">@color/sky_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
         <item name="colorAccent">@color/sky_blue</item>
         <item name="titleTextAppearance">@style/toolBarTitle</item>
         <item name="android:textColor">@color/white</item>
@@ -23,6 +25,7 @@
     <style name="OverlayThemeDarkBlue" parent="Base.Theme.GuardianNews">
         <item name="colorPrimary">@color/dark_blue</item>
         <item name="colorPrimaryDark">@color/dark_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
         <item name="colorAccent">@color/dark_blue</item>
         <item name="android:textColor">@color/white</item>
     </style>
@@ -30,6 +33,7 @@
     <style name="OverlayThemeGreen" parent="Base.Theme.GuardianNews">
         <item name="colorPrimary">@color/green</item>
         <item name="colorPrimaryDark">@color/green</item>
+        <item name="colorOnPrimary">@color/white</item>
         <item name="colorAccent">@color/green</item>
         <item name="android:textColor">@color/white</item>
     </style>
@@ -37,6 +41,7 @@
     <style name="OverlayThemeLightGreen" parent="Base.Theme.GuardianNews">
         <item name="colorPrimary">@color/light_green</item>
         <item name="colorPrimaryDark">@color/light_green</item>
+        <item name="colorOnPrimary">@color/white</item>
         <item name="colorAccent">@color/light_green</item>
         <item name="android:textColor">@color/white</item>
     </style>

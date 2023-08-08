@@ -8,10 +8,12 @@ import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.data.local.datastore.SettingsDataStore
 import com.bale_bootcamp.guardiannews.data.repository.SettingsRepository
 import com.bale_bootcamp.guardiannews.databinding.ActivityMainBinding
-import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
+import com.bale_bootcamp.guardiannews.utility.Utils.getColorThemeOverlayId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
@@ -30,22 +32,23 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         Log.d(TAG, "onCreate: binding created")
         setContentView(binding.root)
-
         // set fragment in the fragment container to the fragment_default
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_container, DefaultFragment())
-            .commit()
+        if(savedInstanceState == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .add(R.id.fragment_container, DefaultFragment())
+                .commit()
+        }
     }
 
-    private fun setThemeFromPrefs() = lifecycleScope.launch(Dispatchers.IO) {
-        settingsRepository.getColorTheme().collectLatest {
+    private fun setThemeFromPrefs() = runBlocking {
+        val it = settingsRepository.getColorTheme().first()
             runOnUiThread {
                 val themeId = getColorThemeOverlayId(it)
                 setTheme(themeId)
                 setStatusBarColorFromTheme(themeId)
             }
-        }
+
     }
 
     private fun setStatusBarColorFromTheme(themeId: Int) =
@@ -55,12 +58,4 @@ class MainActivity : AppCompatActivity() {
                 window.statusBarColor = colorPrimary
             }
 
-    private fun getColorThemeOverlayId(themeName: String) =
-        when(ColorTheme.findByStr(themeName)) {
-            ColorTheme.WHITE -> R.style.OverlayThemeWhite
-            ColorTheme.SKY_BLUE -> R.style.OverlayThemeSkyBlue
-            ColorTheme.DARK_BLUE -> R.style.OverlayThemeDarkBlue
-            ColorTheme.GREEN -> R.style.OverlayThemeGreen
-            ColorTheme.LIGHT_GREEN -> R.style.OverlayThemeLightGreen
-        }
 }
