@@ -1,8 +1,11 @@
 package com.bale_bootcamp.guardiannews.ui.settings
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,16 +32,17 @@ class SettingsFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSettingsBinding.inflate(inflater,container,false)
+        _binding = FragmentSettingsBinding.inflate(inflater, container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentSettingsBinding.bind(view)
+        Log.d(TAG, "onViewCreated: started")
         setUiComponents()
     }
 
@@ -132,7 +136,7 @@ class SettingsFragment : Fragment() {
         return Pair(alertDialogViewBinding, themeChangeAlertDialog)
     }
 
-    private fun colorTheme(resId: Int): ColorTheme = when(resId) {
+    private fun colorTheme(choiceButtonId: Int): ColorTheme = when(choiceButtonId) {
             R.id.white_button -> ColorTheme.WHITE
             R.id.sky_blue_button -> ColorTheme.SKY_BLUE
             R.id.dark_blue_button -> ColorTheme.DARK_BLUE
@@ -143,7 +147,6 @@ class SettingsFragment : Fragment() {
 
     private fun handleThemeSelection(alertDialogViewBinding: AlertDialogThemeChoiceBinding, themeChangeAlertDialog: AlertDialog) {
         Log.d(TAG, "handleThemeSelection: started")
-
         alertDialogViewBinding.apply {
             okButton.setOnClickListener {
                 themeSelectionToggleGroup.checkedButtonId
@@ -155,6 +158,7 @@ class SettingsFragment : Fragment() {
                     }
                 Log.d(TAG, "recreating the activity")
                 themeChangeAlertDialog.dismiss()
+                activity?.recreate()
             }
         }
     }

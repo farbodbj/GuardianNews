@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.ui.news.NewsPagerAdapter
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
@@ -45,9 +44,8 @@ class DefaultFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         _binding = FragmentDefaultBinding.inflate(inflater, container, false)
-        if(savedInstanceState == null)
+        if (savedInstanceState == null)
             setUiComponents()
         return binding.root
     }
