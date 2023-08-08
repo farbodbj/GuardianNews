@@ -18,15 +18,16 @@
     <string name="light_green">Light green</string>
     <string name="white">White</string>
 
-    <string name="ok_button">OK</string>
-
     <string name="settings_title">Settings</string>
 
+    <string name="customize_style">Customize style</string>
     <string name="number_of_items">Number of Items</string>
     <string name="order_by">Order By</string>
     <string name="from_date">From Date</string>
     <string name="color_theme">Color Theme</string>
     <string name="text_size">Text Size</string>
 
-    <string name="customize_style">Customize style</string>
+    <string name="ok_button">OK</string>
+
+    <string name="item_count_hint">default: 10</string>
 </resources>

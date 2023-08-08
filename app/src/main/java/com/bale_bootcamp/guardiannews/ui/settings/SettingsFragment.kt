@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bale_bootcamp.guardiannews.R
+import com.bale_bootcamp.guardiannews.databinding.AlertDialogItemCountBinding
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogThemeChoiceBinding
 import com.bale_bootcamp.guardiannews.databinding.FragmentSettingsBinding
 import com.bale_bootcamp.guardiannews.ui.DefaultFragment
@@ -119,11 +120,43 @@ class SettingsFragment : Fragment() {
     }
 
 
-    private fun setSettingsOnClickListeners() = binding.themeSetting.root
-        .setOnClickListener {
-            val (alertDialogViewBinding, themeChangeAlertDialog) = showThemeAlertDialog()
-            handleThemeSelection(alertDialogViewBinding, themeChangeAlertDialog)
+    private fun setSettingsOnClickListeners() = binding.apply {
+        themeSetting.root
+            .setOnClickListener {
+                val (alertDialogViewBinding, themeChangeAlertDialog) = showThemeAlertDialog()
+                handleThemeSelection(alertDialogViewBinding, themeChangeAlertDialog)
+            }
+
+        itemCountSetting.root
+            .setOnClickListener {
+                val (itemCountAlertDialogBinding, itemCountAlertDialog) = showItemCountAlertDialog()
+                handleItemCountDataEntry(itemCountAlertDialogBinding, itemCountAlertDialog)
+            }
+    }
+
+
+    private fun showItemCountAlertDialog(): Pair<AlertDialogItemCountBinding, AlertDialog>{
+        val itemCountAlertDialog = AlertDialog.Builder(requireContext()).create()
+        val itemCountAlertDialogView = layoutInflater.inflate(R.layout.alert_dialog_item_count, null)
+        val itemCountAlertDialogBinding = AlertDialogItemCountBinding.bind(itemCountAlertDialogView)
+        itemCountAlertDialog.setView(itemCountAlertDialogView)
+        itemCountAlertDialog.setCanceledOnTouchOutside(true)
+        itemCountAlertDialog.show()
+
+        return Pair(itemCountAlertDialogBinding, itemCountAlertDialog)
+    }
+
+
+    private fun handleItemCountDataEntry(itemCountBinding: AlertDialogItemCountBinding, itemCountAlertDialog: AlertDialog) {
+        Log.d(TAG, "handleItemCountDataEntry: started")
+        itemCountBinding.apply {
+            itemCountOkButton.setOnClickListener {
+                val itemCount = itemCountEditText.text.toString().toInt()
+                viewModel.saveItemCount(itemCount)
+                itemCountAlertDialog.dismiss()
+            }
         }
+    }
 
 
     private fun showThemeAlertDialog(): Pair<AlertDialogThemeChoiceBinding, AlertDialog> {
