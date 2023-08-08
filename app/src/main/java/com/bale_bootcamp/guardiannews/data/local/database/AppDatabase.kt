@@ -6,11 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.bale_bootcamp.guardiannews.data.local.model.News
-import com.bale_bootcamp.guardiannews.data.local.model.RemoteKey
+import com.bale_bootcamp.guardiannews.data.local.model.NewsRemoteKey
 import com.bale_bootcamp.guardiannews.utility.LocalDateTimeConverter
 import java.util.concurrent.Executor
 
-@Database(entities = [News::class, RemoteKey::class], version = 2)
+@Database(entities = [News::class, NewsRemoteKey::class], version = 2)
 @TypeConverters(LocalDateTimeConverter::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun newsDao(): NewsDao

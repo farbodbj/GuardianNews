@@ -8,7 +8,7 @@ import androidx.paging.RemoteMediator
 import com.bale_bootcamp.guardiannews.data.local.database.NewsDao
 import com.bale_bootcamp.guardiannews.data.local.database.RemoteKeyDao
 import com.bale_bootcamp.guardiannews.data.local.model.News
-import com.bale_bootcamp.guardiannews.data.local.model.RemoteKey
+import com.bale_bootcamp.guardiannews.data.local.model.NewsRemoteKey
 import com.bale_bootcamp.guardiannews.data.network.model.ResponseModel
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import java.time.LocalDate
@@ -99,8 +99,8 @@ class NewsPagingMediator(
 
     private suspend fun addRemoteKeys(response: ResponseModel) {
         for(news in response.results) {
-            val remoteKey = RemoteKey(news.id, response.currentPage + 1)
-            localRemoteKeyDataSource.insert(remoteKey)
+            val newsRemoteKey = NewsRemoteKey(news.id, response.currentPage + 1)
+            localRemoteKeyDataSource.insert(newsRemoteKey)
         }
     }
 }

@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.ui.news.NewsPagerAdapter
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentDefaultBinding
+import com.bale_bootcamp.guardiannews.ui.settings.SettingsFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -20,6 +22,15 @@ class DefaultFragment : Fragment() {
 
     private var _binding: FragmentDefaultBinding? = null
     private val binding get() = _binding!!
+
+    private val navDrawerItems = mapOf(
+         R.id.nav_home to 0,
+         R.id.nav_world to 1,
+         R.id.nav_science to 2,
+         R.id.nav_environment to 3,
+         R.id.nav_sport to 4,
+         R.id.nav_settings to 5)
+
 
     private val toggle by lazy {
         ActionBarDrawerToggle(
@@ -115,18 +126,19 @@ class DefaultFragment : Fragment() {
     private fun syncDrawerWithViewPager() {
         val viewPager = binding.viewPager
         val navDrawer = binding.navView
-
         navDrawer.setNavigationItemSelectedListener {
             try {
-                viewPager.currentItem =
-                    when (it.itemId) {
-                        R.id.nav_home -> 0
-                        R.id.nav_world -> 1
-                        R.id.nav_science -> 2
-                        R.id.nav_environment -> 3
-                        R.id.nav_sport -> 4
-                        else -> throw IllegalStateException("unknown error")
-                    }
+                val selectedNavItem = navDrawerItems[it.itemId]
+
+                if(selectedNavItem in 0..4) {
+                    viewPager.currentItem = selectedNavItem!!
+                } else {
+
+                    activity?.supportFragmentManager
+                        ?.beginTransaction()
+                        ?.replace(R.id.fragment_container, SettingsFragment())
+                        ?.commit()
+                }
                 true
             } catch (e: IllegalStateException) {
                 false
