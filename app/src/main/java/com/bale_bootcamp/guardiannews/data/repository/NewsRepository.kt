@@ -14,6 +14,7 @@ import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 import java.time.LocalDate
@@ -27,24 +28,6 @@ class NewsRepository (
 
     private var pageSize: Int = 10
     private var fromDate: LocalDate = LocalDate.now().minusMonths(1)
-
-    private val pagingConfig: PagingConfig by lazy {
-        setPageSize()
-        PagingConfig(
-            pageSize = pageSize,
-            prefetchDistance = pageSize - 2,
-            enablePlaceholders = false
-        )
-    }
-
-    private fun setPageSize() {
-        CoroutineScope(Dispatchers.IO).launch {
-            settingsRepository.getItemCount().collect {
-                Log.d(TAG, "getPageSize collected from preferences datastore: $it")
-                pageSize = it
-            }
-        }
-    }
 
     suspend fun refreshNews(category: NewsApiService.Category,
                             toDate: LocalDate,
@@ -64,13 +47,14 @@ class NewsRepository (
     }
 
     @OptIn(ExperimentalPagingApi::class)
-    fun getNews(category: NewsApiService.Category, toDate: LocalDate): Flow<PagingData<News>> {
-
+    suspend fun getNews(category: NewsApiService.Category, toDate: LocalDate): Flow<PagingData<News>> {
+        val pagingConfig = getPageConfig()
         val pager = Pager(
             config = pagingConfig,
             remoteMediator = NewsPagingMediator(onlineDataSource,
                 localDataSource,
                 GuardianNewsApp.getAppContext().database.remoteKeyDao(),
+                settingsRepository,
                 category,
                 fromDate,
                 toDate)
@@ -81,5 +65,16 @@ class NewsRepository (
 
         // add caching if feasible
         return pager.flow
+    }
+
+
+    private suspend fun getPageConfig(): PagingConfig {
+        val pageSize = settingsRepository.getItemCount().first()
+        Log.d(TAG, "setting page config with page size: $pageSize")
+        return PagingConfig(
+            pageSize = pageSize,
+            prefetchDistance = pageSize - 2,
+            enablePlaceholders = false
+        )
     }
 }
