@@ -63,10 +63,7 @@ class NewsFragment : Fragment() {
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
         viewModel.getNews(
             NewsApiService.Category.findByStr(category),
-            LocalDate.now().minusMonths(1),
-            LocalDate.now(),
-            1,
-            10)
+            LocalDate.now())
 
         Log.d(TAG, "refreshNewsList: ${viewModel.news}")
 

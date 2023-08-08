@@ -29,7 +29,7 @@ class SettingsRepository(private val settingsDataStore: SettingsDataStore) {
         val COLOR_THEME = stringPreferencesKey("color_theme")
         val COLOR_THEME_DEFAULT = ColorTheme.WHITE
         val FONT_SIZE = stringPreferencesKey("font_size")
-        const val FONT_SIZE_DEFAULT = "Medium"
+        const val FONT_SIZE_DEFAULT = "medium"
     }
     object KeyDefaults {
         val defaultMap = mapOf<String, Any>(

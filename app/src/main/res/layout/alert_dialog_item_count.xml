@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_xs">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="@string/number_of_items"
+        android:textSize="@dimen/text_size_l"
+        android:textStyle="bold"
+        android:paddingStart="@dimen/margin_s"
+        android:paddingEnd="@dimen/margin_s"
+        android:paddingBottom="@dimen/margin_s"
+        android:paddingTop="@dimen/margin_s"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/margin_m"
+        android:paddingEnd="@dimen/margin_m"
+        app:boxStrokeColor="@color/black"
+        app:hintTextColor="@color/grey_500">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/item_count_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/item_count_hint"
+            android:textColorHint="@color/grey_500"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/item_count_ok_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/alert_dialog_ok_button"
+        android:layout_margin="@dimen/margin_m"
+        android:text="@string/ok_button" />
+
+</LinearLayout>

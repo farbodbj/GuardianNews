@@ -16,6 +16,8 @@ import kotlinx.coroutines.launch
 class SettingsViewModel (
     private val settingsRepository: SettingsRepository
 ): ViewModel() {
+    private val TAG = "SettingsViewModel"
+
     private val _itemCount: MutableStateFlow<Int> = MutableStateFlow(10)
     val itemCount = _itemCount
 
@@ -55,23 +57,34 @@ class SettingsViewModel (
             settingsRepository.saveFontSize(fontSize.toString())
     }
 
+
     private fun initializeFlows() {
         viewModelScope.launch {
             settingsRepository.apply {
-                getItemCount().collect { itemCount ->
-                    _itemCount.value = itemCount
+                launch {
+                    getItemCount().collect { itemCount ->
+                        _itemCount.value = itemCount
+                    }
                 }
-                getOrderBy().collect { orderBy ->
-                    _orderBy.value = OrderBy.findByStr(orderBy)
+                launch {
+                    getOrderBy().collect { orderBy ->
+                        _orderBy.value = OrderBy.findByStr(orderBy)
+                    }
                 }
-                getFromDate().collect { fromDate ->
-                    _fromDate.value = fromDate
+                launch {
+                    getFromDate().collect { fromDate ->
+                        _fromDate.value = fromDate
+                    }
                 }
-                getColorTheme().collect { colorTheme ->
-                    _colorTheme.value = ColorTheme.findByStr(colorTheme)
+                launch {
+                    getColorTheme().collect { colorTheme ->
+                        _colorTheme.value = ColorTheme.findByStr(colorTheme)
+                    }
                 }
-                getFontSize().collect { fontSize ->
-                    _textSize.value = TextSize.findByStr(fontSize)
+                launch {
+                    getFontSize().collect { fontSize ->
+                        _textSize.value = TextSize.findByStr(fontSize.lowercase())
+                    }
                 }
             }
         }

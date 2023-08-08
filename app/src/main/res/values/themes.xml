@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.GuardianNews" parent="Theme.Material3.Light.NoActionBar">
         <item name="background">@color/white</item>
+
     </style>
 
     <style name="OverlayThemeWhite" parent="Base.Theme.GuardianNews">
@@ -47,6 +48,7 @@
 
     <style name="toolBarTitle" parent="Widget.AppCompat.Toolbar">
         <item name="titleTextColor">@color/black</item>
+        <item name="android:textColor">@color/black</item>
         <item name="fontFamily">@font/vogue</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:textSize">@dimen/toolbar_title_text_size</item>
