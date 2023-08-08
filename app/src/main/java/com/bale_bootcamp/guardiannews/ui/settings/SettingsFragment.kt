@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogThemeChoiceBinding
 import com.bale_bootcamp.guardiannews.databinding.FragmentSettingsBinding
+import com.bale_bootcamp.guardiannews.ui.DefaultFragment
 import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -42,13 +43,34 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setUiComponents() {
-        setSettingsView()
+        setBackArrow()
+        setSettingsMenu()
     }
 
-    private fun setSettingsView() {
+    private fun setBackArrow() {
+        binding.settingsToolbar.setNavigationOnClickListener {
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, DefaultFragment())
+                .commit()
+        }
+    }
+
+    private fun setSettingsMenu() {
         Log.d(TAG, "setUiComponents: started")
+        setSettingTitles()
         startObservingSettings()
         setSettingsOnClickListeners()
+    }
+
+    private fun setSettingTitles() {
+        binding.apply {
+            itemCountSetting.settingTitle.text = getString(R.string.number_of_items)
+            orderBySetting.settingTitle.text = getString(R.string.order_by)
+            fromDateSetting.settingTitle.text = getString(R.string.from_date)
+            themeSetting.settingTitle.text = getString(R.string.color_theme)
+            textSizeSetting.settingTitle.text = getString(R.string.text_size)
+        }
     }
 
     private fun startObservingSettings() {
