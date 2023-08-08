@@ -8,10 +8,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import com.bale_bootcamp.guardiannews.GuardianNewsApp
+import com.bale_bootcamp.guardiannews.data.local.datastore.SettingsDataStore
 import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApi
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.data.repository.NewsRepository
+import com.bale_bootcamp.guardiannews.data.repository.SettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -24,27 +26,18 @@ class NewsFragmentViewModel (
 
     val news: MutableLiveData<PagingData<News>> = MutableLiveData()
 
-    fun getNews(category: NewsApiService.Category,
-                fromDate: LocalDate,
-                toDate: LocalDate,
-                page: Int,
-                pageSize: Int) {
+    fun getNews(category: NewsApiService.Category, toDate: LocalDate) {
         viewModelScope.launch {
-            repository.getNews(category, fromDate, toDate, page, pageSize).collectLatest {
+            repository.getNews(category, toDate).collectLatest {
                 news.postValue(it)
-                Log.d(TAG, "getNews: $it")
+                Log.d(TAG, "getNews: $it to date: $toDate")
             }
         }
     }
 
-    fun refreshNews(category: NewsApiService.Category,
-                    fromDate: LocalDate,
-                    toDate: LocalDate,
-                    page: Int,
-                    pageSize: Int) {
-
+    fun refreshNews(category: NewsApiService.Category, toDate: LocalDate, page: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.refreshNews(category, fromDate, toDate, page, pageSize)
+            repository.refreshNews(category, toDate, page)
         }
     }
 
@@ -52,9 +45,13 @@ class NewsFragmentViewModel (
     class NewsFragmentViewModelFactory: ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(NewsFragmentViewModel::class.java)) {
+                val appContext = GuardianNewsApp.getAppContext()
                 val repository = NewsRepository(
                     NewsApi.retrofitApiService,
-                    GuardianNewsApp.getAppContext().database.newsDao())
+                    appContext.database.newsDao(),
+                    SettingsRepository.getInstance(SettingsDataStore
+                        .SettingsDataStoreFactory(appContext).create()))
+
                 return NewsFragmentViewModel(repository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")

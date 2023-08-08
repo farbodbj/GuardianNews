@@ -12,7 +12,6 @@ import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
@@ -42,10 +41,19 @@ class MainActivity : AppCompatActivity() {
     private fun setThemeFromPrefs() = lifecycleScope.launch(Dispatchers.IO) {
         settingsRepository.getColorTheme().collectLatest {
             runOnUiThread {
-                setTheme(getColorThemeOverlayId(it))
+                val themeId = getColorThemeOverlayId(it)
+                setTheme(themeId)
+                setStatusBarColorFromTheme(themeId)
             }
         }
     }
+
+    private fun setStatusBarColorFromTheme(themeId: Int) =
+        theme.obtainStyledAttributes(themeId, intArrayOf(com.google.android.material.R.attr.colorPrimary))
+            .apply {
+                val colorPrimary = getColor(0, 0)
+                window.statusBarColor = colorPrimary
+            }
 
     private fun getColorThemeOverlayId(themeName: String) =
         when(ColorTheme.findByStr(themeName)) {

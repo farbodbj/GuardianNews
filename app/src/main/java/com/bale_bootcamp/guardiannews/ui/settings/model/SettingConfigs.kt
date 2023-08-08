@@ -10,7 +10,7 @@ enum class OrderBy(val value: String) {
         fun findByStr(value: String): OrderBy {
             return OrderBy.values().find {
                 it.value == value
-            } ?: throw IllegalArgumentException("value not found in enum")
+            } ?: throw IllegalArgumentException("value $value not found in enum")
         }
     }
 }
@@ -26,7 +26,7 @@ enum class ColorTheme(val value: String) {
         fun findByStr(value: String): ColorTheme {
             return ColorTheme.values().find {
                 it.value == value
-            } ?: throw IllegalArgumentException("value not found in enum")
+            } ?: throw IllegalArgumentException("value $value not found in enum")
         }
     }
 }
@@ -40,7 +40,7 @@ enum class TextSize(val value: String) {
         fun findByStr(value: String): TextSize {
             return TextSize.values().find {
                 it.value == value
-            } ?: throw IllegalArgumentException("value not found in enum")
+            } ?: throw IllegalArgumentException("value $value not found in enum")
         }
     }
 }

@@ -11,10 +11,10 @@
         android:id="@+id/setting_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="example setting"
         android:paddingStart="@dimen/margin_s"
         android:textStyle="bold"
         android:textColor="@color/black"
+        tools:text="example title"
         android:textSize="@dimen/setting_title_text_size"/>
 
     <TextView
