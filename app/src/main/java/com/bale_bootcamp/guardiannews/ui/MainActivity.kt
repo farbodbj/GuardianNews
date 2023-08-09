@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.bale_bootcamp.guardiannews.GuardianNewsApp
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.data.local.datastore.SettingsDataStore
 import com.bale_bootcamp.guardiannews.data.repository.SettingsRepository
@@ -12,6 +13,7 @@ import com.bale_bootcamp.guardiannews.ui.settings.model.TextSize
 import com.bale_bootcamp.guardiannews.utility.Utils.getColorThemeOverlayId
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
@@ -19,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private val settingsRepository by lazy {
         SettingsRepository.getInstance(SettingsDataStore
-            .SettingsDataStoreFactory(this)
+            .SettingsDataStoreFactory(GuardianNewsApp.getAppContext())
             .create())
     }
 
@@ -42,8 +44,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context?) {
         Log.d(TAG, "attachBaseContext called, is newBase null: ${newBase == null}")
-        if(baseContext == null) super.attachBaseContext(newBase)
-        else super.attachBaseContext(setFontScaleFromPrefs(newBase!!))
+        try{
+            val config = setFontScaleFromPrefs(newBase!!)
+            Log.d(TAG, "super called with config font scale: ${config.resources.configuration.fontScale}")
+            super.attachBaseContext(config)
+        } catch (e: Exception) {
+            super.attachBaseContext(GuardianNewsApp.getAppContext())
+            Log.e(TAG, "${e.stackTrace.asList().joinToString() }}")
+            Log.d(TAG, "default super called successfully")
+        }
     }
 
     private fun setFontScaleFromPrefs(context: Context): Context {
@@ -56,6 +65,7 @@ class MainActivity : AppCompatActivity() {
     private fun getFontSizeFromPrefs() = runBlocking {
         Log.d(TAG, "getFontSizeFromPrefs called")
         val it = settingsRepository.getFontSize().first()
+        Log.d(TAG, it)
         when(TextSize.findByStr(it)) {
             TextSize.SMALL -> 0.85F
             TextSize.MEDIUM -> 1.0F
@@ -67,12 +77,11 @@ class MainActivity : AppCompatActivity() {
     private fun setThemeFromPrefs() = runBlocking {
         Log.d(TAG, "setThemeFromPrefs called")
         val it = settingsRepository.getColorTheme().first()
-            runOnUiThread {
-                val themeId = getColorThemeOverlayId(it)
-                setTheme(themeId)
-                setStatusBarColorFromTheme(themeId)
-            }
-
+        runOnUiThread {
+            val themeId = getColorThemeOverlayId(it)
+            setTheme(themeId)
+            setStatusBarColorFromTheme(themeId)
+        }
     }
 
     private fun setStatusBarColorFromTheme(themeId: Int) =
