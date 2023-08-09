@@ -4,23 +4,32 @@ import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
-import android.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
+import androidx.annotation.IdRes
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bale_bootcamp.guardiannews.R
+import com.bale_bootcamp.guardiannews.databinding.AlertDialogFontSizeChoiceBinding
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogItemCountBinding
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogThemeChoiceBinding
 import com.bale_bootcamp.guardiannews.databinding.FragmentSettingsBinding
 import com.bale_bootcamp.guardiannews.ui.DefaultFragment
 import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
+import com.bale_bootcamp.guardiannews.ui.settings.model.TextSize
+import com.bale_bootcamp.guardiannews.utility.Utils.showAlertDialog
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.lang.IllegalStateException
 
 class SettingsFragment : Fragment() {
@@ -123,29 +132,34 @@ class SettingsFragment : Fragment() {
     private fun setSettingsOnClickListeners() = binding.apply {
         themeSetting.root
             .setOnClickListener {
-                val (alertDialogViewBinding, themeChangeAlertDialog) = showThemeAlertDialog()
-                handleThemeSelection(alertDialogViewBinding, themeChangeAlertDialog)
+                val (itemCountAlertDialogViewBinding, themeChangeAlertDialog) = requireContext()
+                    .showAlertDialog(
+                        AlertDialogThemeChoiceBinding::class,
+                        R.layout.alert_dialog_theme_choice)
+
+                handleThemeSelection(itemCountAlertDialogViewBinding, themeChangeAlertDialog)
             }
 
         itemCountSetting.root
             .setOnClickListener {
-                val (itemCountAlertDialogBinding, itemCountAlertDialog) = showItemCountAlertDialog()
+                val (itemCountAlertDialogBinding, itemCountAlertDialog) = requireContext()
+                    .showAlertDialog(
+                        AlertDialogItemCountBinding::class,
+                        R.layout.alert_dialog_item_count)
+
                 handleItemCountDataEntry(itemCountAlertDialogBinding, itemCountAlertDialog)
             }
+
+        textSizeSetting.root
+            .setOnClickListener {
+                val (fontSizeAlertDialogViewBinding, fontSizeAlertDialog) = requireContext()
+                    .showAlertDialog(
+                        AlertDialogFontSizeChoiceBinding::class,
+                        R.layout.alert_dialog_font_size_choice)
+
+                handleFontSizeSelection(fontSizeAlertDialogViewBinding, fontSizeAlertDialog)
+        }
     }
-
-
-    private fun showItemCountAlertDialog(): Pair<AlertDialogItemCountBinding, AlertDialog>{
-        val itemCountAlertDialog = AlertDialog.Builder(requireContext()).create()
-        val itemCountAlertDialogView = layoutInflater.inflate(R.layout.alert_dialog_item_count, null)
-        val itemCountAlertDialogBinding = AlertDialogItemCountBinding.bind(itemCountAlertDialogView)
-        itemCountAlertDialog.setView(itemCountAlertDialogView)
-        itemCountAlertDialog.setCanceledOnTouchOutside(true)
-        itemCountAlertDialog.show()
-
-        return Pair(itemCountAlertDialogBinding, itemCountAlertDialog)
-    }
-
 
     private fun handleItemCountDataEntry(itemCountBinding: AlertDialogItemCountBinding, itemCountAlertDialog: AlertDialog) {
         Log.d(TAG, "handleItemCountDataEntry: started")
@@ -156,26 +170,6 @@ class SettingsFragment : Fragment() {
                 itemCountAlertDialog.dismiss()
             }
         }
-    }
-
-
-    private fun showThemeAlertDialog(): Pair<AlertDialogThemeChoiceBinding, AlertDialog> {
-        val themeChangeAlertDialog = AlertDialog.Builder(requireContext()).create()
-        val themeChangeAlertDialogView = layoutInflater.inflate(R.layout.alert_dialog_theme_choice, null)
-        val alertDialogViewBinding = AlertDialogThemeChoiceBinding.bind(themeChangeAlertDialogView)
-        themeChangeAlertDialog.setView(themeChangeAlertDialogView)
-        themeChangeAlertDialog.setCanceledOnTouchOutside(true)
-        themeChangeAlertDialog.show()
-        return Pair(alertDialogViewBinding, themeChangeAlertDialog)
-    }
-
-    private fun colorTheme(choiceButtonId: Int): ColorTheme = when(choiceButtonId) {
-            R.id.white_button -> ColorTheme.WHITE
-            R.id.sky_blue_button -> ColorTheme.SKY_BLUE
-            R.id.dark_blue_button -> ColorTheme.DARK_BLUE
-            R.id.green_button -> ColorTheme.GREEN
-            R.id.light_green_button -> ColorTheme.LIGHT_GREEN
-            else -> throw IllegalStateException("unknown button chosen")
     }
 
     private fun handleThemeSelection(alertDialogViewBinding: AlertDialogThemeChoiceBinding, themeChangeAlertDialog: AlertDialog) {
@@ -195,6 +189,60 @@ class SettingsFragment : Fragment() {
             }
         }
     }
+
+    private fun handleFontSizeSelection(alertDialogViewBinding: AlertDialogFontSizeChoiceBinding, fontSizeAlertDialog: AlertDialog) {
+        alertDialogViewBinding.apply {
+            checkCurrentFontSize(fontSizeRadioGroup)
+            fontSizeOkButton.setOnClickListener {
+                fontSizeRadioGroup.checkedRadioButtonId.let {
+                    Log.d(TAG, "checked button id: ${it}, small:${R.id.font_size_small}, medium: ${R.id.font_size_medium}, large:${R.id.font_size_large}")
+                    val selectedFontSize = fontSizeFromButton(it)
+                    Log.d(TAG, "selected font size: ${selectedFontSize.value}")
+                    viewModel.saveFontSize(selectedFontSize)
+                    fontSizeAlertDialog.dismiss()
+                }
+                requireActivity().recreate()
+            }
+        }
+    }
+
+
+    private fun checkCurrentFontSize(fontSizeRadioGroup: RadioGroup) {
+        lifecycleScope.launch {
+            val current = viewModel.textSize.first()
+            val buttonId = buttonIdFromFontSize(current)
+
+            withContext(Dispatchers.Main) {
+                fontSizeRadioGroup.check(buttonId)
+            }
+        }
+    }
+
+    private fun buttonIdFromFontSize(fontSize: TextSize): Int = when(fontSize) {
+        TextSize.SMALL -> R.id.font_size_small
+        TextSize.MEDIUM -> R.id.font_size_medium
+        TextSize.LARGE -> R.id.font_size_large
+    }
+
+
+    private fun fontSizeFromButton(@IdRes buttonId: Int): TextSize = when(buttonId) {
+        R.id.font_size_small -> TextSize.SMALL
+        R.id.font_size_medium -> TextSize.MEDIUM
+        R.id.font_size_large -> TextSize.LARGE
+        else -> throw IllegalStateException("unknown button chosen")
+    }
+
+
+    private fun colorTheme(choiceButtonId: Int): ColorTheme = when(choiceButtonId) {
+            R.id.white_button -> ColorTheme.WHITE
+            R.id.sky_blue_button -> ColorTheme.SKY_BLUE
+            R.id.dark_blue_button -> ColorTheme.DARK_BLUE
+            R.id.green_button -> ColorTheme.GREEN
+            R.id.light_green_button -> ColorTheme.LIGHT_GREEN
+            else -> throw IllegalStateException("unknown button chosen")
+    }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
