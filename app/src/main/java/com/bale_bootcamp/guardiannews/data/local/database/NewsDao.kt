@@ -17,17 +17,16 @@ interface NewsDao: BaseDao<News> {
     fun selectByCategory(category: String): PagingSource<Int, News>
 
     @Query("select * from ${News.ENTITY_NAME} order by webPublicationDate desc")
-    fun selectAllDesc(orderBy: String): PagingSource<Int, News>
+    fun selectAllDesc(): PagingSource<Int, News>
 
     @Query("select * from ${News.ENTITY_NAME} order by webPublicationDate asc")
-    fun selectAllAsc(orderBy: String): PagingSource<Int, News>
+    fun selectAllAsc(): PagingSource<Int, News>
 
     fun select(category: NewsApiService.Category, orderBy: OrderBy): PagingSource<Int, News> {
         return if (category == NewsApiService.Category.HOME) {
-            val orderByStr = orderBy.toString()
             when(orderBy) {
-                OrderBy.NEWEST -> selectAllDesc(orderByStr)
-                OrderBy.OLDEST -> selectAllAsc(orderByStr)
+                OrderBy.NEWEST -> selectAllDesc()
+                OrderBy.OLDEST -> selectAllAsc()
                 OrderBy.RELEVANCE -> selectAllDefault()
             }
         } else {
