@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_xs"
-                android:textColor="@color/blue_600"
+                android:textColor="?colorOnPrimary"
                 android:maxLines="1"
                 tools:text="Category" />
 

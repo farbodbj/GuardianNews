@@ -48,7 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/customize_style"
-                    android:textColor="@color/black"
+                    android:textColor="?colorOnBackground"
                     android:paddingTop="@dimen/margin_s"
                     android:paddingBottom="@dimen/margin_s"
                     android:paddingStart="@dimen/margin_xs"
