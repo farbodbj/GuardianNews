@@ -64,7 +64,7 @@ class NewsRepository (
             val orderBy = runBlocking {
                 OrderBy.findByStr(settingsRepository.getOrderBy().first())
             }
-            Log.d(TAG, "getting news with page config: $pagingConfig for category: $category, fromDate: $fromDate, toDate: $toDate")
+            Log.d(TAG, "getting news with page config: $pagingConfig for category: $category, fromDate: $fromDate, toDate: $toDate, ordered by: ${orderBy.value}")
             localDataSource.select(category, orderBy)
         }
 
