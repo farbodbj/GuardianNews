@@ -19,11 +19,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+private const val TAG: String = "NewsFragmentViewModel"
 class NewsFragmentViewModel (
     private val repository: NewsRepository
 ): ViewModel() {
-    private val TAG: String = "NewsFragmentViewModel"
-
     val news: MutableLiveData<PagingData<News>> = MutableLiveData()
 
     fun getNews(category: NewsApiService.Category, toDate: LocalDate) {

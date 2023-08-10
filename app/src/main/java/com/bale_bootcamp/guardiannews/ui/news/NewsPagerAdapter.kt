@@ -8,10 +8,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
 
+private const val TAG = "NewsPagerAdapter"
 class NewsPagerAdapter(fragmentActivity: FragmentActivity,
                        private val categories: List<String>
 ): FragmentStateAdapter(fragmentActivity) {
-    private val TAG = "NewsPagerAdapter"
+
 
     override fun getItemCount(): Int {
         Log.d(TAG, "getItemCount: ${categories.size}")

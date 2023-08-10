@@ -19,12 +19,12 @@ import kotlinx.coroutines.launch
 
 import java.time.LocalDate
 
+private const val TAG: String = "NewsRepository"
 class NewsRepository (
     private val onlineDataSource: NewsApiService,
     private val localDataSource: NewsDao,
     private val settingsRepository: SettingsRepository
 ) {
-    private val TAG: String = "NewsRepository"
 
     private var pageSize: Int = 10
     private var fromDate: LocalDate = LocalDate.now().minusMonths(1)

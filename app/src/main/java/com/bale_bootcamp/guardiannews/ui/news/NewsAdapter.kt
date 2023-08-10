@@ -17,10 +17,11 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
+private const val TAG = "NewsAdapter"
 class NewsAdapter(
     private val onItemClicked: (News) -> Unit
 ): PagingDataAdapter<News, NewsAdapter.NewsViewHolder>(DiffCallback) {
-    private val TAG = "NewsAdapter"
+
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<News>() {
             override fun areItemsTheSame(oldItem: News, newItem: News): Boolean {
@@ -62,7 +63,10 @@ class NewsAdapter(
         private var binding: NewsViewholderBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        private val TAG = "NewsViewHolder"
+        companion object {
+            private const val TAG = "NewsViewHolder"
+            private const val GLIDE_TAG = "Glide"
+        }
         fun bind(news: News) {
             bindTextual(news)
             bindImage(news)
@@ -83,14 +87,13 @@ class NewsAdapter(
                 .centerCrop()
                 .placeholder(R.drawable.placeholder_square)
                 .listener(object : RequestListener<Drawable> {
-                    private val TAG = "Glide"
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        Log.e(TAG, "onLoadFailed: ${e?.message}")
+                        Log.e("$TAG:$GLIDE_TAG", "onLoadFailed: ${e?.message}")
                         return false
                     }
 
@@ -101,7 +104,7 @@ class NewsAdapter(
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        Log.d(TAG, "onResourceReady: image loaded")
+                        Log.d("$TAG:$GLIDE_TAG", "onResourceReady: image loaded")
                         return false
                     }
                 })

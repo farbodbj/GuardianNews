@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
-    private val TAG = "MainActivity"
     private lateinit var binding: ActivityMainBinding
 
     private val settingsRepository by lazy {

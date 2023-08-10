@@ -23,8 +23,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import java.lang.IllegalStateException
 
+private const val TAG = "SettingsFragment"
 class SettingsFragment : Fragment() {
-    private val TAG = "SettingsFragment"
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
