@@ -16,9 +16,8 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 
 
+private const val TAG = "UserPreferencesRepository"
 class SettingsRepository(private val settingsDataStore: SettingsDataStore) {
-    private val TAG = "UserPreferencesRepository"
-
     private object Keys {
         val ITEM_COUNT = intPreferencesKey("item_count")
         const val ITEM_COUNT_DEFAULT = 10

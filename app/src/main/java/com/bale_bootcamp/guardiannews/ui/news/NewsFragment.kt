@@ -16,8 +16,8 @@ import java.time.LocalDate
 
 const val ONE_MINUTE = 60 * 1000
 
+private const val TAG = "NewsFragment"
 class NewsFragment : Fragment() {
-    private val TAG = "NewsFragment"
 
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
