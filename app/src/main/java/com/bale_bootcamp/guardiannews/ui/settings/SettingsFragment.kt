@@ -176,8 +176,6 @@ class SettingsFragment : Fragment() {
                 val selectedOrderBy = buttonIdOrderBy(orderByRadioGroup.checkedRadioButtonId)
                 viewModel.saveOrderBy(selectedOrderBy)
                 orderByAlertDialog.dismiss()
-
-                orderByAlertDialog.dismiss()
             }
         }
     }
