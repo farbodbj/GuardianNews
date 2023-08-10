@@ -14,6 +14,7 @@ import com.bale_bootcamp.guardiannews.data.network.NewsApi
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.data.repository.NewsRepository
 import com.bale_bootcamp.guardiannews.data.repository.SettingsRepository
+import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -26,18 +27,12 @@ class NewsFragmentViewModel (
 
     val news: MutableLiveData<PagingData<News>> = MutableLiveData()
 
-    fun getNews(category: NewsApiService.Category, toDate: LocalDate) {
+    fun getNews(category: NewsApiService.Category, toDate: LocalDate, orderBy: OrderBy = OrderBy.RELEVANCE) {
         viewModelScope.launch {
             repository.getNews(category, toDate).collectLatest {
                 news.postValue(it)
                 Log.d(TAG, "getNews: $it to date: $toDate")
             }
-        }
-    }
-
-    fun refreshNews(category: NewsApiService.Category, toDate: LocalDate, page: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.refreshNews(category, toDate, page)
         }
     }
 
@@ -49,8 +44,9 @@ class NewsFragmentViewModel (
                 val repository = NewsRepository(
                     NewsApi.retrofitApiService,
                     appContext.database.newsDao(),
-                    SettingsRepository.getInstance(SettingsDataStore
-                        .SettingsDataStoreFactory(appContext).create()))
+                    SettingsRepository.getInstance(SettingsDataStore.SettingsDataStoreFactory(appContext).create()),
+
+                )
 
                 return NewsFragmentViewModel(repository) as T
             }

@@ -11,24 +11,14 @@ import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 @Dao
 interface NewsDao: BaseDao<News> {
     @Query("select * from ${News.ENTITY_NAME}")
-    fun selectAllDefault(): PagingSource<Int, News>
+    fun selectAll(): PagingSource<Int, News>
 
     @Query("select * from ${News.ENTITY_NAME} where sectionId = :category")
     fun selectByCategory(category: String): PagingSource<Int, News>
 
-    @Query("select * from ${News.ENTITY_NAME} order by webPublicationDate desc")
-    fun selectAllDesc(): PagingSource<Int, News>
-
-    @Query("select * from ${News.ENTITY_NAME} order by webPublicationDate asc")
-    fun selectAllAsc(): PagingSource<Int, News>
-
     fun select(category: NewsApiService.Category, orderBy: OrderBy): PagingSource<Int, News> {
         return if (category == NewsApiService.Category.HOME) {
-            when(orderBy) {
-                OrderBy.NEWEST -> selectAllDesc()
-                OrderBy.OLDEST -> selectAllAsc()
-                OrderBy.RELEVANCE -> selectAllDefault()
-            }
+            selectAll()
         } else {
             selectByCategory(category.categoryName)
         }
