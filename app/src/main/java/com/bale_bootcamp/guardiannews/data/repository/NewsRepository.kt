@@ -11,11 +11,13 @@ import com.bale_bootcamp.guardiannews.GuardianNewsApp
 import com.bale_bootcamp.guardiannews.data.local.database.NewsDao
 import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
+import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 import java.time.LocalDate
 
@@ -59,14 +61,16 @@ class NewsRepository (
                 fromDate,
                 toDate)
         ) {
+            val orderBy = runBlocking {
+                OrderBy.findByStr(settingsRepository.getOrderBy().first())
+            }
             Log.d(TAG, "getting news with page config: $pagingConfig for category: $category, fromDate: $fromDate, toDate: $toDate")
-            localDataSource.select(category)
+            localDataSource.select(category, orderBy)
         }
 
         // add caching if feasible
         return pager.flow
     }
-
 
     private suspend fun getPageConfig(): PagingConfig {
         val pageSize = settingsRepository.getItemCount().first()
@@ -74,7 +78,6 @@ class NewsRepository (
         return PagingConfig(
             pageSize = pageSize,
             prefetchDistance = pageSize - 2,
-            enablePlaceholders = false
-        )
+            enablePlaceholders = false)
     }
 }
