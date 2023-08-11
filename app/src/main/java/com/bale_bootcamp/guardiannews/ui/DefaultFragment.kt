@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.ui.news.NewsPagerAdapter
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
@@ -132,10 +133,14 @@ class DefaultFragment : Fragment() {
                     viewPager.currentItem = selectedNavItem!!
                 } else {
 
-                    activity?.supportFragmentManager
-                        ?.beginTransaction()
-                        ?.replace(R.id.fragment_container, SettingsFragment())
-                        ?.commit()
+//                    activity?.supportFragmentManager
+//                        ?.beginTransaction()
+//                        ?.replace(R.id.fragment_container, SettingsFragment())
+//                        ?.commit()
+
+                    val directions = DefaultFragmentDirections.actionDefaultFragmentToSettingsFragment()
+                    findNavController().navigate(directions)
+
                 }
                 true
             } catch (e: IllegalStateException) {

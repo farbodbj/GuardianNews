@@ -33,12 +33,14 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: binding created")
         setContentView(binding.root)
         // set fragment in the fragment container to the fragment_default
-        if(savedInstanceState == null) {
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.fragment_container, DefaultFragment())
-                .commit()
-        }
+
+        // replacing navigation component
+//        if(savedInstanceState == null) {
+//            supportFragmentManager
+//                .beginTransaction()
+//                .add(R.id.fragment_container, DefaultFragment())
+//                .commit()
+//        }
     }
 
     private fun setThemeFromPrefs() = runBlocking {
