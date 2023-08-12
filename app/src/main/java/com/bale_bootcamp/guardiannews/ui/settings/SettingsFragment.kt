@@ -57,10 +57,6 @@ class SettingsFragment : Fragment() {
         binding.settingsToolbar.setNavigationOnClickListener {
             val directions = SettingsFragmentDirections.actionSettingsFragmentToDefaultFragment()
             findNavController().navigate(directions)
-        //            requireActivity().supportFragmentManager
-//                .beginTransaction()
-//                .replace(R.id.fragment_container, DefaultFragment())
-//                .commit()
         }
     }
 

@@ -46,8 +46,7 @@ class DefaultFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDefaultBinding.inflate(inflater, container, false)
-        if (savedInstanceState == null)
-            setUiComponents()
+        setUiComponents()
         return binding.root
     }
 
@@ -132,12 +131,6 @@ class DefaultFragment : Fragment() {
                 if(selectedNavItem in 0..4) {
                     viewPager.currentItem = selectedNavItem!!
                 } else {
-
-//                    activity?.supportFragmentManager
-//                        ?.beginTransaction()
-//                        ?.replace(R.id.fragment_container, SettingsFragment())
-//                        ?.commit()
-
                     val directions = DefaultFragmentDirections.actionDefaultFragmentToSettingsFragment()
                     findNavController().navigate(directions)
 
