@@ -10,7 +10,7 @@ import com.bale_bootcamp.guardiannews.data.local.model.NewsRemoteKey
 import com.bale_bootcamp.guardiannews.utility.LocalDateTimeConverter
 import java.util.concurrent.Executor
 
-@Database(entities = [News::class, NewsRemoteKey::class], version = 2)
+@Database(entities = [News::class, NewsRemoteKey::class], version = 2, exportSchema = false)
 @TypeConverters(LocalDateTimeConverter::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun newsDao(): NewsDao
