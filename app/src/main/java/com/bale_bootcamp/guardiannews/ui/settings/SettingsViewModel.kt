@@ -6,11 +6,13 @@ import com.bale_bootcamp.guardiannews.data.repository.SettingsRepository
 import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import com.bale_bootcamp.guardiannews.ui.settings.model.TextSize
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val TAG = "SettingsViewModel"
+@HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ): ViewModel() {

@@ -11,18 +11,6 @@ import java.util.concurrent.Executors.newSingleThreadExecutor
 class GuardianNewsApp: Application() {
     val name = "GuardianNewsApp"
 
-    val database by lazy {
-        AppDatabase.getDatabase(
-                this,
-                object : RoomDatabase.QueryCallback {
-                    override fun onQuery(sqlQuery: String, bindArgs: List<Any?>) {
-                        Log.d("Database", "query: $sqlQuery\n args:$bindArgs")
-                    }
-                },
-                newSingleThreadExecutor()
-            )
-    }
-
     override fun onCreate() {
         super.onCreate()
         appContext = this
