@@ -16,8 +16,8 @@ import com.bale_bootcamp.guardiannews.ui.settings.SettingsFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
+private const val TAG = "DefaultFragment"
 class DefaultFragment : Fragment() {
-    private val TAG = "DefaultFragment"
 
     private var _binding: FragmentDefaultBinding? = null
     private val binding get() = _binding!!

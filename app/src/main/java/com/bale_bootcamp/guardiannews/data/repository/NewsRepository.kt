@@ -16,12 +16,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 
+private const val TAG: String = "NewsRepository"
 class NewsRepository (
     private val onlineDataSource: NewsApiService,
     private val localDataSource: NewsDao,
     private val settingsRepository: SettingsRepository
 ) {
-    private val TAG: String = "NewsRepository"
 
     private var fromDate: LocalDate = LocalDate.now().minusMonths(1)
 

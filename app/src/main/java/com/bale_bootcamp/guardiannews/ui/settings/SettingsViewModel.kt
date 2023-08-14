@@ -13,10 +13,10 @@ import com.bale_bootcamp.guardiannews.ui.settings.model.TextSize
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
+private const val TAG = "SettingsViewModel"
 class SettingsViewModel (
     private val settingsRepository: SettingsRepository
 ): ViewModel() {
-    private val TAG = "SettingsViewModel"
 
     private val _itemCount: MutableStateFlow<Int> = MutableStateFlow(10)
     val itemCount = _itemCount
