@@ -15,10 +15,12 @@ import androidx.lifecycle.lifecycleScope
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogFontSizeChoiceBinding
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogItemCountBinding
+import com.bale_bootcamp.guardiannews.databinding.AlertDialogOrderByBinding
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogThemeChoiceBinding
 import com.bale_bootcamp.guardiannews.databinding.FragmentSettingsBinding
 import com.bale_bootcamp.guardiannews.ui.DefaultFragment
 import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
+import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import com.bale_bootcamp.guardiannews.ui.settings.model.TextSize
 import com.bale_bootcamp.guardiannews.utility.Utils.showAlertDialog
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.lang.IllegalStateException
+
 
 private const val TAG = "SettingsFragment"
 class SettingsFragment : Fragment() {
@@ -150,6 +153,15 @@ class SettingsFragment : Fragment() {
                 handleItemCountDataEntry(itemCountAlertDialogBinding, itemCountAlertDialog)
             }
 
+
+        orderBySetting.root
+            .setOnClickListener {
+            val (orderByAlertDialogBinding, orderByAlertDialog) = showOrderByAlertDialog()
+            handleOrderBySelection(orderByAlertDialogBinding, orderByAlertDialog)
+        }
+    }
+
+
         textSizeSetting.root
             .setOnClickListener {
                 val (fontSizeAlertDialogViewBinding, fontSizeAlertDialog) = requireContext()
@@ -160,6 +172,49 @@ class SettingsFragment : Fragment() {
                 handleFontSizeSelection(fontSizeAlertDialogViewBinding, fontSizeAlertDialog)
         }
     }
+
+    private fun showOrderByAlertDialog(): Pair<AlertDialogOrderByBinding, AlertDialog> {
+        val orderByAlertDialog = AlertDialog.Builder(requireContext()).create()
+        val orderByAlertDialogView = layoutInflater.inflate(R.layout.alert_dialog_order_by, null)
+        val orderByAlertDialogBinding = AlertDialogOrderByBinding.bind(orderByAlertDialogView)
+        orderByAlertDialog.setView(orderByAlertDialogView)
+        orderByAlertDialog.setCanceledOnTouchOutside(true)
+        orderByAlertDialog.show()
+
+        return Pair(orderByAlertDialogBinding, orderByAlertDialog)
+    }
+
+    private fun handleOrderBySelection(orderByAlertDialogBinding: AlertDialogOrderByBinding, orderByAlertDialog: AlertDialog) {
+        Log.d(TAG, "handleOrderBySelection: started")
+        orderByAlertDialogBinding.apply {
+            val orderBy = OrderBy.findByStr(viewModel.orderBy.value.value)
+            val orderByButtonId = orderByButtonId(orderBy)
+            orderByRadioGroup.check(orderByButtonId)
+
+            orderByOkButton.setOnClickListener {
+                val selectedOrderBy = buttonIdOrderBy(orderByRadioGroup.checkedRadioButtonId)
+                viewModel.saveOrderBy(selectedOrderBy)
+                orderByAlertDialog.dismiss()
+            }
+        }
+    }
+
+
+    @IdRes
+    private fun orderByButtonId(orderBy: OrderBy): Int = when(orderBy) {
+        OrderBy.NEWEST -> R.id.newest_radio_button
+        OrderBy.OLDEST -> R.id.oldest_radio_button
+        OrderBy.RELEVANCE -> R.id.relevance_radio_button
+    }
+
+    private fun buttonIdOrderBy(@IdRes buttonId: Int): OrderBy = when(buttonId) {
+        R.id.newest_radio_button -> OrderBy.NEWEST
+        R.id.oldest_radio_button -> OrderBy.OLDEST
+        R.id.relevance_radio_button -> OrderBy.RELEVANCE
+        else -> throw IllegalStateException("no such button id")
+    }
+
+
 
     private fun handleItemCountDataEntry(itemCountBinding: AlertDialogItemCountBinding, itemCountAlertDialog: AlertDialog) {
         Log.d(TAG, "handleItemCountDataEntry: started")
