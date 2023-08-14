@@ -14,7 +14,7 @@ import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import java.time.LocalDate
 
-
+private const val TAG = "NewsPagingMediator"
 @OptIn(ExperimentalPagingApi::class)
 class NewsPagingMediator(
     private val onlineDataSource: NewsApiService,
@@ -25,7 +25,7 @@ class NewsPagingMediator(
     private val toDate: LocalDate,
     private val orderBy: OrderBy
 ) : RemoteMediator<Int, News>() {
-    private val TAG = "NewsPagingMediator"
+
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, News>

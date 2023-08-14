@@ -14,10 +14,9 @@ import kotlinx.coroutines.flow.map
 import okio.IOException
 
 private const val SETTINGS_PREFERENCES_NAME = "settings_preferences"
+private const val TAG = "SettingsDataStore"
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SETTINGS_PREFERENCES_NAME)
 class SettingsDataStore(private val context: Context) {
-    private val TAG = "SettingsDataStore"
-
     suspend fun <T> savePref(key: Preferences.Key<T>, value: T) {
         Log.d(TAG, "savePref: key: ${key.name}, value: $value")
         try {
