@@ -11,19 +11,23 @@ import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.local.model.NewsRemoteKey
 import com.bale_bootcamp.guardiannews.data.network.model.ResponseModel
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import java.time.LocalDate
+import javax.inject.Inject
 
 private const val TAG = "NewsPagingMediator"
 @OptIn(ExperimentalPagingApi::class)
-class NewsPagingMediator(
+
+class NewsPagingMediator @AssistedInject constructor(
     private val onlineDataSource: NewsApiService,
     private val localNewsDataSource: NewsDao,
     private val localRemoteKeyDataSource: RemoteKeyDao,
-    private val category: NewsApiService.Category,
-    private val fromDate: LocalDate,
-    private val toDate: LocalDate,
-    private val orderBy: OrderBy
+    private val localSettingsRepository: SettingsRepository,
+    @Assisted private val category: NewsApiService.Category,
+    @Assisted("from-date") private val fromDate: LocalDate,
+    @Assisted("to-date") private val toDate: LocalDate,
 ) : RemoteMediator<Int, News>() {
 
     override suspend fun load(

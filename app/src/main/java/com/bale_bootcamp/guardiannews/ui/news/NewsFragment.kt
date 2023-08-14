@@ -13,12 +13,14 @@ import androidx.paging.PagingDataAdapter
 import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 const val ONE_MINUTE = 60 * 1000
 
 private const val TAG = "NewsFragment"
+@AndroidEntryPoint
 class NewsFragment : Fragment() {
 
     private var _binding: FragmentNewsBinding? = null
@@ -28,9 +30,7 @@ class NewsFragment : Fragment() {
 
     private var lastRefreshed: Long = 0
 
-    private val viewModel: NewsFragmentViewModel by viewModels {
-        NewsFragmentViewModel.NewsFragmentViewModelFactory()
-    }
+    private val viewModel: NewsFragmentViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -14,10 +14,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import javax.inject.Inject
 
 
 private const val TAG = "UserPreferencesRepository"
-class SettingsRepository(private val settingsDataStore: SettingsDataStore) {
+class SettingsRepository @Inject constructor(private val settingsDataStore: SettingsDataStore) {
     private object Keys {
         val ITEM_COUNT = intPreferencesKey("item_count")
         const val ITEM_COUNT_DEFAULT = 10

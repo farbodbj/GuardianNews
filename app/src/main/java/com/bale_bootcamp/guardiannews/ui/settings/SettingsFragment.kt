@@ -21,6 +21,7 @@ import com.bale_bootcamp.guardiannews.databinding.AlertDialogThemeChoiceBinding
 import com.bale_bootcamp.guardiannews.databinding.FragmentSettingsBinding
 import com.bale_bootcamp.guardiannews.ui.DefaultFragment
 import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
+import dagger.hilt.android.AndroidEntryPoint
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import com.bale_bootcamp.guardiannews.ui.settings.model.TextSize
 import com.bale_bootcamp.guardiannews.utility.Utils.showAlertDialog
@@ -37,13 +38,12 @@ import java.lang.IllegalStateException
 
 
 private const val TAG = "SettingsFragment"
+@AndroidEntryPoint
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SettingsViewModel by viewModels {
-        SettingsViewModel.SettingsViewModelFactory(requireContext())
-    }
+    private val viewModel: SettingsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
