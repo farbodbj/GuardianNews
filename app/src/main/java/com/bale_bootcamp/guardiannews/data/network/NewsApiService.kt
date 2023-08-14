@@ -42,27 +42,3 @@ interface NewsApiService {
                                       @Query("page") page: Int,
                                       @Query("page-size") pageSize: Int = 10): NetworkResponse
 }
-
-
-object NewsApi {
-    init{
-        MoshiInstance.registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter())
-    }
-
-    private val okhttpClient: OkHttpClient = OkHttpClient.Builder()
-        //.addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
-        .readTimeout(5, TimeUnit.MINUTES)
-        .build()
-
-    private val converterFactory: MoshiConverterFactory = MoshiConverterFactory
-        .create(MoshiInstance.instance)
-
-
-    val retrofitApiService: NewsApiService by lazy {
-        RetrofitFactory.createRetrofitInstance(
-            baseUrl = Api.BASE_URL,
-            client = okhttpClient,
-            converterFactory = converterFactory
-        ).create(NewsApiService::class.java)
-    }
-}
