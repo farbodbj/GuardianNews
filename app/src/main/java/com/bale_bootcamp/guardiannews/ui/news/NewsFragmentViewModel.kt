@@ -14,6 +14,7 @@ import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.data.repository.NewsRepository
 import com.bale_bootcamp.guardiannews.data.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -27,7 +28,7 @@ class NewsFragmentViewModel @Inject constructor(
 ): ViewModel() {
     val news: MutableLiveData<PagingData<News>> = MutableLiveData()
 
-    fun getNews(category: NewsApiService.Category, toDate: LocalDate) {
+    fun getNews(category: NewsApiService.Category, toDate: LocalDate, orderBy: OrderBy = OrderBy.RELEVANCE) {
         viewModelScope.launch {
             repository.getNews(category, toDate).collectLatest {
                 news.postValue(it)

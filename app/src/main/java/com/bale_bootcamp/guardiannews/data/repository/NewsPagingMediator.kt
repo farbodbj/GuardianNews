@@ -13,6 +13,7 @@ import com.bale_bootcamp.guardiannews.data.network.model.ResponseModel
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -92,7 +93,8 @@ class NewsPagingMediator @AssistedInject constructor(
             fromDate,
             toDate,
             lastAccessedPage,
-    50).response
+    50,
+            orderBy.value).response
         } catch (e: Exception) {
             Log.e(TAG, "exception: ${e.message}")
             ResponseModel("status", 0, 0, 10, 50, emptyList())

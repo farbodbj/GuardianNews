@@ -6,7 +6,6 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.bale_bootcamp.guardiannews.GuardianNewsApp
 import com.bale_bootcamp.guardiannews.data.local.database.NewsDao
 import com.bale_bootcamp.guardiannews.data.local.model.News
@@ -17,6 +16,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -26,6 +29,7 @@ class NewsRepository @Inject constructor(
     private val localDataSource: NewsDao,
     private val settingsRepository: SettingsRepository
 ) {
+
     private var fromDate: LocalDate = LocalDate.now().minusMonths(1)
 
     @Inject lateinit var remoteMediatorAssistedFactory: RemoteMediatorAssistedFactory
@@ -38,14 +42,15 @@ class NewsRepository @Inject constructor(
             config = pagingConfig,
             remoteMediator = remoteMediatorAssistedFactory.create(category, fromDate, toDate)
         ) {
-            Log.d(TAG, "getting news with page config: $pagingConfig for category: $category, fromDate: $fromDate, toDate: $toDate")
-            localDataSource.select(category)
+            val orderBy = runBlocking {
+                OrderBy.findByStr(settingsRepository.getOrderBy().first())
+            }
+            Log.d(TAG, "getting news with page config: $pagingConfig for category: $category, fromDate: $fromDate, toDate: $toDate, ordered by: ${orderBy.value}")
+            localDataSource.select(category, orderBy)
         }
-
         // add caching if feasible
         return pager.flow
     }
-
 
     private suspend fun getPageConfig(): PagingConfig {
         val pageSize = settingsRepository.getItemCount().first()

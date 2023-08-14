@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingDataAdapter
+import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,22 +80,32 @@ class NewsFragment : Fragment() {
     }
 
     private fun setSwipeRefresh(){
-        val newsRefreshedToast: Toast =
-            Toast.makeText(context, "News refreshed", Toast.LENGTH_SHORT)
-        val refreshedJutsNowToast: Toast =
-            Toast.makeText(context, "News not refreshed", Toast.LENGTH_SHORT)
+        val newsRefreshedToast: Toast = Toast.makeText(context, "News refreshed", Toast.LENGTH_SHORT)
+        val refreshedJutsNowToast: Toast = Toast.makeText(context, "News not refreshed", Toast.LENGTH_SHORT)
         binding.refresh.setOnRefreshListener {
-            //refreshNewsList()
-            //binding.newsRecyclerView.adapter.refresh()
+            isRefreshing = true
+            refreshAPagingAdapter()
+            Log.d(TAG, "setSwipeRefresh: refresh")
             if(isRefreshing) {
                 binding.refresh.isRefreshing = false
                 newsRefreshedToast.show()
             }
-            if(System.currentTimeMillis() - lastRefreshed < ONE_MINUTE) {
+            if((System.currentTimeMillis() - lastRefreshed) < ONE_MINUTE) {
                 binding.refresh.isRefreshing = false
                 refreshedJutsNowToast.show()
             }
         }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun refreshAPagingAdapter() {
+        (binding.newsRecyclerView.adapter as PagingDataAdapter<News, NewsAdapter.NewsViewHolder>).refresh()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        refreshAPagingAdapter()
     }
 
     override fun onDestroy() {

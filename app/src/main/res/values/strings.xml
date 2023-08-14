@@ -30,4 +30,15 @@
     <string name="ok_button">OK</string>
 
     <string name="item_count_hint">default: 10</string>
+
+
+    <string name="order_by_newest">Newest</string>
+    <string name="order_by_oldest">Oldest</string>
+    <string name="order_by_relevance">Relevance</string>
+
+
+    <string name="font_size_choice">Choose Font Size</string>
+    <string name="font_size_small">Small</string>
+    <string name="font_size_medium">Medium</string>
+    <string name="font_size_large">Large</string>
 </resources>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/font_size_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_size_m"
+        android:divider="@color/grey_700"
+        android:showDividers="middle">
+
+        <RadioButton
+            android:id="@+id/font_size_small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/font_size_small"
+            tools:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/font_size_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/font_size_medium"/>
+
+        <RadioButton
+            android:id="@+id/font_size_large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/font_size_large"/>
+    </RadioGroup>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/font_size_ok_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/alert_dialog_ok_button"
+        android:layout_margin="@dimen/margin_m"
+        android:text="@string/ok_button" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
