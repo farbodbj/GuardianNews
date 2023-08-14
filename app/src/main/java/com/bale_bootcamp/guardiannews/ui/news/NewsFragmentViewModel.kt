@@ -35,20 +35,4 @@ class NewsFragmentViewModel @Inject constructor(
             }
         }
     }
-
-
-    class NewsFragmentViewModelFactory: ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(NewsFragmentViewModel::class.java)) {
-                val appContext = GuardianNewsApp.getAppContext()
-                val repository = NewsRepository(
-                    appContext.database.newsDao(),
-                    SettingsRepository.getInstance(SettingsDataStore
-                        .SettingsDataStoreFactory(appContext).create()))
-
-                return NewsFragmentViewModel(repository) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
-    }
 }
