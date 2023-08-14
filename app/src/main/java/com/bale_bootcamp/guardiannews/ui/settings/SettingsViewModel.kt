@@ -12,9 +12,10 @@ import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import com.bale_bootcamp.guardiannews.ui.settings.model.TextSize
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val TAG = "SettingsViewModel"
-class SettingsViewModel (
+class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ): ViewModel() {
 
