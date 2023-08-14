@@ -11,53 +11,32 @@ import com.bale_bootcamp.guardiannews.GuardianNewsApp
 import com.bale_bootcamp.guardiannews.data.local.database.NewsDao
 import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
+import com.bale_bootcamp.guardiannews.di.RemoteMediatorAssistedFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-
 import java.time.LocalDate
+import javax.inject.Inject
+
 
 private const val TAG: String = "NewsRepository"
-class NewsRepository (
-    private val onlineDataSource: NewsApiService,
+class NewsRepository @Inject constructor(
     private val localDataSource: NewsDao,
     private val settingsRepository: SettingsRepository
 ) {
-
-    private var pageSize: Int = 10
     private var fromDate: LocalDate = LocalDate.now().minusMonths(1)
 
-    suspend fun refreshNews(category: NewsApiService.Category,
-                            toDate: LocalDate,
-                            page: Int) {
-
-        val results = onlineDataSource.getLatestFromCategory(category,
-            fromDate,
-            toDate,
-            page,
-            pageSize
-        ).response
-
-        results.results.let {
-            Log.d(TAG, it.toString())
-            localDataSource.insertAll(*it.toTypedArray())
-        }
-    }
+    @Inject lateinit var remoteMediatorAssistedFactory: RemoteMediatorAssistedFactory
 
     @OptIn(ExperimentalPagingApi::class)
     suspend fun getNews(category: NewsApiService.Category, toDate: LocalDate): Flow<PagingData<News>> {
+
         val pagingConfig = getPageConfig()
         val pager = Pager(
             config = pagingConfig,
-            remoteMediator = NewsPagingMediator(onlineDataSource,
-                localDataSource,
-                GuardianNewsApp.getAppContext().database.remoteKeyDao(),
-                settingsRepository,
-                category,
-                fromDate,
-                toDate)
+            remoteMediator = remoteMediatorAssistedFactory.create(category, fromDate, toDate)
         ) {
             Log.d(TAG, "getting news with page config: $pagingConfig for category: $category, fromDate: $fromDate, toDate: $toDate")
             localDataSource.select(category)

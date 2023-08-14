@@ -2,7 +2,7 @@ package com.bale_bootcamp.guardiannews.di
 
 import com.bale_bootcamp.guardiannews.BuildConfig
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
-import com.bale_bootcamp.guardiannews.utility.MoshiInstance
+import com.bale_bootcamp.guardiannews.utility.LocalDateTimeAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,6 +11,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -36,9 +37,6 @@ object NetworkServiceModule {
                 .build()
         }
 
-    @Provides
-    @Singleton
-    fun provideConverterFactory(): MoshiConverterFactory = MoshiConverterFactory.create(MoshiInstance.instance)
 
     @Provides
     @Singleton

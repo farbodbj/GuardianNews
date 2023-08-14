@@ -28,9 +28,7 @@ class NewsFragment : Fragment() {
 
     private var lastRefreshed: Long = 0
 
-    private val viewModel: NewsFragmentViewModel by viewModels {
-        NewsFragmentViewModel.NewsFragmentViewModelFactory()
-    }
+    private val viewModel: NewsFragmentViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

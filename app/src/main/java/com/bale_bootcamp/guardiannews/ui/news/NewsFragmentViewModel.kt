@@ -10,17 +10,19 @@ import androidx.paging.PagingData
 import com.bale_bootcamp.guardiannews.GuardianNewsApp
 import com.bale_bootcamp.guardiannews.data.local.datastore.SettingsDataStore
 import com.bale_bootcamp.guardiannews.data.local.model.News
-import com.bale_bootcamp.guardiannews.data.network.NewsApi
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.data.repository.NewsRepository
 import com.bale_bootcamp.guardiannews.data.repository.SettingsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
 private const val TAG: String = "NewsFragmentViewModel"
-class NewsFragmentViewModel (
+@HiltViewModel
+class NewsFragmentViewModel @Inject constructor(
     private val repository: NewsRepository
 ): ViewModel() {
     val news: MutableLiveData<PagingData<News>> = MutableLiveData()
@@ -34,19 +36,12 @@ class NewsFragmentViewModel (
         }
     }
 
-    fun refreshNews(category: NewsApiService.Category, toDate: LocalDate, page: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.refreshNews(category, toDate, page)
-        }
-    }
-
 
     class NewsFragmentViewModelFactory: ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(NewsFragmentViewModel::class.java)) {
                 val appContext = GuardianNewsApp.getAppContext()
                 val repository = NewsRepository(
-                    NewsApi.retrofitApiService,
                     appContext.database.newsDao(),
                     SettingsRepository.getInstance(SettingsDataStore
                         .SettingsDataStoreFactory(appContext).create()))
