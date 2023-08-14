@@ -155,11 +155,12 @@ class SettingsFragment : Fragment() {
 
         orderBySetting.root
             .setOnClickListener {
-            val (orderByAlertDialogBinding, orderByAlertDialog) = showOrderByAlertDialog()
+            val (orderByAlertDialogBinding, orderByAlertDialog) = requireContext()
+                .showAlertDialog(
+                    AlertDialogOrderByBinding::class,
+                    R.layout.alert_dialog_order_by)
             handleOrderBySelection(orderByAlertDialogBinding, orderByAlertDialog)
         }
-    }
-
 
         textSizeSetting.root
             .setOnClickListener {
@@ -170,17 +171,6 @@ class SettingsFragment : Fragment() {
 
                 handleFontSizeSelection(fontSizeAlertDialogViewBinding, fontSizeAlertDialog)
         }
-    }
-
-    private fun showOrderByAlertDialog(): Pair<AlertDialogOrderByBinding, AlertDialog> {
-        val orderByAlertDialog = AlertDialog.Builder(requireContext()).create()
-        val orderByAlertDialogView = layoutInflater.inflate(R.layout.alert_dialog_order_by, null)
-        val orderByAlertDialogBinding = AlertDialogOrderByBinding.bind(orderByAlertDialogView)
-        orderByAlertDialog.setView(orderByAlertDialogView)
-        orderByAlertDialog.setCanceledOnTouchOutside(true)
-        orderByAlertDialog.show()
-
-        return Pair(orderByAlertDialogBinding, orderByAlertDialog)
     }
 
     private fun handleOrderBySelection(orderByAlertDialogBinding: AlertDialogOrderByBinding, orderByAlertDialog: AlertDialog) {
@@ -295,7 +285,6 @@ class SettingsFragment : Fragment() {
             R.id.light_green_button -> ColorTheme.LIGHT_GREEN
             else -> throw IllegalStateException("unknown button chosen")
     }
-
 
 
     override fun onDestroyView() {

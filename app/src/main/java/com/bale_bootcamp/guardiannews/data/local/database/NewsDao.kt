@@ -16,7 +16,7 @@ interface NewsDao: BaseDao<News> {
     @Query("select * from ${News.ENTITY_NAME} where sectionId = :category")
     fun selectByCategory(category: String): PagingSource<Int, News>
 
-    fun select(category: NewsApiService.Category, orderBy: OrderBy): PagingSource<Int, News> {
+    fun select(category: NewsApiService.Category): PagingSource<Int, News> {
         return if (category == NewsApiService.Category.HOME) {
             selectAll()
         } else {

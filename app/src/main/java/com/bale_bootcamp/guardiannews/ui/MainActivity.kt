@@ -17,6 +17,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -31,6 +32,7 @@ private const val TAG = "MainActivity"
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    @ApplicationContext lateinit var appContext: Context
 
     @InstallIn(SingletonComponent::class)
     @EntryPoint
@@ -50,27 +52,26 @@ class MainActivity : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context?) {
         Log.d(TAG, "attachBaseContext called, is newBase null: ${newBase == null}")
-        try{
-            val config = setFontScaleFromPrefs(newBase!!)
-            Log.d(TAG, "super called with config font scale: ${config.resources.configuration.fontScale}")
-            super.attachBaseContext(config)
-        } catch (e: Exception) {
-            super.attachBaseContext(GuardianNewsApp.getAppContext())
-            Log.e(TAG, "${e.stackTrace.asList().joinToString() }}")
-            Log.d(TAG, "default super called successfully")
-        }
+        val config = setFontScaleFromPrefs(newBase!!)
+        Log.d(TAG, "super called with config font scale: ${config.resources.configuration.fontScale}")
+        super.attachBaseContext(config)
+
     }
 
     private fun setFontScaleFromPrefs(context: Context): Context {
         val config = context.resources.configuration
-        config.fontScale = getFontSizeFromPrefs()
+        config.fontScale = getFontSizeFromPrefs(context)
         Log.d(TAG, "setting scaling all fonts to ${config.fontScale}")
         return context.createConfigurationContext(config)
     }
 
-    private fun getFontSizeFromPrefs() = runBlocking {
+    private fun getFontSizeFromPrefs(context: Context) = runBlocking {
         Log.d(TAG, "getFontSizeFromPrefs called")
-        val it = settingsRepository.getFontSize().first()
+        val it = EntryPointAccessors.fromApplication<ThemeAccessorEntryPoint>(context)
+            .settingsRepository
+            .getFontSize()
+            .first()
+
         Log.d(TAG, it)
         when(TextSize.findByStr(it)) {
             TextSize.SMALL -> 0.85F
@@ -81,8 +82,9 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setThemeFromPrefs() = runBlocking {
-        val theme =
-            EntryPointAccessors.fromApplication<ThemeAccessorEntryPoint>(this@MainActivity).settingsRepository.getColorTheme()
+        val theme = EntryPointAccessors.fromApplication<ThemeAccessorEntryPoint>(this@MainActivity)
+                .settingsRepository
+                .getColorTheme()
                 .first()
         runOnUiThread {
             val themeId = getColorThemeOverlayId(theme)

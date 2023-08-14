@@ -6,19 +6,13 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.bale_bootcamp.guardiannews.GuardianNewsApp
 import com.bale_bootcamp.guardiannews.data.local.database.NewsDao
 import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.di.RemoteMediatorAssistedFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import javax.inject.Inject
@@ -36,17 +30,17 @@ class NewsRepository @Inject constructor(
 
     @OptIn(ExperimentalPagingApi::class)
     suspend fun getNews(category: NewsApiService.Category, toDate: LocalDate): Flow<PagingData<News>> {
-
+        val orderBy = runBlocking {
+            OrderBy.findByStr(settingsRepository.getOrderBy().first())
+        }
         val pagingConfig = getPageConfig()
         val pager = Pager(
             config = pagingConfig,
-            remoteMediator = remoteMediatorAssistedFactory.create(category, fromDate, toDate)
+            remoteMediator = remoteMediatorAssistedFactory.create(category, fromDate, toDate, orderBy)
         ) {
-            val orderBy = runBlocking {
-                OrderBy.findByStr(settingsRepository.getOrderBy().first())
-            }
+
             Log.d(TAG, "getting news with page config: $pagingConfig for category: $category, fromDate: $fromDate, toDate: $toDate, ordered by: ${orderBy.value}")
-            localDataSource.select(category, orderBy)
+            localDataSource.select(category)
         }
         // add caching if feasible
         return pager.flow

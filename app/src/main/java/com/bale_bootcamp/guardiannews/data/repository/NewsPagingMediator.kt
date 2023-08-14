@@ -28,6 +28,7 @@ class NewsPagingMediator @AssistedInject constructor(
     @Assisted private val category: NewsApiService.Category,
     @Assisted("from-date") private val fromDate: LocalDate,
     @Assisted("to-date") private val toDate: LocalDate,
+    @Assisted private val orderBy: OrderBy,
 ) : RemoteMediator<Int, News>() {
 
     override suspend fun load(
