@@ -4,8 +4,10 @@ import android.app.Application
 import android.util.Log
 import androidx.room.RoomDatabase
 import com.bale_bootcamp.guardiannews.data.local.database.AppDatabase
+import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.Executors.newSingleThreadExecutor
 
+@HiltAndroidApp
 class GuardianNewsApp: Application() {
     val name = "GuardianNewsApp"
 

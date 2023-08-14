@@ -10,18 +10,20 @@ import androidx.paging.PagingData
 import com.bale_bootcamp.guardiannews.GuardianNewsApp
 import com.bale_bootcamp.guardiannews.data.local.datastore.SettingsDataStore
 import com.bale_bootcamp.guardiannews.data.local.model.News
-import com.bale_bootcamp.guardiannews.data.network.NewsApi
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.data.repository.NewsRepository
 import com.bale_bootcamp.guardiannews.data.repository.SettingsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
 
 private const val TAG: String = "NewsFragmentViewModel"
-class NewsFragmentViewModel (
+@HiltViewModel
+class NewsFragmentViewModel @Inject constructor(
     private val repository: NewsRepository
 ): ViewModel() {
     val news: MutableLiveData<PagingData<News>> = MutableLiveData()
@@ -32,24 +34,6 @@ class NewsFragmentViewModel (
                 news.postValue(it)
                 Log.d(TAG, "getNews: $it to date: $toDate")
             }
-        }
-    }
-
-
-    class NewsFragmentViewModelFactory: ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(NewsFragmentViewModel::class.java)) {
-                val appContext = GuardianNewsApp.getAppContext()
-                val repository = NewsRepository(
-                    NewsApi.retrofitApiService,
-                    appContext.database.newsDao(),
-                    SettingsRepository.getInstance(SettingsDataStore.SettingsDataStoreFactory(appContext).create()),
-
-                )
-
-                return NewsFragmentViewModel(repository) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 }

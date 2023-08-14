@@ -1,20 +1,17 @@
 package com.bale_bootcamp.guardiannews.ui.settings
 
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.bale_bootcamp.guardiannews.data.local.datastore.SettingsDataStore
 import com.bale_bootcamp.guardiannews.data.repository.SettingsRepository
 import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import com.bale_bootcamp.guardiannews.ui.settings.model.TextSize
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val TAG = "SettingsViewModel"
-class SettingsViewModel (
+class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ): ViewModel() {
 
@@ -87,18 +84,6 @@ class SettingsViewModel (
                     }
                 }
             }
-        }
-    }
-
-    class SettingsViewModelFactory(private val context: Context): ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if(modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                val settingsDataStore = SettingsDataStore.SettingsDataStoreFactory(context).create()
-                val settingsRepository = SettingsRepository.getInstance(settingsDataStore)
-                return SettingsViewModel(settingsRepository) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 }
