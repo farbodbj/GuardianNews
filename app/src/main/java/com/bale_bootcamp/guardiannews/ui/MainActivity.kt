@@ -33,13 +33,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         Log.d(TAG, "onCreate: binding created")
         setContentView(binding.root)
-        // set fragment in the fragment container to the fragment_default
-        if(savedInstanceState == null) {
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.fragment_container, DefaultFragment())
-                .commit()
-        }
     }
 
     override fun attachBaseContext(newBase: Context?) {

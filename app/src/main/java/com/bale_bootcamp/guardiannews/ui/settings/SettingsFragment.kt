@@ -12,6 +12,7 @@ import android.widget.RadioGroup
 import androidx.annotation.IdRes
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogFontSizeChoiceBinding
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogItemCountBinding
@@ -66,10 +67,8 @@ class SettingsFragment : Fragment() {
 
     private fun setBackArrow() {
         binding.settingsToolbar.setNavigationOnClickListener {
-            requireActivity().supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragment_container, DefaultFragment())
-                .commit()
+            val directions = SettingsFragmentDirections.actionSettingsFragmentToDefaultFragment()
+            findNavController().navigate(directions)
         }
     }
 
