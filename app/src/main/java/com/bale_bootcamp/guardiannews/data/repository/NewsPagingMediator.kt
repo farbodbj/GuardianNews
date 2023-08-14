@@ -11,6 +11,7 @@ import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.local.model.NewsRemoteKey
 import com.bale_bootcamp.guardiannews.data.network.model.ResponseModel
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
+import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import java.time.LocalDate
 
 private const val TAG = "NewsPagingMediator"
@@ -19,10 +20,10 @@ class NewsPagingMediator(
     private val onlineDataSource: NewsApiService,
     private val localNewsDataSource: NewsDao,
     private val localRemoteKeyDataSource: RemoteKeyDao,
-    private val localSettingsRepository: SettingsRepository,
     private val category: NewsApiService.Category,
     private val fromDate: LocalDate,
     private val toDate: LocalDate,
+    private val orderBy: OrderBy
 ) : RemoteMediator<Int, News>() {
 
     override suspend fun load(
@@ -88,7 +89,8 @@ class NewsPagingMediator(
             fromDate,
             toDate,
             lastAccessedPage,
-    50).response
+    50,
+            orderBy.value).response
         } catch (e: Exception) {
             Log.e(TAG, "exception: ${e.message}")
             ResponseModel("status", 0, 0, 10, 50, emptyList())

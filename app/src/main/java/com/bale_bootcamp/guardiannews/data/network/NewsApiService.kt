@@ -40,7 +40,8 @@ interface NewsApiService {
                                       @Query("from-date") fromDate: LocalDate,
                                       @Query("to-date") toDate: LocalDate,
                                       @Query("page") page: Int,
-                                      @Query("page-size") pageSize: Int = 10): NetworkResponse
+                                      @Query("page-size") pageSize: Int = 10,
+                                      @Query("order-by") orderByStr: String = "relevance"): NetworkResponse
 }
 
 
