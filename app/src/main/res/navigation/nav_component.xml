@@ -18,9 +18,11 @@
         android:id="@+id/settingsFragment"
         android:name="com.bale_bootcamp.guardiannews.ui.settings.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" >
+        tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_settingsFragment_to_defaultFragment"
-            app:destination="@id/defaultFragment" />
+            app:destination="@id/defaultFragment"
+            app:popUpTo="@id/defaultFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
