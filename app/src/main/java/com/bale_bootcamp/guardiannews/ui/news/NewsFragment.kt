@@ -41,11 +41,10 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: view created")
-        _binding = FragmentNewsBinding.bind(view)
-        Log.d(TAG, "onViewCreated: binding set")
-        refreshNewsList()
-        Log.d(TAG, "onViewCreated: news list set")
-        Log.d(TAG, "onViewCreated: swipe refresh set")
+        setNewsAdapter()
+        observeNews()
+        if(savedInstanceState == null)
+            refreshNewsList()
         setSwipeRefresh()
         Log.d(TAG, "onViewCreated: swipe refresh set")
     }
@@ -60,7 +59,12 @@ class NewsFragment : Fragment() {
     }
 
     private fun refreshNewsList() {
-        isRefreshing = true
+        val category = arguments?.getString("category") ?: "search"
+        viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.now())
+        Log.d(TAG, "refreshNewsList: ${viewModel.news}")
+    }
+
+    private fun setNewsAdapter(): NewsAdapter {
         val newsRecyclerViewAdapter = NewsAdapter {
             Log.d(TAG, "onItemClicked: $it")
             //TODO("onItemClicked")
@@ -85,7 +89,7 @@ class NewsFragment : Fragment() {
         }
     }
 
-    private fun setSwipeRefresh(){
+    private fun setSwipeRefresh() {
         val newsRefreshedToast: Toast = Toast.makeText(context, "News refreshed", Toast.LENGTH_SHORT)
         val refreshedJutsNowToast: Toast = Toast.makeText(context, "News not refreshed", Toast.LENGTH_SHORT)
         binding.refresh.setOnRefreshListener {
