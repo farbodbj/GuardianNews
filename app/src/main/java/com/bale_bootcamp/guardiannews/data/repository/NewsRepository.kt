@@ -14,9 +14,12 @@ import com.bale_bootcamp.guardiannews.di.RemoteMediatorAssistedFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 
 private const val TAG: String = "NewsRepository"
@@ -43,8 +46,8 @@ class NewsRepository @Inject constructor(
             Log.d(TAG, "getting news with page config: $pagingConfig for category: $category, fromDate: $fromDate, toDate: $toDate, ordered by: ${orderBy.value}")
             localDataSource.select(category)
         }
-        // add caching if feasible
-        return pager.flow
+
+        return pager.flow.cachedIn(CoroutineScope(coroutineContext))
     }
 
     private suspend fun getPageConfig(): PagingConfig {

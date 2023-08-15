@@ -42,12 +42,12 @@ class NewsPagingMediator @AssistedInject constructor(
             InitializeAction.LAUNCH_INITIAL_REFRESH
         } else {
             val diff = System.currentTimeMillis() - lastUpdated
-            if(TimeUnit.MILLISECONDS.toHours(diff) < 1) {
-                Log.d(TAG, "initialize: diff: $diff, minutes: ${TimeUnit.MILLISECONDS.toHours(diff)}")
+            if(TimeUnit.MILLISECONDS.toMinutes(diff) < 1) {
+                Log.d(TAG, "initialize: diff: $diff, minutes: ${TimeUnit.MILLISECONDS.toMinutes(diff)}")
                 Log.d(TAG, "initialize: skipping initial refresh")
                 InitializeAction.SKIP_INITIAL_REFRESH
             } else {
-                Log.d(TAG, "initialize: diff: $diff, minutes: ${TimeUnit.MILLISECONDS.toHours(diff)}")
+                Log.d(TAG, "initialize: diff: $diff, minutes: ${TimeUnit.MILLISECONDS.toMinutes(diff)}")
                 InitializeAction.LAUNCH_INITIAL_REFRESH
             }
         }
