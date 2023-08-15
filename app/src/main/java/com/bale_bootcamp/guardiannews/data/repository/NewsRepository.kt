@@ -6,6 +6,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.bale_bootcamp.guardiannews.data.local.database.NewsDao
 import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
@@ -51,7 +52,7 @@ class NewsRepository @Inject constructor(
         Log.d(TAG, "setting page config with page size: $pageSize")
         return PagingConfig(
             pageSize = pageSize,
-            prefetchDistance = pageSize - 2,
+            prefetchDistance = pageSize,
             enablePlaceholders = false
         )
     }
