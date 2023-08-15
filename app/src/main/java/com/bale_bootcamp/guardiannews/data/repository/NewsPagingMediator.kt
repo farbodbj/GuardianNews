@@ -15,6 +15,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import java.time.LocalDate
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 private const val TAG = "NewsPagingMediator"
@@ -30,6 +31,28 @@ class NewsPagingMediator @AssistedInject constructor(
     @Assisted("to-date") private val toDate: LocalDate,
     @Assisted private val orderBy: OrderBy,
 ) : RemoteMediator<Int, News>() {
+
+    private var lastUpdated: Long = 0L
+
+    override suspend fun initialize(): InitializeAction {
+        Log.d(TAG, "initialize called")
+        return if(lastUpdated == 0L) {
+            lastUpdated = System.currentTimeMillis()
+            Log.d(TAG, "initialize: lastUpdated: $lastUpdated")
+            InitializeAction.LAUNCH_INITIAL_REFRESH
+        } else {
+            val diff = System.currentTimeMillis() - lastUpdated
+            if(TimeUnit.MILLISECONDS.toHours(diff) < 1) {
+                Log.d(TAG, "initialize: diff: $diff, minutes: ${TimeUnit.MILLISECONDS.toHours(diff)}")
+                Log.d(TAG, "initialize: skipping initial refresh")
+                InitializeAction.SKIP_INITIAL_REFRESH
+            } else {
+                Log.d(TAG, "initialize: diff: $diff, minutes: ${TimeUnit.MILLISECONDS.toHours(diff)}")
+                InitializeAction.LAUNCH_INITIAL_REFRESH
+            }
+        }
+
+    }
 
     override suspend fun load(
         loadType: LoadType,
@@ -73,6 +96,7 @@ class NewsPagingMediator @AssistedInject constructor(
         val response = getFromApi(page ?: 1)
         Log.d(TAG, "got data for page: ${response.currentPage} from api")
 
+        //System.currentTimeMillis() - lastUpdated > 3600000
         if(loadType == LoadType.REFRESH) {
             val remoteKeyDeletes = localRemoteKeyDataSource.delete(category)
             val newsDeletes = localNewsDataSource.delete(category)

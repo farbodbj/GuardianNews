@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
@@ -110,7 +111,8 @@ class NewsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        refreshAPagingAdapter()
+        if(binding.newsRecyclerView.adapter?.itemCount == 0)
+            refreshAPagingAdapter()
     }
 
     override fun onDestroy() {
