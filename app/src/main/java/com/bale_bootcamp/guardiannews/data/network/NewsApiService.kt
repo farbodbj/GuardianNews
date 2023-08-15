@@ -1,17 +1,11 @@
 package com.bale_bootcamp.guardiannews.data.network
 
 import com.bale_bootcamp.guardiannews.data.network.model.NetworkResponse
-import com.bale_bootcamp.guardiannews.utility.LocalDateTimeAdapter
-import com.bale_bootcamp.guardiannews.utility.MoshiInstance
-import com.bale_bootcamp.guardiannews.utility.RetrofitFactory
-import okhttp3.OkHttpClient
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.concurrent.TimeUnit
+
 
 
 object Api {

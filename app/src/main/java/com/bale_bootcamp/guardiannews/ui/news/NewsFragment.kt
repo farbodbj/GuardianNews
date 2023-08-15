@@ -13,6 +13,7 @@ import androidx.paging.PagingDataAdapter
 import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
+import com.bale_bootcamp.guardiannews.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
