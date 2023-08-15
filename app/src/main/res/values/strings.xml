@@ -41,4 +41,6 @@
     <string name="font_size_small">Small</string>
     <string name="font_size_medium">Medium</string>
     <string name="font_size_large">Large</string>
+
+    <string name="press_back_to_exit">Press back again to exit</string>
 </resources>
