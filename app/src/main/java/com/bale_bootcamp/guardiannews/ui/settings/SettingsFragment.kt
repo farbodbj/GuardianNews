@@ -1,7 +1,6 @@
 package com.bale_bootcamp.guardiannews.ui.settings
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,20 +18,14 @@ import com.bale_bootcamp.guardiannews.databinding.AlertDialogItemCountBinding
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogOrderByBinding
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogThemeChoiceBinding
 import com.bale_bootcamp.guardiannews.databinding.FragmentSettingsBinding
-import com.bale_bootcamp.guardiannews.ui.DefaultFragment
 import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
 import dagger.hilt.android.AndroidEntryPoint
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import com.bale_bootcamp.guardiannews.ui.settings.model.TextSize
 import com.bale_bootcamp.guardiannews.utility.Utils.showAlertDialog
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.lang.IllegalStateException
 
@@ -92,39 +85,39 @@ class SettingsFragment : Fragment() {
     private fun startObservingSettings() {
         lifecycleScope.launch {
             Log.d(TAG, "launching observation on all theme items")
-            awaitAll(observerItemCountAsync(),
-                observerOrderByAsync(),
-                observerFromDateAsync(),
-                observerColorThemeAsync(),
-                observerTextSizeAsync())
+            observerItemCount()
+            observerColorTheme()
+            observerFromDate()
+            observerOrderBy()
+            observerTextSize()
         }
     }
 
-    private suspend fun observerItemCountAsync() = lifecycleScope.async {
+    private suspend fun observerItemCount() = lifecycleScope.launch {
         viewModel.itemCount.collect {
             binding.itemCountSetting.settingValue.text = it.toString()
         }
     }
 
-    private suspend fun observerOrderByAsync() = lifecycleScope.async {
+    private suspend fun observerOrderBy() = lifecycleScope.launch {
         viewModel.orderBy.collect {
             binding.orderBySetting.settingValue.text = it.value
         }
     }
 
-    private suspend fun observerFromDateAsync() = lifecycleScope.async {
+    private suspend fun observerFromDate() = lifecycleScope.launch {
         viewModel.fromDate.collect {
             binding.fromDateSetting.settingValue.text = it
         }
     }
 
-    private suspend fun observerColorThemeAsync() = lifecycleScope.async {
+    private suspend fun observerColorTheme() = lifecycleScope.launch {
         viewModel.colorTheme.collect {
             binding.themeSetting.settingValue.text = it.value
         }
     }
 
-    private suspend fun observerTextSizeAsync() = lifecycleScope.async {
+    private suspend fun observerTextSize() = lifecycleScope.launch {
         viewModel.textSize.collect {
             binding.textSizeSetting.settingValue.text = it.value
         }
