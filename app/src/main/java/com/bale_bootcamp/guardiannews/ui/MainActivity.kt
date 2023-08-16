@@ -1,6 +1,7 @@
 package com.bale_bootcamp.guardiannews.ui
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -43,23 +44,25 @@ class MainActivity : AppCompatActivity() {
 
     @InstallIn(SingletonComponent::class)
     @EntryPoint
-    interface ThemeAccessorEntryPoint {
+    sealed interface SettingsRepositoryEntryPoint {
         val settingsRepository: SettingsRepository
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setThemeFromPrefs()
         Log.d(TAG, "onCreate: starts")
         super.onCreate(savedInstanceState)
         setFontScaleFromPrefs(this)
-        addBackButtonCallback()
+        setThemeFromPrefs()
         binding = ActivityMainBinding.inflate(layoutInflater)
         Log.d(TAG, "onCreate: binding created")
         setContentView(binding.root)
+        addBackButtonCallback()
     }
 
     private fun addBackButtonCallback() {
-        val navController = Navigation.findNavController(this, R.id.fragment_container)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
+        val navController = navHostFragment.navController
+        Log.d(TAG, "addBackButtonCallback: navController created")
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val currentId = navController.currentDestination?.id
@@ -102,13 +105,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun getFontSizeFromPrefs(context: Context) = runBlocking {
         Log.d(TAG, "getFontSizeFromPrefs called")
-        val it = EntryPointAccessors.fromApplication<ThemeAccessorEntryPoint>(context)
+        val it = EntryPointAccessors.fromApplication<SettingsRepositoryEntryPoint>(context)
             .settingsRepository
             .getFontSize()
             .first()
 
         Log.d(TAG, it)
-        when(TextSize.findByStr(it)) {
+        when (TextSize.findByStr(it)) {
             TextSize.SMALL -> 0.85F
             TextSize.MEDIUM -> 1.0F
             TextSize.LARGE -> 1.15F
@@ -117,7 +120,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setThemeFromPrefs() = runBlocking {
-        val theme = EntryPointAccessors.fromApplication<ThemeAccessorEntryPoint>(this@MainActivity)
+        val theme = EntryPointAccessors.fromApplication<SettingsRepositoryEntryPoint>(this@MainActivity)
                 .settingsRepository
                 .getColorTheme()
                 .first()
