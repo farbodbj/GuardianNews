@@ -126,10 +126,10 @@ class DefaultFragment : Fragment() {
     private fun syncDrawerWithViewPager() {
         val viewPager = binding.viewPager
         val navDrawer = binding.navView
+
         navDrawer.setNavigationItemSelectedListener {
             try {
                 val selectedNavItem = navDrawerItems[it.itemId]
-
                 if(selectedNavItem in 0..4) {
                     viewPager.currentItem = selectedNavItem!!
                 } else {
@@ -139,6 +139,7 @@ class DefaultFragment : Fragment() {
                 }
                 true
             } catch (e: IllegalStateException) {
+                Log.d(TAG, "syncDrawerWithViewPager: ${e.message}")
                 false
             }
         }
