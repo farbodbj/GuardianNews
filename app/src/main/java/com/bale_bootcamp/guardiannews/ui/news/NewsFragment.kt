@@ -15,7 +15,11 @@ import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
 import com.bale_bootcamp.guardiannews.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 const val ONE_MINUTE = 60 * 1000
@@ -64,19 +68,19 @@ class NewsFragment : Fragment() {
         val category = arguments?.getString("category") ?: "search"
 
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
-        viewModel.getNews(
-            NewsApiService.Category.findByStr(category),
-            LocalDate.now())
+        viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.now())
 
         Log.d(TAG, "refreshNewsList: ${viewModel.news}")
 
-        viewModel.news.observe(viewLifecycleOwner) {
-            Log.d(TAG, "refreshNewsList: $it")
-            lifecycleScope.launch {
-                newsRecyclerViewAdapter.submitData(it)
+        lifecycleScope.launch {
+            viewModel.news.collectLatest {
+                Log.d(TAG, "refreshNewsList: $it")
+                lifecycleScope.launch {
+                    newsRecyclerViewAdapter.submitData(it)
+                }
+                lastRefreshed = System.currentTimeMillis()
+                isRefreshing = false
             }
-            lastRefreshed = System.currentTimeMillis()
-            isRefreshing = false
         }
     }
 
