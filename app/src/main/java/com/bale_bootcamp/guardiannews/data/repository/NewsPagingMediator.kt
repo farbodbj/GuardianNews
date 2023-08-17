@@ -32,16 +32,15 @@ class NewsPagingMediator @AssistedInject constructor(
     @Assisted private val orderBy: OrderBy,
 ) : RemoteMediator<Int, News>() {
 
-    private var lastUpdated: Long = 0L
-
     override suspend fun initialize(): InitializeAction {
         Log.d(TAG, "initialize called")
-        return if(lastUpdated == 0L) {
-            lastUpdated = System.currentTimeMillis()
-            Log.d(TAG, "initialize: lastUpdated: $lastUpdated")
+
+        return if(NewsDao.lastUpdated == 0L) {
+            NewsDao.lastUpdated = System.currentTimeMillis()
+            Log.d(TAG, "initialize: lastUpdated: ${NewsDao.lastUpdated}")
             InitializeAction.LAUNCH_INITIAL_REFRESH
         } else {
-            val diff = System.currentTimeMillis() - lastUpdated
+            val diff = System.currentTimeMillis() - NewsDao.lastUpdated
             if(TimeUnit.MILLISECONDS.toMinutes(diff) < 1) {
                 Log.d(TAG, "initialize: diff: $diff, minutes: ${TimeUnit.MILLISECONDS.toMinutes(diff)}")
                 Log.d(TAG, "initialize: skipping initial refresh")
@@ -96,7 +95,6 @@ class NewsPagingMediator @AssistedInject constructor(
         val response = getFromApi(page ?: 1)
         Log.d(TAG, "got data for page: ${response.currentPage} from api")
 
-        //System.currentTimeMillis() - lastUpdated > 3600000
         if(loadType == LoadType.REFRESH) {
             val remoteKeyDeletes = localRemoteKeyDataSource.delete(category)
             val newsDeletes = localNewsDataSource.delete(category)
