@@ -10,6 +10,9 @@ import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 
 @Dao
 interface NewsDao: BaseDao<News> {
+    companion object {
+        var lastUpdated: Long = 0L
+    }
     @Query("select * from ${News.ENTITY_NAME}")
     fun selectAll(): PagingSource<Int, News>
 

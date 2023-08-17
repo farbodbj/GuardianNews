@@ -40,12 +40,8 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: view created")
-        _binding = FragmentNewsBinding.bind(view)
-        Log.d(TAG, "onViewCreated: binding set")
-        refreshNewsList()
-        Log.d(TAG, "onViewCreated: news list set")
-        Log.d(TAG, "onViewCreated: swipe refresh set")
-        setSwipeRefresh()
+        if(savedInstanceState == null)
+            loadNews()
         Log.d(TAG, "onViewCreated: swipe refresh set")
     }
 
@@ -55,28 +51,33 @@ class NewsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
+        setNewsAdapter()
+        setSwipeRefresh()
+        collectNews()
         return binding.root
     }
 
-    private fun refreshNewsList() {
-        isRefreshing = true
+    private fun loadNews() {
+        val category = arguments?.getString("category") ?: "search"
+        viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.now())
+        Log.d(TAG, "refreshNewsList: ${viewModel.news}")
+    }
+
+    private fun setNewsAdapter() {
         val newsRecyclerViewAdapter = NewsAdapter {
             Log.d(TAG, "onItemClicked: $it")
             //TODO("onItemClicked")
         }
-
-        val category = arguments?.getString("category") ?: "search"
-
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
-        viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.now())
+    }
 
-        Log.d(TAG, "refreshNewsList: ${viewModel.news}")
-
+    @Suppress("UNCHECKED_CAST")
+    private fun collectNews() {
         lifecycleScope.launch {
             viewModel.news.collectLatest {
                 Log.d(TAG, "refreshNewsList: $it")
                 lifecycleScope.launch {
-                    newsRecyclerViewAdapter.submitData(it)
+                    (binding.newsRecyclerView.adapter as PagingDataAdapter<News, NewsAdapter.NewsViewHolder>).submitData(it)
                 }
                 lastRefreshed = System.currentTimeMillis()
                 isRefreshing = false
@@ -84,9 +85,10 @@ class NewsFragment : Fragment() {
         }
     }
 
-    private fun setSwipeRefresh(){
+
+    private fun setSwipeRefresh() {
         val newsRefreshedToast: Toast = Toast.makeText(context, "News refreshed", Toast.LENGTH_SHORT)
-        val refreshedJutsNowToast: Toast = Toast.makeText(context, "News not refreshed", Toast.LENGTH_SHORT)
+        val refreshedJutsNowToast: Toast = Toast.makeText(context, "News was refreshed just now", Toast.LENGTH_SHORT)
         binding.refresh.setOnRefreshListener {
             isRefreshing = true
             refreshAPagingAdapter()
@@ -107,14 +109,9 @@ class NewsFragment : Fragment() {
         (binding.newsRecyclerView.adapter as PagingDataAdapter<News, NewsAdapter.NewsViewHolder>).refresh()
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        refreshAPagingAdapter()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
+        Log.d(TAG, "onDestroy: destroyed")
         _binding = null
     }
 }

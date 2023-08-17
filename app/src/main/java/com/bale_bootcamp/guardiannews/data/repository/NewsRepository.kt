@@ -6,6 +6,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.bale_bootcamp.guardiannews.data.local.database.NewsDao
 import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
@@ -13,9 +14,12 @@ import com.bale_bootcamp.guardiannews.di.RemoteMediatorAssistedFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 
 private const val TAG: String = "NewsRepository"
@@ -42,8 +46,8 @@ class NewsRepository @Inject constructor(
             Log.d(TAG, "getting news with page config: $pagingConfig for category: $category, fromDate: $fromDate, toDate: $toDate, ordered by: ${orderBy.value}")
             localDataSource.select(category)
         }
-        // add caching if feasible
-        return pager.flow
+
+        return pager.flow.cachedIn(CoroutineScope(coroutineContext))
     }
 
     private suspend fun getPageConfig(): PagingConfig {
@@ -51,7 +55,7 @@ class NewsRepository @Inject constructor(
         Log.d(TAG, "setting page config with page size: $pageSize")
         return PagingConfig(
             pageSize = pageSize,
-            prefetchDistance = pageSize - 2,
+            prefetchDistance = pageSize,
             enablePlaceholders = false
         )
     }

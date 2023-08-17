@@ -17,7 +17,6 @@
         android:layout_weight="1"
         android:layout_marginTop="@dimen/margin_s"
         android:layout_marginBottom="@dimen/margin_s"
-
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/news_viewholder"/>
