@@ -15,7 +15,6 @@ class NewsPagerAdapter(fragmentActivity: FragmentActivity,
 
 
     override fun getItemCount(): Int {
-        Log.d(TAG, "getItemCount: ${categories.size}")
         return categories.size
     }
 
