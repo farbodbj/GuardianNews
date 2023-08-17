@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -32,8 +33,9 @@ class NewsFragmentViewModel @Inject constructor(
     val news: Flow<PagingData<News>> get() = _news ?: emptyFlow()
 
     fun getNews(category: NewsApiService.Category, toDate: LocalDate, orderBy: OrderBy = OrderBy.RELEVANCE) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _news = repository.getNews(category, toDate).cachedIn(this@launch)
+        viewModelScope.launch {
+            _news = repository.getNews(category, toDate).cachedIn(this@launch).flowOn(Dispatchers.IO)
+            _news?.collect {}
             Log.d(TAG, "getNews: ${_news.toString()}")
         }
     }
