@@ -14,6 +14,7 @@ import com.bale_bootcamp.guardiannews.di.RemoteMediatorAssistedFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
+import com.bale_bootcamp.guardiannews.utility.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
@@ -28,15 +29,18 @@ class NewsRepository @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) {
 
-    private var fromDate: LocalDate = LocalDate.now().minusMonths(1)
-
     @Inject lateinit var remoteMediatorAssistedFactory: RemoteMediatorAssistedFactory
 
     @OptIn(ExperimentalPagingApi::class)
-    suspend fun getNews(category: NewsApiService.Category, toDate: LocalDate): Flow<PagingData<News>> {
+    suspend fun getNews(category: NewsApiService.Category, toDate: LocalDate = LocalDate.now()): Flow<PagingData<News>> {
         val orderBy = runBlocking {
             OrderBy.findByStr(settingsRepository.getOrderBy().first())
         }
+
+        val fromDate = runBlocking {
+            LocalDate.parse(settingsRepository.getFromDate().first(), Utils.formatter)
+        }
+
         val pagingConfig = getPageConfig()
         val pager = Pager(
             config = pagingConfig,
@@ -47,7 +51,7 @@ class NewsRepository @Inject constructor(
             localDataSource.select(category)
         }
 
-        return pager.flow.cachedIn(CoroutineScope(coroutineContext))
+        return pager.flow
     }
 
     private suspend fun getPageConfig(): PagingConfig {

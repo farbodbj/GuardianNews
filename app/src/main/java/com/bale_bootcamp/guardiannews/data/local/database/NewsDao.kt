@@ -30,7 +30,14 @@ interface NewsDao: BaseDao<News> {
     @Query("delete from ${News.ENTITY_NAME} where sectionId = :category")
     suspend fun deleteByCategory(category: String): Int
 
-    suspend fun delete(category: NewsApiService.Category): Int {
-        return deleteByCategory(category.categoryName)
-    }
+    @Query("delete from ${News.ENTITY_NAME} where sectionId not in (:categories)")
+    suspend fun deleteExcept(categories: List<String>): Int
+
+    suspend fun delete(category: NewsApiService.Category): Int =
+        if(category != NewsApiService.Category.HOME)
+            deleteByCategory(category.categoryName)
+        else
+            deleteExcept(NewsApiService.Category.categoryNameList())
+
+
 }

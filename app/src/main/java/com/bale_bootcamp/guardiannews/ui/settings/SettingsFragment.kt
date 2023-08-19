@@ -1,6 +1,7 @@
 package com.bale_bootcamp.guardiannews.ui.settings
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog.OnDateSetListener
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -22,12 +23,16 @@ import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
 import dagger.hilt.android.AndroidEntryPoint
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import com.bale_bootcamp.guardiannews.ui.settings.model.TextSize
+import com.bale_bootcamp.guardiannews.utility.Utils
 import com.bale_bootcamp.guardiannews.utility.Utils.showAlertDialog
+import com.bale_bootcamp.guardiannews.utility.Utils.showDatePickerDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.IllegalStateException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 private const val TAG = "SettingsFragment"
@@ -164,6 +169,16 @@ class SettingsFragment : Fragment() {
 
                 handleFontSizeSelection(fontSizeAlertDialogViewBinding, fontSizeAlertDialog)
         }
+
+        fromDateSetting.root
+            .setOnClickListener {
+                requireContext().showDatePickerDialog(
+                    OnDateSetListener { _, year, month, dayOfMonth ->
+                        handleFromDateSelection(year, month, dayOfMonth)
+                    },
+                    true
+                )
+            }
     }
 
     private fun handleOrderBySelection(orderByAlertDialogBinding: AlertDialogOrderByBinding, orderByAlertDialog: AlertDialog) {
@@ -241,6 +256,11 @@ class SettingsFragment : Fragment() {
                 requireActivity().recreate()
             }
         }
+    }
+
+    private fun handleFromDateSelection(year: Int, month: Int, dayOfMonth: Int) {
+        val date = LocalDate.of(year, month + 1, dayOfMonth)
+        viewModel.saveFromDate(date.format(Utils.formatter))
     }
 
 

@@ -26,6 +26,8 @@ interface NewsApiService {
             fun findByStr(value: String): Category {
                 return values().find { it.categoryName == value } ?: throw IllegalArgumentException("value not found in enum")
             }
+
+            fun categoryNameList(): List<String> = values().map { it.categoryName }
         }
     }
 
