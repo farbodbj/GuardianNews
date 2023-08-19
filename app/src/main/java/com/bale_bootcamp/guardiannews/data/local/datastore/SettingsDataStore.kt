@@ -30,7 +30,7 @@ class SettingsDataStore @Inject constructor(@ApplicationContext val context: Con
         }
     }
 
-    suspend fun <T> getPrefFlow(key: Preferences.Key<T>): Flow<T> =
+    fun <T> getPrefFlow(key: Preferences.Key<T>): Flow<T> =
         context.dataStore.data
             .catch {exception ->
                 if(exception is IOException) {
@@ -41,16 +41,5 @@ class SettingsDataStore @Inject constructor(@ApplicationContext val context: Con
                 Log.d(TAG, "getPrefFlow: key: ${key.name}, value: ${it[key]}")
                 it[key] ?: SettingsRepository.KeyDefaults.defaultMap[key.name] as T
             }
-
-    class SettingsDataStoreFactory(private val context: Context) {
-
-        @Volatile private var instance: SettingsDataStore? = null
-
-        fun create(): SettingsDataStore {
-            return instance ?: synchronized(this) {
-                instance ?: SettingsDataStore(context).also { instance = it }
-            }
-        }
-    }
 
 }
