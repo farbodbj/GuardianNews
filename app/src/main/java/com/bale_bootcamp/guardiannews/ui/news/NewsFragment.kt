@@ -60,7 +60,6 @@ class NewsFragment : Fragment() {
     private fun loadNews() {
         val category = arguments?.getString("category") ?: "search"
         viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.now())
-        Log.d(TAG, "refreshNewsList: ${viewModel.news}")
     }
 
     private fun setNewsAdapter() {
@@ -71,7 +70,7 @@ class NewsFragment : Fragment() {
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
     }
 
-    @Suppress("UNCHECKED_CAST")
+
     private fun collectNews() {
         lifecycleScope.launch {
             viewModel.news.collectLatest {
