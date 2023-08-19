@@ -42,6 +42,9 @@ class NewsFragment : Fragment() {
         Log.d(TAG, "onViewCreated: view created")
         if(savedInstanceState == null)
             loadNews()
+        setNewsAdapter()
+        setSwipeRefresh()
+        collectNews()
         Log.d(TAG, "onViewCreated: swipe refresh set")
     }
 
@@ -51,9 +54,6 @@ class NewsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
-        setNewsAdapter()
-        setSwipeRefresh()
-        collectNews()
         return binding.root
     }
 
@@ -77,7 +77,7 @@ class NewsFragment : Fragment() {
             viewModel.news.collectLatest {
                 Log.d(TAG, "refreshNewsList: $it")
                 lifecycleScope.launch {
-                    (binding.newsRecyclerView.adapter as PagingDataAdapter<News, NewsAdapter.NewsViewHolder>).submitData(it)
+                    (binding.newsRecyclerView.adapter as NewsAdapter).submitData(it)
                 }
                 lastRefreshed = System.currentTimeMillis()
                 isRefreshing = false
@@ -104,9 +104,8 @@ class NewsFragment : Fragment() {
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun refreshAPagingAdapter() {
-        (binding.newsRecyclerView.adapter as PagingDataAdapter<News, NewsAdapter.NewsViewHolder>).refresh()
+        (binding.newsRecyclerView.adapter as NewsAdapter).refresh()
     }
 
     override fun onDestroy() {
