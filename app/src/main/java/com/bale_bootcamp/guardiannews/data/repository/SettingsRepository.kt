@@ -64,22 +64,14 @@ class SettingsRepository @Inject constructor(private val settingsDataStore: Sett
         Log.d(TAG, "default values added")
     }
 
-    suspend fun getItemCount(): Flow<Int> = settingsDataStore.getPrefFlow(Keys.ITEM_COUNT)
-    suspend fun getOrderBy(): Flow<String> = settingsDataStore.getPrefFlow(Keys.ORDER_BY)
-    suspend fun getFromDate(): Flow<String> = settingsDataStore.getPrefFlow(Keys.FROM_DATE)
-    suspend fun getColorTheme(): Flow<String> = settingsDataStore.getPrefFlow(Keys.COLOR_THEME)
-    suspend fun getFontSize(): Flow<String> = settingsDataStore.getPrefFlow(Keys.FONT_SIZE)
+    fun getItemCount(): Flow<Int> = settingsDataStore.getPrefFlow(Keys.ITEM_COUNT)
+    fun getOrderBy(): Flow<String> = settingsDataStore.getPrefFlow(Keys.ORDER_BY)
+    fun getFromDate(): Flow<String> = settingsDataStore.getPrefFlow(Keys.FROM_DATE)
+    fun getColorTheme(): Flow<String> = settingsDataStore.getPrefFlow(Keys.COLOR_THEME)
+    fun getFontSize(): Flow<String> = settingsDataStore.getPrefFlow(Keys.FONT_SIZE)
     suspend fun saveItemCount(itemCount: Int) = settingsDataStore.savePref(Keys.ITEM_COUNT, itemCount)
     suspend fun saveOrderBy(orderBy: String) = settingsDataStore.savePref(Keys.ORDER_BY, orderBy)
     suspend fun saveFromDate(fromDate: String) = settingsDataStore.savePref(Keys.FROM_DATE, fromDate)
     suspend fun saveColorTheme(colorTheme: String) = settingsDataStore.savePref(Keys.COLOR_THEME, colorTheme)
     suspend fun saveFontSize(fontSize: String) = settingsDataStore.savePref(Keys.FONT_SIZE, fontSize)
-
-    companion object {
-        @Volatile private var instance: SettingsRepository? = null
-        fun getInstance(settingsDataStore: SettingsDataStore) =
-            instance ?: synchronized(this) {
-                instance ?: SettingsRepository(settingsDataStore).also { instance = it }
-            }
-    }
 }
