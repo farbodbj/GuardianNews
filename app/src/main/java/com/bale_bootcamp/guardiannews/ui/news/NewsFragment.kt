@@ -9,17 +9,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.PagingDataAdapter
-import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
-import com.bale_bootcamp.guardiannews.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 const val ONE_MINUTE = 60 * 1000
@@ -40,8 +35,7 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: view created")
-        if(savedInstanceState == null)
-            loadNews()
+        loadNewsOnViewModelEmpty()
         setNewsAdapter()
         setSwipeRefresh()
         collectNews()
@@ -55,6 +49,11 @@ class NewsFragment : Fragment() {
     ): View {
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    private fun loadNewsOnViewModelEmpty() = lifecycleScope.launch {
+        if(viewModel.news.count() == 0)
+            loadNews()
     }
 
     private fun loadNews() {
@@ -74,12 +73,8 @@ class NewsFragment : Fragment() {
     private fun collectNews() {
         lifecycleScope.launch {
             viewModel.news.collectLatest {
-                Log.d(TAG, "refreshNewsList: $it")
-                lifecycleScope.launch {
-                    (binding.newsRecyclerView.adapter as NewsAdapter).submitData(it)
-                }
-                lastRefreshed = System.currentTimeMillis()
-                isRefreshing = false
+                Log.d(TAG, "collecting news: $it")
+                (binding.newsRecyclerView.adapter as NewsAdapter).submitData(it)
             }
         }
     }
