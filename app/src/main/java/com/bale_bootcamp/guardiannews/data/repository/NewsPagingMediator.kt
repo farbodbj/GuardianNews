@@ -35,6 +35,7 @@ class NewsPagingMediator @AssistedInject constructor(
     override suspend fun initialize(): InitializeAction {
         Log.d(TAG, "initialize called")
 
+
         return if(NewsDao.lastUpdated == 0L) {
             NewsDao.lastUpdated = System.currentTimeMillis()
             Log.d(TAG, "initialize: lastUpdated: ${NewsDao.lastUpdated}")
@@ -44,7 +45,7 @@ class NewsPagingMediator @AssistedInject constructor(
             if(TimeUnit.MILLISECONDS.toMinutes(diff) < 1) {
                 Log.d(TAG, "initialize: diff: $diff, minutes: ${TimeUnit.MILLISECONDS.toMinutes(diff)}")
                 Log.d(TAG, "initialize: skipping initial refresh")
-                InitializeAction.SKIP_INITIAL_REFRESH
+                InitializeAction.LAUNCH_INITIAL_REFRESH
             } else {
                 Log.d(TAG, "initialize: diff: $diff, minutes: ${TimeUnit.MILLISECONDS.toMinutes(diff)}")
                 InitializeAction.LAUNCH_INITIAL_REFRESH

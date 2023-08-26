@@ -34,9 +34,8 @@ class NewsFragmentViewModel @Inject constructor(
 
     fun getNews(category: NewsApiService.Category, toDate: LocalDate, orderBy: OrderBy = OrderBy.RELEVANCE) {
         viewModelScope.launch {
-            _news = repository.getNews(category, toDate).cachedIn(this@launch).flowOn(Dispatchers.IO)
-            _news?.collect {}
-            Log.d(TAG, "getNews: ${_news.toString()}")
+            Log.d(TAG, "calling repository.getNews() for category: $category")
+            _news = repository.getNews(category).cachedIn(this@launch).flowOn(Dispatchers.IO)
         }
     }
 }
