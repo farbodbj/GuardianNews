@@ -14,8 +14,15 @@ import com.bale_bootcamp.guardiannews.di.RemoteMediatorAssistedFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
+import com.bale_bootcamp.guardiannews.utility.Utils
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import javax.inject.Inject
@@ -28,26 +35,33 @@ class NewsRepository @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) {
 
-    private var fromDate: LocalDate = LocalDate.now().minusMonths(1)
-
     @Inject lateinit var remoteMediatorAssistedFactory: RemoteMediatorAssistedFactory
 
-    @OptIn(ExperimentalPagingApi::class)
-    suspend fun getNews(category: NewsApiService.Category, toDate: LocalDate): Flow<PagingData<News>> {
-        val orderBy = runBlocking {
-            OrderBy.findByStr(settingsRepository.getOrderBy().first())
-        }
-        val pagingConfig = getPageConfig()
-        val pager = Pager(
-            config = pagingConfig,
-            remoteMediator = remoteMediatorAssistedFactory.create(category, fromDate, toDate, orderBy)
-        ) {
+    @OptIn(ExperimentalPagingApi::class, ExperimentalCoroutinesApi::class)
+    fun getNews(category: NewsApiService.Category, toDate: LocalDate = LocalDate.now()): Flow<PagingData<News>> {
+        Log.d(TAG, "**** getNews() called! ****")
+        val orderByFlow = settingsRepository.getOrderBy()
+        val fromDateFlow = settingsRepository.getFromDate()
 
-            Log.d(TAG, "getting news with page config: $pagingConfig for category: $category, fromDate: $fromDate, toDate: $toDate, ordered by: ${orderBy.value}")
-            localDataSource.select(category)
+
+        val pagerFlow = fromDateFlow.combine(orderByFlow) { fromDateStr, orderByStr ->
+            val orderBy = OrderBy.findByStr(orderByStr)
+            val fromDate = LocalDate.parse(fromDateStr, Utils.formatter)
+
+            Log.d(TAG, "order by: $orderBy, from date: $fromDate")
+            Pager(
+                config = getPageConfig(),
+                remoteMediator = remoteMediatorAssistedFactory.create(category, fromDate, toDate, orderBy)
+            ) {
+                Log.d(TAG, "getting news for category: $category, fromDate: $fromDate, toDate: $toDate, ordered by: ${orderBy.value}")
+                localDataSource.select(category)
+            }
         }
 
-        return pager.flow.cachedIn(CoroutineScope(coroutineContext))
+        return pagerFlow.flatMapLatest { pager ->
+            pager.flow
+        }
+
     }
 
     private suspend fun getPageConfig(): PagingConfig {
@@ -55,7 +69,7 @@ class NewsRepository @Inject constructor(
         Log.d(TAG, "setting page config with page size: $pageSize")
         return PagingConfig(
             pageSize = pageSize,
-            prefetchDistance = pageSize,
+            prefetchDistance = 1,
             enablePlaceholders = false
         )
     }
