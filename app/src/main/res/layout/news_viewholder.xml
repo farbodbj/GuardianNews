@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="some random news title which is important"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/margin_s"
         android:textStyle="bold"
         android:textSize="@dimen/news_title_text_size"/>
 
@@ -31,7 +31,7 @@
                 android:id="@+id/news_section"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_xs"
+                android:layout_marginStart="@dimen/margin_s"
                 android:textColor="?colorOnPrimary"
                 android:maxLines="1"
                 android:textStyle="bold|italic"
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:maxWidth="@dimen/news_summary_max_width"
                 android:maxHeight="@dimen/news_summary_max_height"
-                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginStart="@dimen/margin_s"
 
                 tools:text="@tools:sample/lorem/random" />
 
@@ -54,7 +54,6 @@
             android:layout_width="@dimen/news_photo_max_width"
             android:layout_height="@dimen/news_photo_max_height"
             android:layout_marginStart="@dimen/margin_m"
-            android:layout_marginTop="@dimen/margin_m"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/roundedImageView"
             tools:src="@drawable/random_news"/>
@@ -65,6 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_s"
+        android:alpha="0.5"
         android:layout_marginTop="@dimen/margin_m"
-        tools:text="2023/03/14" />
+        tools:text="Jan 1 , 2023" />
 </androidx.appcompat.widget.LinearLayoutCompat>
