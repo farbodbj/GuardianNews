@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.databinding.NewsViewholderBinding
 import com.bale_bootcamp.guardiannews.data.local.model.News
+import com.bale_bootcamp.guardiannews.utility.LocalDateTimeAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -77,8 +78,7 @@ class NewsAdapter(
             newsTitle.text = news.details.headline.parseAsHtml()
             newsSection.text = news.sectionName
             newsSummary.text = news.details.trailText.parseAsHtml()
-            newsDate.text = news.webPublicationDate.toString().parseAsHtml()
-            Log.d(TAG, "bindTextual: text binded")
+            newsDate.text = news.webPublicationDate.format(LocalDateTimeAdapter.casualFormatter)
         }
 
         private fun bindImage(news: News) = binding.apply {
