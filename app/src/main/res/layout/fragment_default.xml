@@ -37,26 +37,25 @@ tools:context=".ui.MainActivity">
             app:tabSelectedTextColor="@color/blue_500"
             android:elevation="@dimen/toolbar_elevation"
             app:tabTextAppearance="@style/tabItemText"
-            app:tabPaddingEnd="0dp"
-            app:tabPaddingStart="0dp">
+            app:tabMode="scrollable">
             <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/home" />
             <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/world" />
             <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/science" />
             <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/environment" />
             <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/sport" />
         </com.google.android.material.tabs.TabLayout>
