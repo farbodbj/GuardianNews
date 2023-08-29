@@ -68,7 +68,8 @@ class DefaultFragment : Fragment() {
                     it,
                     NewsApiService.Category
                         .values()
-                        .map { it.categoryName }
+                        .map { it.categoryName },
+                    arguments?.getBoolean("shouldUpdate")
                 )
             }
 

@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
@@ -37,10 +39,11 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated: view created")
-        loadNewsOnViewModelEmpty()
+        loadNews()
         setNewsAdapter()
         setSwipeRefresh()
         collectNews()
+        refreshAdapterIfNeeded()
         Log.d(TAG, "onViewCreated: swipe refresh set")
     }
 
@@ -53,14 +56,20 @@ class NewsFragment : Fragment() {
         return binding.root
     }
 
-    private fun loadNewsOnViewModelEmpty() = lifecycleScope.launch {
-        if(viewModel.news.count() == 0)
-            loadNews()
+
+    private fun refreshAdapterIfNeeded() {
+        if(arguments?.getBoolean("shouldUpdate") == true) {
+            refreshAPagingAdapter()
+            arguments?.putBoolean("shouldUpdate", false)
+        }
     }
 
-    private fun loadNews() {
+
+    private fun loadNews() = lifecycleScope.launch {
+        Log.d(TAG, "loadNewsOnViewModelEmpty: viewModel.news.count() = ${viewModel.news.count()}")
         val category = arguments?.getString("category") ?: "search"
-        viewModel.getNews(NewsApiService.Category.findByStr(category), LocalDate.now())
+        viewModel.getNews(NewsApiService.Category.findByStr(category))
+
     }
 
     private fun setNewsAdapter() {

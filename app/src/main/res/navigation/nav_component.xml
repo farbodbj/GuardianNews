@@ -10,9 +10,14 @@
         android:name="com.bale_bootcamp.guardiannews.ui.DefaultFragment"
         android:label="DefaultFragment"
         tools:layout="@layout/fragment_default">
+
         <action
             android:id="@+id/action_defaultFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <argument
+            android:name="shouldUpdate"
+            app:argType="boolean" />
+
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -21,8 +26,6 @@
         tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_settingsFragment_to_defaultFragment"
-            app:destination="@id/defaultFragment"
-            app:popUpTo="@id/defaultFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/defaultFragment" />
     </fragment>
 </navigation>
