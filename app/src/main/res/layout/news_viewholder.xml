@@ -59,12 +59,27 @@
             tools:src="@drawable/random_news"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <TextView
-        android:id="@+id/news_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_s"
-        android:alpha="0.5"
-        android:layout_marginTop="@dimen/margin_m"
-        tools:text="Jan 1 , 2023" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/news_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_s"
+            android:alpha="0.5"
+            android:layout_marginTop="@dimen/margin_m"
+            tools:text="Jan 1, 2023" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/share_button"
+            android:layout_width="@dimen/news_item_share_icon_width"
+            android:layout_height="@dimen/news_item_share_icon_height"
+            android:src="@drawable/share_white_48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/margin_xl"
+            android:layout_marginBottom="@dimen/margin_xs"
+            app:tint="?colorOnPrimary"
+            android:alpha="0.65"/>
+    </RelativeLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>

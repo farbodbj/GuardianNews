@@ -1,5 +1,6 @@
 package com.bale_bootcamp.guardiannews.ui.news
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,13 +64,21 @@ class NewsFragment : Fragment() {
     }
 
     private fun setNewsAdapter() {
-        val newsRecyclerViewAdapter = NewsAdapter {
-            Log.d(TAG, "onItemClicked: $it")
-            //TODO("onItemClicked")
-        }
+        val newsRecyclerViewAdapter = NewsAdapter({}, {launchShareIntent(it) })
         binding.newsRecyclerView.adapter = newsRecyclerViewAdapter
     }
 
+
+    private fun launchShareIntent(news: News) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "read this interesting news on guardian:\n${news.webUrl}")
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+    }
 
     private fun collectNews() {
         lifecycleScope.launch {
@@ -97,7 +107,6 @@ class NewsFragment : Fragment() {
             }
         }
     }
-
     private fun refreshAPagingAdapter() {
         (binding.newsRecyclerView.adapter as NewsAdapter).refresh()
     }

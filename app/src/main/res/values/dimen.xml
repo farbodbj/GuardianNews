@@ -5,6 +5,7 @@
     <dimen name="margin_m">16dp</dimen>
     <dimen name="margin_l">24dp</dimen>
     <dimen name="margin_xl">32dp</dimen>
+    <dimen name="margin_xxl">42dp</dimen>
 
     <dimen name="nav_header_height">150dp</dimen>
     <dimen name="nav_header_width">266dp</dimen>
@@ -19,6 +20,8 @@
     <dimen name="news_photo_max_height">150dp</dimen>
     <dimen name="news_summary_max_width">150dp</dimen>
     <dimen name="news_summary_max_height">150dp</dimen>
+    <dimen name="news_item_share_icon_width">28sp</dimen>
+    <dimen name="news_item_share_icon_height">28sp</dimen>
 
     <dimen name="toolbar_title_text_size">26sp</dimen>
     <dimen name="tab_item_text_size">14dp</dimen>
