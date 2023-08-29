@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.annotation.IdRes
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -32,7 +33,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.IllegalStateException
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 private const val TAG = "SettingsFragment"
@@ -40,6 +40,8 @@ private const val TAG = "SettingsFragment"
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
+
+    private var shouldDestinationUpdate: Boolean = false
 
     private val viewModel: SettingsViewModel by viewModels()
 
@@ -65,8 +67,8 @@ class SettingsFragment : Fragment() {
 
     private fun setBackArrow() {
         binding.settingsToolbar.setNavigationOnClickListener {
-            val directions = SettingsFragmentDirections.actionSettingsFragmentToDefaultFragment()
-            findNavController().navigate(directions)
+            Log.d(TAG, shouldDestinationUpdate.toString())
+            findNavController().navigate(R.id.action_settingsFragment_to_defaultFragment, bundleOf("shouldUpdate" to shouldDestinationUpdate))
         }
     }
 
@@ -192,6 +194,7 @@ class SettingsFragment : Fragment() {
                 val selectedOrderBy = buttonIdOrderBy(orderByRadioGroup.checkedRadioButtonId)
                 viewModel.saveOrderBy(selectedOrderBy)
                 orderByAlertDialog.dismiss()
+                shouldDestinationUpdate = true
             }
         }
     }
@@ -261,6 +264,7 @@ class SettingsFragment : Fragment() {
     private fun handleFromDateSelection(year: Int, month: Int, dayOfMonth: Int) {
         val date = LocalDate.of(year, month + 1, dayOfMonth)
         viewModel.saveFromDate(date.format(Utils.formatter))
+        shouldDestinationUpdate = true
     }
 
 
