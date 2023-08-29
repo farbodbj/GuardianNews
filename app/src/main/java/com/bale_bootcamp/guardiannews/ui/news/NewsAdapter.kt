@@ -20,7 +20,8 @@ import com.bumptech.glide.request.target.Target
 
 private const val TAG = "NewsAdapter"
 class NewsAdapter(
-    private val onItemClicked: (News) -> Unit
+    private val onItemClicked: (News) -> Unit,
+    private val onItemShareButtonClicked: (News)->(Unit)
 ): PagingDataAdapter<News, NewsAdapter.NewsViewHolder>(DiffCallback) {
 
     companion object {
@@ -43,15 +44,25 @@ class NewsAdapter(
                 false
             )
         )
-        Log.d(TAG, "onCreateViewHolder: viewHolder created")
 
+        setViewHolderOnClickListener(viewHolder)
+        setViewHolderShareButtonOnClickListener(viewHolder)
+
+        return viewHolder
+    }
+
+    private fun setViewHolderOnClickListener(viewHolder: NewsViewHolder) {
         viewHolder.itemView.setOnClickListener {
             val position = viewHolder.bindingAdapterPosition
             getItem(position)?.let { it1 -> onItemClicked(it1) }
         }
-        Log.d(TAG, "onCreateViewHolder: viewHolder setOnClickListener")
+    }
 
-        return viewHolder
+    private fun setViewHolderShareButtonOnClickListener(viewHolder: NewsViewHolder) {
+        viewHolder.binding.shareButton.setOnClickListener {
+            val position = viewHolder.bindingAdapterPosition
+            getItem(position)?.let { it1 -> onItemShareButtonClicked(it1) }
+        }
     }
 
 
@@ -61,7 +72,7 @@ class NewsAdapter(
     }
 
     class NewsViewHolder(
-        private var binding: NewsViewholderBinding
+        var binding: NewsViewholderBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
         companion object {
@@ -113,6 +124,3 @@ class NewsAdapter(
         }
     }
 }
-
-
-
