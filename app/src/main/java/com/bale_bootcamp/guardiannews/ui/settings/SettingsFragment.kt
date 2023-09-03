@@ -12,7 +12,9 @@ import android.widget.RadioGroup
 import androidx.annotation.IdRes
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.databinding.AlertDialogFontSizeChoiceBinding
@@ -25,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
 import com.bale_bootcamp.guardiannews.ui.settings.model.TextSize
 import com.bale_bootcamp.guardiannews.utility.Utils
+import com.bale_bootcamp.guardiannews.utility.Utils.lifecycleAwareLaunch
 import com.bale_bootcamp.guardiannews.utility.Utils.showAlertDialog
 import com.bale_bootcamp.guardiannews.utility.Utils.showDatePickerDialog
 import kotlinx.coroutines.Dispatchers
@@ -100,31 +103,31 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private suspend fun observerItemCount() = lifecycleScope.launch {
+    private suspend fun observerItemCount() = lifecycleAwareLaunch {
         viewModel.itemCount.collect {
             binding.itemCountSetting.settingValue.text = it.toString()
         }
     }
 
-    private suspend fun observerOrderBy() = lifecycleScope.launch {
+    private suspend fun observerOrderBy() = lifecycleAwareLaunch {
         viewModel.orderBy.collect {
             binding.orderBySetting.settingValue.text = it.value
         }
     }
 
-    private suspend fun observerFromDate() = lifecycleScope.launch {
+    private suspend fun observerFromDate() = lifecycleAwareLaunch {
         viewModel.fromDate.collect {
             binding.fromDateSetting.settingValue.text = it
         }
     }
 
-    private suspend fun observerColorTheme() = lifecycleScope.launch {
+    private suspend fun observerColorTheme() = lifecycleAwareLaunch {
         viewModel.colorTheme.collect {
             binding.themeSetting.settingValue.text = it.value
         }
     }
 
-    private suspend fun observerTextSize() = lifecycleScope.launch {
+    private suspend fun observerTextSize() = lifecycleAwareLaunch {
         viewModel.textSize.collect {
             binding.textSizeSetting.settingValue.text = it.value
         }
