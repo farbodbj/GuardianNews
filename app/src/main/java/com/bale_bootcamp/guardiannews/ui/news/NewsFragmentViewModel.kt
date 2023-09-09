@@ -32,7 +32,7 @@ class NewsFragmentViewModel @Inject constructor(
     private var _news :Flow<PagingData<News>>? = null
     val news: Flow<PagingData<News>> get() = _news ?: emptyFlow()
 
-    fun getNews(category: NewsApiService.Category, toDate: LocalDate, orderBy: OrderBy = OrderBy.RELEVANCE) {
+    fun getNews(category: NewsApiService.Category) {
         viewModelScope.launch {
             Log.d(TAG, "calling repository.getNews() for category: $category")
             _news = repository.getNews(category).cachedIn(this@launch).flowOn(Dispatchers.IO)

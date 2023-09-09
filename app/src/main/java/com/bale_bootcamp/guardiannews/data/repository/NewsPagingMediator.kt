@@ -14,6 +14,8 @@ import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -34,24 +36,18 @@ class NewsPagingMediator @AssistedInject constructor(
 
     override suspend fun initialize(): InitializeAction {
         Log.d(TAG, "initialize called")
-
-
-        return if(NewsDao.lastUpdated == 0L) {
-            NewsDao.lastUpdated = System.currentTimeMillis()
-            Log.d(TAG, "initialize: lastUpdated: ${NewsDao.lastUpdated}")
-            InitializeAction.LAUNCH_INITIAL_REFRESH
-        } else {
-            val diff = System.currentTimeMillis() - NewsDao.lastUpdated
-            if(TimeUnit.MILLISECONDS.toMinutes(diff) < 1) {
-                Log.d(TAG, "initialize: diff: $diff, minutes: ${TimeUnit.MILLISECONDS.toMinutes(diff)}")
-                Log.d(TAG, "initialize: skipping initial refresh")
-                InitializeAction.LAUNCH_INITIAL_REFRESH
-            } else {
-                Log.d(TAG, "initialize: diff: $diff, minutes: ${TimeUnit.MILLISECONDS.toMinutes(diff)}")
-                InitializeAction.LAUNCH_INITIAL_REFRESH
-            }
+        val currentCount = runBlocking {
+            localNewsDataSource.count().first()
         }
 
+        return if(currentCount == 0) {
+            Log.d(TAG, "initialize: current count is 0")
+            InitializeAction.LAUNCH_INITIAL_REFRESH
+        }
+        else {
+            Log.d(TAG, "initialize: current count is $currentCount")
+            InitializeAction.SKIP_INITIAL_REFRESH
+        }
     }
 
     override suspend fun load(
@@ -111,7 +107,7 @@ class NewsPagingMediator @AssistedInject constructor(
     }
 
     private suspend fun getFromApi(lastAccessedPage: Int) = try {
-        Log.d(TAG, "getFromApi: ${category.categoryName}, $fromDate, $toDate, $lastAccessedPage")
+        // Log.d(TAG, "getFromApi: ${category.categoryName}, $fromDate, $toDate, $lastAccessedPage")
         onlineDataSource.getLatestFromCategory(
             category,
             fromDate,

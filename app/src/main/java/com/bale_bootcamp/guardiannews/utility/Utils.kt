@@ -8,9 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.annotation.StyleRes
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.bale_bootcamp.guardiannews.R
 import com.bale_bootcamp.guardiannews.ui.settings.model.ColorTheme
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.reflect.KClass
@@ -51,6 +56,14 @@ object Utils {
         datePickerDialog.apply {
             setCanceledOnTouchOutside(cancelOnTouchOutside)
             show()
+        }
+    }
+
+    fun Fragment.lifecycleAwareLaunch(state: Lifecycle.State = Lifecycle.State.STARTED, block: suspend () -> Unit) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(state) {
+                block()
+            }
         }
     }
 }

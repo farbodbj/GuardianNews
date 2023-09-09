@@ -7,12 +7,17 @@ import com.bale_bootcamp.guardiannews.data.local.BaseDao
 import com.bale_bootcamp.guardiannews.data.local.model.News
 import com.bale_bootcamp.guardiannews.data.network.NewsApiService
 import com.bale_bootcamp.guardiannews.ui.settings.model.OrderBy
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NewsDao: BaseDao<News> {
     companion object {
         var lastUpdated: Long = 0L
     }
+
+    @Query("select count(*) from ${News.ENTITY_NAME}")
+    fun count(): Flow<Int>
+
     @Query("select * from ${News.ENTITY_NAME}")
     fun selectAll(): PagingSource<Int, News>
 
